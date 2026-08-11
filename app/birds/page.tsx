@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
+import { BirdProfileLink } from "../components/BirdProfileLink";
 import { getPublishedBirds } from "../../lib/bird-repository";
 
 export const metadata: Metadata = {
@@ -60,7 +61,7 @@ export default async function BirdsPage() {
               </header>
               <div className="encyclopedia-grid">
                 {group.birds.map((bird) => (
-                  <a className="species-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                  <BirdProfileLink className="species-card" href={`/birds/${bird.slug}`} key={bird.slug}>
                     <div className="species-card-visual">
                       {bird.imageUrl ? (
                         // The repository supplies reviewed, attributed bird imagery when available.
@@ -80,7 +81,7 @@ export default async function BirdsPage() {
                         <strong>{bird.sourceCount > 0 ? "View profile →" : "Open profile →"}</strong>
                       </div>
                     </div>
-                  </a>
+                  </BirdProfileLink>
                 ))}
               </div>
             </section>

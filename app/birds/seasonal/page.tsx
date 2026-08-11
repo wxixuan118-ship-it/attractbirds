@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
+import { BirdProfileLink } from "../../components/BirdProfileLink";
 import { getPublishedBirds } from "../../../lib/bird-repository";
 
 export const metadata: Metadata = {
@@ -65,12 +66,12 @@ export default async function SeasonalBirdsPage() {
             <h2>Explore birds you may see through the year</h2>
             <div className="index-grid">
               {birds.map((bird) => (
-                <a className="index-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                <BirdProfileLink className="index-card" href={`/birds/${bird.slug}`} key={bird.slug}>
                   <small>{bird.scientificName}</small>
                   <h2>{bird.commonName}</h2>
                   <p>{bird.hook}</p>
                   <span>View bird profile →</span>
-                </a>
+                </BirdProfileLink>
               ))}
             </div>
           </section>

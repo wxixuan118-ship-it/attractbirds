@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { PlannerForm } from "./components/PlannerForm";
+import { BirdProfileLink } from "./components/BirdProfileLink";
 import { plantPicks, problemGuides } from "../lib/content";
 import { getPublishedBirds } from "../lib/bird-repository";
 
@@ -65,14 +66,14 @@ export default async function Home() {
           </div>
           <div className="bird-grid">
             {featuredBirds.map((bird) => (
-              <a className="bird-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+              <BirdProfileLink className="bird-card" href={`/birds/${bird.slug}`} key={bird.slug}>
                 <div className="bird-circle">
                   <div className="bird-circle-inner">{bird.initials}</div>
                 </div>
                 <span className="bird-card-name">{bird.commonName}</span>
                 <span className="bird-card-sci">{bird.scientificName}</span>
                 <span className="bird-card-tag">{bird.family}</span>
-              </a>
+              </BirdProfileLink>
             ))}
           </div>
         </section>
