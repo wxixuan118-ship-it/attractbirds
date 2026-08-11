@@ -35,7 +35,7 @@ async function wmGet(params: Record<string, string>): Promise<WikimediaQueryResu
   const url = new URL(API);
   const base: Record<string, string> = { action: "query", format: "json", origin: "*" };
   Object.entries({ ...base, ...params }).forEach(([k, v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString(), { headers: { "User-Agent": "BirdGardenAI/1.0 (contact@birdgardenai.com)" } });
+  const res = await fetch(url.toString(), { headers: { "User-Agent": "AttractBirds.app/0.1 (https://attractbirds.app)" } });
   if (!res.ok) throw new Error(`Wikimedia API → ${res.status} ${res.statusText}`);
   return res.json() as Promise<WikimediaQueryResult>;
 }
@@ -61,7 +61,8 @@ async function getImageInfo(titles: string[]): Promise<WikimediaQueryResult> {
     prop: "imageinfo",
     titles: titles.join("|"),
     iiprop: "url|extmetadata",
-    iiextmetadatafilter: "License|LicenseUrl|Artist|ImageDescription",
+    iiurlwidth: "800",
+    iiextmetadatafilter: "License|LicenseShortName|LicenseUrl|Artist|Credit|ImageDescription",
   });
 }
 
@@ -103,10 +104,12 @@ export async function importWikimediaImages(
       sourceUrl: `https://commons.wikimedia.org/wiki/Category:${scientificName.replace(/ /g, "_")}`,
       datasetIdentifier: `wikimedia-${scientificName.toLowerCase().replace(/ /g, "-")}`,
       license: "various CC / PD",
+      licenseUrl: "https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia",
+      commercialUseAllowed: true,
       attribution: "Wikimedia Commons contributors, licensed under Creative Commons or public domain.",
       allowedFields: ["image_url", "credit", "license", "alt_text"],
     })
-    .onConflictDoNothing()
+    .onConflictDoUpdate({ target: [sources.datasetIdentifier, sources.version], set: { importedAt: new Date() } })
     .returning({ id: sources.id });
 
   let inserted = 0;
@@ -116,6 +119,7 @@ export async function importWikimediaImages(
     if (!info?.url) continue;
 
     const license = info.extmetadata?.License?.value ?? info.extmetadata?.LicenseUrl?.value ?? "";
+    const licenseUrl = info.extmetadata?.LicenseUrl?.value ?? "";
     if (!isAcceptedLicense(license)) { result.skipped++; continue; }
 
     const artist = info.extmetadata?.Artist?.value
@@ -127,9 +131,7 @@ export async function importWikimediaImages(
 
     // Commons doesn't serve thumbnails at a fixed URL, but you can request one:
     // e.g. https://commons.wikimedia.org/w/thumb.php?f=File.jpg&w=400
-    const thumbnailUrl = info.url.includes("upload.wikimedia.org")
-      ? info.url.replace(/\/commons\//, "/commons/thumb/").replace(/([^/]+)$/, "$1/400px-$1")
-      : undefined;
+    const thumbnailUrl = info.thumburl ?? info.url;
 
     try {
       await db
@@ -141,11 +143,15 @@ export async function importWikimediaImages(
           altText: description,
           credit: artist,
           license: license.toUpperCase().replace("CC-", "CC ").replace(/-/g, " "),
+          licenseUrl,
+          sourcePageUrl: info.descriptionurl,
+          attributionText: `${artist} / Wikimedia Commons / ${license}`,
+          externalId: `wikimedia:${page.pageid}`,
           wikimediaId: String(page.pageid),
           isPrimary: inserted === 0,
           sourceId: src?.id,
         })
-        .onConflictDoNothing();
+        .onConflictDoUpdate({ target: [birdImages.sourceId, birdImages.externalId], set: { imageUrl: info.url, thumbnailUrl, altText: description, credit: artist, license, licenseUrl, sourcePageUrl: info.descriptionurl, attributionText: `${artist} / Wikimedia Commons / ${license}`, retrievedAt: new Date() } });
       inserted++;
       result.inserted++;
     } catch (e) {
@@ -158,7 +164,7 @@ export async function importWikimediaImages(
 
 // ─── Batch runner ─────────────────────────────────────────────────────────────
 
-import { eq } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { birds } from "../../db/schema.js";
 
 /**
@@ -173,7 +179,7 @@ export async function importAllWikimediaImages(opts: { limit?: number; delayMs?:
     .selectDistinct({ id: birds.id, scientificName: birds.scientificName })
     .from(birds)
     .leftJoin(birdImages, eq(birdImages.birdId, birds.id))
-    .where(eq(birds.status, "draft"));
+    .where(isNull(birdImages.id));
 
   console.log(`Wikimedia import: ${candidates.length} birds without primary image`);
 

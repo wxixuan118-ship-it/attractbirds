@@ -15,6 +15,13 @@
       "when": 1786411690500,
       "tag": "0001_high_hardball",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786413075245,
+      "tag": "0002_many_spyke",
+      "breakpoints": true
     }
   ]
 }

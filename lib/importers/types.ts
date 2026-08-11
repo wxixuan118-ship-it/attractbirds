@@ -1,30 +1,3 @@
-// ─── eBird ────────────────────────────────────────────────────────────────────
-
-export interface EBirdTaxon {
-  sciName: string;
-  comName: string;
-  speciesCode: string;
-  category: "species" | "issf" | "spuh" | "slash" | "hybrid" | "intergrade" | "domestic" | "form";
-  taxonOrder: number;
-  order: string;
-  familyComName: string;
-  familySciName: string;
-  bandingCodes?: string[];
-  comNameCodes?: string[];
-  sciNameCodes?: string[];
-  extinct?: boolean;
-  extinctYear?: number;
-}
-
-export interface EBirdRegionSpecies {
-  speciesCode: string;
-  comName: string;
-  sciName: string;
-  locName?: string;
-  obsDt?: string;
-  howMany?: number;
-}
-
 // ─── GBIF ─────────────────────────────────────────────────────────────────────
 
 export interface GbifSpeciesMatch {
@@ -77,6 +50,7 @@ export interface GbifOccurrenceSearchResult {
   endOfRecords: boolean;
   count: number;
   results: GbifOccurrence[];
+  facets?: Array<{ field: string; counts: Array<{ name: string; count: number }> }>;
 }
 
 // ─── Wikimedia Commons ────────────────────────────────────────────────────────
@@ -86,11 +60,14 @@ export interface WikimediaPage {
   title: string;
   imageinfo?: Array<{
     url: string;
+    thumburl?: string;
     descriptionurl: string;
     extmetadata?: {
       License?: { value: string };
+      LicenseShortName?: { value: string };
       LicenseUrl?: { value: string };
       Artist?: { value: string };
+      Credit?: { value: string };
       ImageDescription?: { value: string };
     };
   }>;

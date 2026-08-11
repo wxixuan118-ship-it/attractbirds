@@ -4,6 +4,7 @@ export const contentStatus = pgEnum("content_status", ["draft", "reviewed", "pub
 export const locationType = pgEnum("location_type", ["country", "state", "county", "city", "region"]);
 export const presenceType = pgEnum("presence_type", ["resident", "breeding", "winter", "migrant"]);
 export const benefitType = pgEnum("benefit_type", ["nectar", "fruit", "seed", "insects", "shelter", "nesting"]);
+export const importRunStatus = pgEnum("import_run_status", ["running", "succeeded", "failed"]);
 
 const contentFields = {
   status: contentStatus("status").notNull().default("draft"),
@@ -38,12 +39,49 @@ export const feeders = pgTable("feeders", {
 }, (table) => [uniqueIndex("feeders_slug_uq").on(table.slug)]);
 
 export const sources = pgTable("sources", {
-  id: uuid("id").primaryKey().defaultRandom(), organization: text("organization").notNull(), sourceUrl: text("source_url"), datasetIdentifier: text("dataset_identifier"), license: text("license"), attribution: text("attribution"), importedAt: timestamp("imported_at", { withTimezone: true }).notNull().defaultNow(), version: text("version"), allowedFields: text("allowed_fields").array(),
-});
+  id: uuid("id").primaryKey().defaultRandom(), organization: text("organization").notNull(), sourceUrl: text("source_url"), datasetIdentifier: text("dataset_identifier").notNull(), license: text("license").notNull(), licenseUrl: text("license_url"), attribution: text("attribution").notNull(), importedAt: timestamp("imported_at", { withTimezone: true }).notNull().defaultNow(), version: text("version").notNull().default("current"), allowedFields: text("allowed_fields").array(), commercialUseAllowed: boolean("commercial_use_allowed").notNull().default(false),
+}, (table) => [uniqueIndex("sources_dataset_version_uq").on(table.datasetIdentifier, table.version)]);
+
+export const importRuns = pgTable("import_runs", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  importer: text("importer").notNull(),
+  datasetIdentifier: text("dataset_identifier").notNull(),
+  datasetVersion: text("dataset_version").notNull(),
+  status: importRunStatus("status").notNull().default("running"),
+  startedAt: timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  insertedCount: integer("inserted_count").notNull().default(0),
+  updatedCount: integer("updated_count").notNull().default(0),
+  skippedCount: integer("skipped_count").notNull().default(0),
+  errorCount: integer("error_count").notNull().default(0),
+  metadata: jsonb("metadata"),
+}, (table) => [index("import_runs_dataset_idx").on(table.datasetIdentifier, table.startedAt)]);
+
+export const birdSources = pgTable("bird_sources", {
+  birdId: uuid("bird_id").notNull().references(() => birds.id, { onDelete: "cascade" }),
+  sourceId: uuid("source_id").notNull().references(() => sources.id, { onDelete: "cascade" }),
+  fieldName: text("field_name").notNull(),
+  sourceRecordUrl: text("source_record_url"),
+  retrievedAt: timestamp("retrieved_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [primaryKey({ columns: [table.birdId, table.sourceId, table.fieldName] }), index("bird_sources_bird_idx").on(table.birdId)]);
 
 export const birdOccurrences = pgTable("bird_occurrences", {
   birdId: uuid("bird_id").notNull().references(() => birds.id, { onDelete: "cascade" }), locationId: uuid("location_id").notNull().references(() => locations.id, { onDelete: "cascade" }), season: text("season").notNull(), frequencyScore: real("frequency_score"), presence: presenceType("presence").notNull(), observationPeriod: text("observation_period"), sourceId: uuid("source_id").references(() => sources.id), confidence: real("confidence"),
 }, (table) => [primaryKey({ columns:[table.birdId, table.locationId, table.season] }), index("occurrence_location_season_idx").on(table.locationId, table.season, table.frequencyScore)]);
+
+export const birdOccurrenceStats = pgTable("bird_occurrence_stats", {
+  birdId: uuid("bird_id").notNull().references(() => birds.id, { onDelete: "cascade" }),
+  locationId: uuid("location_id").notNull().references(() => locations.id, { onDelete: "cascade" }),
+  month: integer("month").notNull(),
+  observationCount: integer("observation_count").notNull().default(0),
+  recentYearCount: integer("recent_year_count").notNull().default(0),
+  frequencyScore: real("frequency_score"),
+  seasonalStatus: text("seasonal_status").notNull().default("unknown"),
+  confidence: real("confidence").notNull().default(0),
+  datasetVersion: text("dataset_version").notNull(),
+  sourceId: uuid("source_id").notNull().references(() => sources.id),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [primaryKey({ columns: [table.birdId, table.locationId, table.month, table.datasetVersion] }), index("occurrence_stats_location_month_idx").on(table.locationId, table.month, table.frequencyScore)]);
 
 export const birdFoods = pgTable("bird_foods", {
   birdId: uuid("bird_id").notNull().references(() => birds.id, { onDelete:"cascade" }), foodId: uuid("food_id").notNull().references(() => foods.id, { onDelete:"cascade" }), context: text("context").notNull(), season: text("season").notNull().default("all"), preferenceScore: real("preference_score"), evidenceLevel: text("evidence_level"), sourceId: uuid("source_id").references(() => sources.id),
@@ -84,7 +122,8 @@ export const birdDetails = pgTable("bird_details", {
   populationTrend:    text("population_trend"),    // increasing | stable | decreasing | unknown
   populationEstimate: text("population_estimate"), // free text: "300 million"
   mainThreats:        text("main_threats").array(),
-});
+  gbifId:             text("gbif_id"),
+}, (table) => [uniqueIndex("bird_details_species_code_uq").on(table.speciesCode), uniqueIndex("bird_details_gbif_id_uq").on(table.gbifId)]);
 
 /**
  * Visual identification features — one row per (bird, sex, season) combo.
@@ -114,6 +153,7 @@ export const birdIdentification = pgTable("bird_identification", {
   distinguishingFeatures: text("distinguishing_features"),
   similarSpecies:         text("similar_species").array(),
 }, (table) => [
+  uniqueIndex("bird_identification_bird_sex_season_uq").on(table.birdId, table.sex, table.season),
   index("bird_id_sex_season_idx").on(table.birdId, table.sex, table.season),
   index("identification_color_size_idx").on(table.primaryColor, table.sizeClass),
 ]);
@@ -151,13 +191,21 @@ export const birdImages = pgTable("bird_images", {
   ageClass:     text("age_class"),   // adult | juvenile | immature
   season:       text("season"),
   credit:       text("credit"),
-  license:      text("license"),     // CC0 | CC-BY | CC-BY-SA | ARR
+  creatorUrl:   text("creator_url"),
+  license:      text("license").notNull(),     // CC0 | CC-BY | CC-BY-SA
+  licenseUrl:   text("license_url").notNull(),
+  sourcePageUrl:text("source_page_url").notNull(),
+  attributionText: text("attribution_text").notNull(),
+  modified:     boolean("modified").notNull().default(false),
+  retrievedAt:  timestamp("retrieved_at", { withTimezone: true }).notNull().defaultNow(),
+  externalId:   text("external_id").notNull(),
   isPrimary:    boolean("is_primary").notNull().default(false),
   wikimediaId:  text("wikimedia_id"),
   macaulayId:   text("macaulay_id"),
   gbifId:       text("gbif_id"),
   sourceId:     uuid("source_id").references(() => sources.id),
 }, (table) => [
+  uniqueIndex("bird_images_source_external_uq").on(table.sourceId, table.externalId),
   index("bird_images_bird_idx").on(table.birdId),
   index("bird_images_primary_idx").on(table.birdId, table.isPrimary),
 ]);

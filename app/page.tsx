@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { PlannerForm } from "./components/PlannerForm";
-import { featuredBirds, plantPicks, problemGuides } from "../lib/content";
+import { plantPicks, problemGuides } from "../lib/content";
+import { getPublishedBirds } from "../lib/bird-repository";
 
 const modules = [
   { icon: "🦜", num: "01", title: "Bird Encyclopedia", copy: "500+ species — diet, habitat, attraction tips, and nesting habits for every common backyard bird.", href: "/birds" },
@@ -17,7 +18,8 @@ const modules = [
 
 const locationPills = ["California", "Texas", "Florida", "New York", "Arizona", "Georgia", "Oregon", "Colorado", "Michigan", "North Carolina"];
 
-export default function Home() {
+export default async function Home() {
+  const featuredBirds=(await getPublishedBirds()).slice(0,4);
   return (
     <div className="site-shell">
       <Header />

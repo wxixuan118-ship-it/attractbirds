@@ -1,0 +1,62 @@
+export type WhitelistBird = { slug: string; commonName: string; scientificName: string; priority: number };
+
+const rows: Array<[string, string]> = [
+  ["Northern Cardinal", "Cardinalis cardinalis"], ["American Robin", "Turdus migratorius"],
+  ["Blue Jay", "Cyanocitta cristata"], ["American Goldfinch", "Spinus tristis"],
+  ["Black-capped Chickadee", "Poecile atricapillus"], ["Tufted Titmouse", "Baeolophus bicolor"],
+  ["House Finch", "Haemorhous mexicanus"], ["Mourning Dove", "Zenaida macroura"],
+  ["Downy Woodpecker", "Dryobates pubescens"], ["Ruby-throated Hummingbird", "Archilochus colubris"],
+  ["Anna's Hummingbird", "Calypte anna"], ["Carolina Wren", "Thryothorus ludovicianus"],
+  ["White-breasted Nuthatch", "Sitta carolinensis"], ["Red-bellied Woodpecker", "Melanerpes carolinus"],
+  ["Dark-eyed Junco", "Junco hyemalis"], ["Song Sparrow", "Melospiza melodia"],
+  ["House Sparrow", "Passer domesticus"], ["European Starling", "Sturnus vulgaris"],
+  ["Common Grackle", "Quiscalus quiscula"], ["Red-winged Blackbird", "Agelaius phoeniceus"],
+  ["Brown-headed Cowbird", "Molothrus ater"], ["Baltimore Oriole", "Icterus galbula"],
+  ["Orchard Oriole", "Icterus spurius"], ["Eastern Bluebird", "Sialia sialis"],
+  ["Western Bluebird", "Sialia mexicana"], ["Mountain Bluebird", "Sialia currucoides"],
+  ["Cedar Waxwing", "Bombycilla cedrorum"], ["Gray Catbird", "Dumetella carolinensis"],
+  ["Northern Mockingbird", "Mimus polyglottos"], ["Brown Thrasher", "Toxostoma rufum"],
+  ["Eastern Towhee", "Pipilo erythrophthalmus"], ["Spotted Towhee", "Pipilo maculatus"],
+  ["Chipping Sparrow", "Spizella passerina"], ["White-throated Sparrow", "Zonotrichia albicollis"],
+  ["White-crowned Sparrow", "Zonotrichia leucophrys"], ["American Tree Sparrow", "Spizelloides arborea"],
+  ["Fox Sparrow", "Passerella iliaca"], ["Field Sparrow", "Spizella pusilla"],
+  ["Savannah Sparrow", "Passerculus sandwichensis"], ["Lincoln's Sparrow", "Melospiza lincolnii"],
+  ["Purple Finch", "Haemorhous purpureus"], ["Pine Siskin", "Spinus pinus"],
+  ["Evening Grosbeak", "Coccothraustes vespertinus"], ["Rose-breasted Grosbeak", "Pheucticus ludovicianus"],
+  ["Black-headed Grosbeak", "Pheucticus melanocephalus"], ["Indigo Bunting", "Passerina cyanea"],
+  ["Painted Bunting", "Passerina ciris"], ["Lazuli Bunting", "Passerina amoena"],
+  ["Scarlet Tanager", "Piranga olivacea"], ["Summer Tanager", "Piranga rubra"],
+  ["Western Tanager", "Piranga ludoviciana"], ["Yellow-rumped Warbler", "Setophaga coronata"],
+  ["Yellow Warbler", "Setophaga petechia"], ["Common Yellowthroat", "Geothlypis trichas"],
+  ["Pine Warbler", "Setophaga pinus"], ["Palm Warbler", "Setophaga palmarum"],
+  ["American Redstart", "Setophaga ruticilla"], ["Nashville Warbler", "Leiothlypis ruficapilla"],
+  ["Orange-crowned Warbler", "Leiothlypis celata"], ["Black-and-white Warbler", "Mniotilta varia"],
+  ["Carolina Chickadee", "Poecile carolinensis"], ["Mountain Chickadee", "Poecile gambeli"],
+  ["Chestnut-backed Chickadee", "Poecile rufescens"], ["Oak Titmouse", "Baeolophus inornatus"],
+  ["Bushtit", "Psaltriparus minimus"], ["Red-breasted Nuthatch", "Sitta canadensis"],
+  ["Brown Creeper", "Certhia americana"], ["Golden-crowned Kinglet", "Regulus satrapa"],
+  ["Ruby-crowned Kinglet", "Corthylio calendula"], ["House Wren", "Troglodytes aedon"],
+  ["Winter Wren", "Troglodytes hiemalis"], ["Bewick's Wren", "Thryomanes bewickii"],
+  ["Rock Wren", "Salpinctes obsoletus"], ["American Crow", "Corvus brachyrhynchos"],
+  ["Fish Crow", "Corvus ossifragus"], ["Black-billed Magpie", "Pica hudsonia"],
+  ["Steller's Jay", "Cyanocitta stelleri"], ["California Scrub-Jay", "Aphelocoma californica"],
+  ["Woodhouse's Scrub-Jay", "Aphelocoma woodhouseii"], ["Canada Jay", "Perisoreus canadensis"],
+  ["Clark's Nutcracker", "Nucifraga columbiana"], ["Hairy Woodpecker", "Leuconotopicus villosus"],
+  ["Pileated Woodpecker", "Dryocopus pileatus"], ["Northern Flicker", "Colaptes auratus"],
+  ["Yellow-bellied Sapsucker", "Sphyrapicus varius"], ["Red-headed Woodpecker", "Melanerpes erythrocephalus"],
+  ["Acorn Woodpecker", "Melanerpes formicivorus"], ["Lewis's Woodpecker", "Melanerpes lewis"],
+  ["Broad-tailed Hummingbird", "Selasphorus platycercus"], ["Rufous Hummingbird", "Selasphorus rufus"],
+  ["Black-chinned Hummingbird", "Archilochus alexandri"], ["Costa's Hummingbird", "Calypte costae"],
+  ["Calliope Hummingbird", "Selasphorus calliope"], ["Common Ground Dove", "Columbina passerina"],
+  ["White-winged Dove", "Zenaida asiatica"], ["Band-tailed Pigeon", "Patagioenas fasciata"],
+  ["American Kestrel", "Falco sparverius"], ["Cooper's Hawk", "Accipiter cooperii"],
+  ["Red-tailed Hawk", "Buteo jamaicensis"], ["Barred Owl", "Strix varia"],
+];
+
+function slugify(name: string) { return name.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+export const birdWhitelist: WhitelistBird[] = rows.map(([commonName, scientificName], index) => ({
+  slug: slugify(commonName), commonName, scientificName, priority: index + 1,
+}));
+
+export const pilotBirdSlugs = birdWhitelist.slice(0, 10).map((bird) => bird.slug);

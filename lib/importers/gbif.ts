@@ -8,7 +8,7 @@
  *         bird_details   (gbifId for cross-reference)
  */
 
-import { eq } from "drizzle-orm";
+import { eq, isNull } from "drizzle-orm";
 import { getDb } from "../../db/index.js";
 import { birds, birdDetails, birdImages, sources } from "../../db/schema.js";
 import type { GbifSpeciesMatch, GbifMedia, GbifOccurrenceSearchResult, ImportResult } from "./types.js";
@@ -100,10 +100,12 @@ export async function importBirdImages(
       sourceUrl: `https://www.gbif.org/species/${gbifKey}`,
       datasetIdentifier: `gbif-species-${gbifKey}`,
       license: "CC BY",
+      licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+      commercialUseAllowed: true,
       attribution: `GBIF.org occurrence data for GBIF taxon key ${gbifKey}.`,
       allowedFields: ["image_url", "thumbnail_url", "credit", "license"],
     })
-    .onConflictDoNothing()
+    .onConflictDoUpdate({ target: [sources.datasetIdentifier, sources.version], set: { importedAt: new Date() } })
     .returning({ id: sources.id });
 
   let inserted = 0;
@@ -127,11 +129,15 @@ export async function importBirdImages(
             altText: media.title ?? `${media.creator ?? "Unknown"} — GBIF`,
             credit: media.creator ?? media.rightsHolder ?? "Unknown",
             license: normalizeLicense(media.license),
+            licenseUrl: media.license,
+            sourcePageUrl: media.references ?? `https://www.gbif.org/occurrence/${occ.key}`,
+            attributionText: `${media.creator ?? media.rightsHolder ?? "Unknown"} / ${normalizeLicense(media.license)} / GBIF occurrence ${occ.key}`,
+            externalId: `gbif:${occ.key}:${media.identifier}`,
             gbifId: String(occ.key),
             isPrimary: inserted === 0, // first valid image = hero
             sourceId: src?.id,
           })
-          .onConflictDoNothing();
+        .onConflictDoUpdate({ target: [birdImages.sourceId, birdImages.externalId], set: { imageUrl: media.identifier, altText: media.title ?? `${media.creator ?? "Unknown"} — GBIF`, credit: media.creator ?? media.rightsHolder ?? "Unknown", license: normalizeLicense(media.license), licenseUrl: media.license, sourcePageUrl: media.references ?? `https://www.gbif.org/occurrence/${occ.key}`, attributionText: `${media.creator ?? media.rightsHolder ?? "Unknown"} / ${normalizeLicense(media.license)} / GBIF occurrence ${occ.key}`, retrievedAt: new Date() } });
         inserted++;
         result.inserted++;
       } catch (e) {
@@ -161,7 +167,7 @@ export async function importAllBirdImages(opts: { limit?: number; delayMs?: numb
     .selectDistinct({ id: birds.id, scientificName: birds.scientificName })
     .from(birds)
     .leftJoin(birdImages, eq(birdImages.birdId, birds.id))
-    .where(eq(birds.status, "draft"));
+    .where(isNull(birdImages.id));
 
   console.log(`GBIF image import: ${candidates.length} birds with no images`);
 

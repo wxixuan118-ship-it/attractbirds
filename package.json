@@ -14,10 +14,12 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "import": "tsx scripts/import.ts",
-    "import:taxonomy": "tsx scripts/import.ts taxonomy",
-    "import:states": "tsx scripts/import.ts states",
-    "import:images": "tsx scripts/import.ts images"
+    "import": "node --env-file=.env.local --import tsx scripts/import.ts",
+    "import:taxonomy": "node --env-file=.env.local --import tsx scripts/import.ts taxonomy",
+    "import:states": "node --env-file=.env.local --import tsx scripts/import.ts states",
+    "import:images": "node --env-file=.env.local --import tsx scripts/import.ts images",
+    "seed:pilot": "node --env-file=.env.local --import tsx scripts/seed-pilot.ts",
+    "quality:birds": "node --env-file=.env.local --import tsx scripts/quality.ts"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
@@ -45,6 +47,7 @@
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.59.3",
+    "tsx": "4.20.6",
     "vinext": "1.0.0-beta.2",
     "vite": "8.0.13",
     "wrangler": "4.92.0"
