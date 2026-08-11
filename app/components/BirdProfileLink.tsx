@@ -1,16 +1,7 @@
-"use client";
-
-import type { MouseEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type BirdProfileLinkProps = { children: ReactNode; className: string; href: string };
 
 export function BirdProfileLink({ children, className, href }: BirdProfileLinkProps) {
-  function openProfile(event: MouseEvent<HTMLAnchorElement>) {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    event.stopPropagation();
-    window.location.assign(href);
-  }
-
-  return <a className={className} href={href} target="_top" onClick={openProfile}>{children}</a>;
+  return <form action={href} method="get" className="bird-profile-form"><button className={className} type="submit">{children}</button></form>;
 }

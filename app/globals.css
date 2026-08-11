@@ -352,6 +352,8 @@ h1, h2, h3, p { margin-top: 0; }
   box-shadow: var(--shadow-hover);
   border-color: var(--green-pill);
 }
+.bird-profile-form { display: flex; min-width: 0; margin: 0; }
+.bird-profile-form > button { width: 100%; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
 .bird-circle {
   width: 80px;
   height: 80px;
