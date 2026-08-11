@@ -96,3 +96,39 @@ test("renders quality-gated plant SEO routes", async () => {
   assert.equal(location.status, 200);
   assert.match(await location.text(), /Planning preview/);
 });
+
+test("renders quality-gated feeder routes and calculator", async () => {
+  const hub = await render("/feeders");
+  assert.equal(hub.status, 200);
+  assert.match(await hub.text(), /Choose a feeder/);
+
+  const type = await render("/feeders/tube-feeder");
+  assert.equal(type.status, 200);
+  const typeHtml = await type.text();
+  assert.match(typeHtml, /Tube Feeder/);
+  assert.match(typeHtml, /FAQPage/);
+
+  const bird = await render("/feeders/for/northern-cardinal");
+  assert.equal(bird.status, 200);
+  assert.match(await bird.text(), /Feeder types for Northern Cardinals/);
+
+  const food = await render("/feeders/for/nectar");
+  assert.equal(food.status, 200);
+  assert.match(await food.text(), /Feeders for Hummingbird Nectar/);
+
+  const problem = await render("/feeders/squirrel-proof");
+  assert.equal(problem.status, 200);
+  assert.match(await problem.text(), /Squirrel-resistant/);
+
+  const comparison = await render("/feeders/compare/tube-vs-hopper");
+  assert.equal(comparison.status, 200);
+  assert.match(await comparison.text(), /Tube Feeder vs Hopper Feeder/);
+
+  const state = await render("/feeders/california");
+  assert.equal(state.status, 200);
+  assert.match(await state.text(), /noindex/);
+
+  const calculator = await render("/tools/bird-feeder-calculator");
+  assert.equal(calculator.status, 200);
+  assert.match(await calculator.text(), /Bird feeder planner/);
+});

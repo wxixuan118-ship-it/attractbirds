@@ -9,7 +9,7 @@ const links = {
   ],
   Garden: [
     { label: "Bird-Friendly Plants", href: "/plants" },
-    { label: "Feeder Guide", href: "/feeders/platform-feeder" },
+    { label: "Feeder Guide", href: "/feeders" },
     { label: "Water Sources", href: "/#planner" },
     { label: "Nesting & Shelter", href: "/birds" },
   ],
@@ -18,6 +18,7 @@ const links = {
     { label: "Problem Diagnosis", href: "/bird-problems/no-birds-at-feeder" },
     { label: "Species Identifier", href: "/birds" },
     { label: "Seasonal Calendar", href: "/seasonal-birds" },
+    { label: "Feeder Planner", href: "/tools/bird-feeder-calculator" },
   ],
 };
 

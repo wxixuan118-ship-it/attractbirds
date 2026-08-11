@@ -6,7 +6,7 @@ const nav = [
   { label: "By Location", href: "/birds-by-location" },
   { label: "Seasonal Birds", href: "/seasonal-birds" },
   { label: "Plants", href: "/plants" },
-  { label: "Feeders", href: "/feeders/platform-feeder" },
+  { label: "Feeders", href: "/feeders" },
   { label: "Problems", href: "/bird-problems/no-birds-at-feeder" },
 ];
 
