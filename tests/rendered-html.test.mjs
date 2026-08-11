@@ -48,3 +48,11 @@ test("renders encyclopedia and location detail pages", async () => {
   assert.equal(location.status, 200);
   assert.match(await location.text(), /Birds in/);
 });
+
+test("location landing exposes direct state links", async () => {
+  const response = await render("/birds-by-location");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<a[^>]+href="\/birds-by-location\/california"[^>]*class="state-card"/);
+  assert.match(html, /<a[^>]+href="\/birds-by-location\/texas"[^>]*class="us-map-tile/);
+});

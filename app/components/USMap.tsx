@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { US_STATES_DATA, REGIONS } from "../../data/us-states-data";
 
@@ -52,7 +51,7 @@ export function USMap() {
         aria-label="Interactive map of United States — select a state to see local birds"
       >
         {tiles.map((s) => (
-          <Link
+          <a
             key={s.slug}
             href={`/birds-by-location/${s.slug}`}
             className={`us-map-tile ${s.isHovered ? "tile-hovered" : ""}`}
@@ -67,7 +66,7 @@ export function USMap() {
             aria-label={`Birds in ${s.name}`}
           >
             <span className="tile-abbr">{s.abbr}</span>
-          </Link>
+          </a>
         ))}
       </div>
 

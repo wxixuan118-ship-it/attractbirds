@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { USMap } from "../components/USMap";
@@ -53,11 +52,11 @@ export default function BirdsByLocationPage() {
           </div>
           <div className="state-directory" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}>
             {popular.map((s) => (
-              <Link key={s.slug} href={`/birds-by-location/${s.slug}`} className="state-card">
+              <a key={s.slug} href={`/birds-by-location/${s.slug}`} className="state-card">
                 <span className="state-card-abbr">{s.abbr}</span>
                 <span className="state-card-name">{s.name}</span>
                 <span className="state-card-count">{s.speciesCount}+ species</span>
-              </Link>
+              </a>
             ))}
           </div>
         </section>
@@ -78,11 +77,11 @@ export default function BirdsByLocationPage() {
                 </div>
                 <div className="state-directory" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))" }}>
                   {states.map((s) => (
-                    <Link key={s.slug} href={`/birds-by-location/${s.slug}`} className="state-card">
+                    <a key={s.slug} href={`/birds-by-location/${s.slug}`} className="state-card">
                       <span className="state-card-abbr">{s.abbr}</span>
                       <span className="state-card-name">{s.name}</span>
                       <span className="state-card-count">{s.speciesCount}+ species</span>
-                    </Link>
+                    </a>
                   ))}
                 </div>
               </div>
