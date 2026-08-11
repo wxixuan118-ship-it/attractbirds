@@ -60,7 +60,7 @@ export default async function BirdsPage() {
               </header>
               <div className="encyclopedia-grid">
                 {group.birds.map((bird) => (
-                  <Link className="species-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                  <a className="species-card" href={`/birds/${bird.slug}`} key={bird.slug}>
                     <div className="species-card-visual">
                       {bird.imageUrl ? (
                         // The repository supplies reviewed, attributed bird imagery when available.
@@ -80,7 +80,7 @@ export default async function BirdsPage() {
                         <strong>{bird.sourceCount > 0 ? "View profile →" : "Open profile →"}</strong>
                       </div>
                     </div>
-                  </Link>
+                  </a>
                 ))}
               </div>
             </section>
