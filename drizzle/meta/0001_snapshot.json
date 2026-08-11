@@ -1,0 +1,2318 @@
+{
+  "id": "71de9bf8-1007-472e-b9ca-53f740a5021a",
+  "prevId": "c4f665a1-a78a-40e7-8ae1-72fb0958a898",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.bird_behaviors": {
+      "name": "bird_behaviors",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "migratory": {
+          "name": "migratory",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "migration_pattern": {
+          "name": "migration_pattern",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "migration_months": {
+          "name": "migration_months",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flocking_behavior": {
+          "name": "flocking_behavior",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "feeding_behavior": {
+          "name": "feeding_behavior",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nest_type": {
+          "name": "nest_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nest_locations": {
+          "name": "nest_locations",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nest_material": {
+          "name": "nest_material",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "clutch_size": {
+          "name": "clutch_size",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "incubation_days": {
+          "name": "incubation_days",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "broods_per_year": {
+          "name": "broods_per_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bird_behaviors_bird_id_birds_id_fk": {
+          "name": "bird_behaviors_bird_id_birds_id_fk",
+          "tableFrom": "bird_behaviors",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_details": {
+      "name": "bird_details",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "genus": {
+          "name": "genus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taxonomy_class": {
+          "name": "taxonomy_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Aves'"
+        },
+        "species_code": {
+          "name": "species_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "avibase_id": {
+          "name": "avibase_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ebird_id": {
+          "name": "ebird_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ioc_id": {
+          "name": "ioc_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight_g_min": {
+          "name": "weight_g_min",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight_g_max": {
+          "name": "weight_g_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wingspan_cm_min": {
+          "name": "wingspan_cm_min",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wingspan_cm_max": {
+          "name": "wingspan_cm_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lifespan_years_min": {
+          "name": "lifespan_years_min",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lifespan_years_max": {
+          "name": "lifespan_years_max",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "iucn_status": {
+          "name": "iucn_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "population_trend": {
+          "name": "population_trend",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "population_estimate": {
+          "name": "population_estimate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "main_threats": {
+          "name": "main_threats",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bird_details_bird_id_birds_id_fk": {
+          "name": "bird_details_bird_id_birds_id_fk",
+          "tableFrom": "bird_details",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_feeders": {
+      "name": "bird_feeders",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feeder_id": {
+          "name": "feeder_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "suitability_score": {
+          "name": "suitability_score",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bird_feeders_bird_id_birds_id_fk": {
+          "name": "bird_feeders_bird_id_birds_id_fk",
+          "tableFrom": "bird_feeders",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_feeders_feeder_id_feeders_id_fk": {
+          "name": "bird_feeders_feeder_id_feeders_id_fk",
+          "tableFrom": "bird_feeders",
+          "tableTo": "feeders",
+          "columnsFrom": [
+            "feeder_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_feeders_source_id_sources_id_fk": {
+          "name": "bird_feeders_source_id_sources_id_fk",
+          "tableFrom": "bird_feeders",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bird_feeders_bird_id_feeder_id_pk": {
+          "name": "bird_feeders_bird_id_feeder_id_pk",
+          "columns": [
+            "bird_id",
+            "feeder_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_foods": {
+      "name": "bird_foods",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "food_id": {
+          "name": "food_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "context": {
+          "name": "context",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'all'"
+        },
+        "preference_score": {
+          "name": "preference_score",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "evidence_level": {
+          "name": "evidence_level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "bird_foods_food_idx": {
+          "name": "bird_foods_food_idx",
+          "columns": [
+            {
+              "expression": "food_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_foods_bird_id_birds_id_fk": {
+          "name": "bird_foods_bird_id_birds_id_fk",
+          "tableFrom": "bird_foods",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_foods_food_id_foods_id_fk": {
+          "name": "bird_foods_food_id_foods_id_fk",
+          "tableFrom": "bird_foods",
+          "tableTo": "foods",
+          "columnsFrom": [
+            "food_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_foods_source_id_sources_id_fk": {
+          "name": "bird_foods_source_id_sources_id_fk",
+          "tableFrom": "bird_foods",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bird_foods_bird_id_food_id_context_season_pk": {
+          "name": "bird_foods_bird_id_food_id_context_season_pk",
+          "columns": [
+            "bird_id",
+            "food_id",
+            "context",
+            "season"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_identification": {
+      "name": "bird_identification",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sex": {
+          "name": "sex",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'unknown'"
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'all'"
+        },
+        "primary_color": {
+          "name": "primary_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "body_colors": {
+          "name": "body_colors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "breast_color": {
+          "name": "breast_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wing_color": {
+          "name": "wing_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "head_color": {
+          "name": "head_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size_class": {
+          "name": "size_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "beak_shape": {
+          "name": "beak_shape",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "beak_color": {
+          "name": "beak_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tail_shape": {
+          "name": "tail_shape",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wing_pattern": {
+          "name": "wing_pattern",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "eye_ring": {
+          "name": "eye_ring",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "eye_color": {
+          "name": "eye_color",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "distinguishing_features": {
+          "name": "distinguishing_features",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "similar_species": {
+          "name": "similar_species",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "bird_id_sex_season_idx": {
+          "name": "bird_id_sex_season_idx",
+          "columns": [
+            {
+              "expression": "bird_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "sex",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "season",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "identification_color_size_idx": {
+          "name": "identification_color_size_idx",
+          "columns": [
+            {
+              "expression": "primary_color",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "size_class",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_identification_bird_id_birds_id_fk": {
+          "name": "bird_identification_bird_id_birds_id_fk",
+          "tableFrom": "bird_identification",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_images": {
+      "name": "bird_images",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "thumbnail_url": {
+          "name": "thumbnail_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alt_text": {
+          "name": "alt_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sex": {
+          "name": "sex",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "age_class": {
+          "name": "age_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credit": {
+          "name": "credit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "license": {
+          "name": "license",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_primary": {
+          "name": "is_primary",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "wikimedia_id": {
+          "name": "wikimedia_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "macaulay_id": {
+          "name": "macaulay_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gbif_id": {
+          "name": "gbif_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "bird_images_bird_idx": {
+          "name": "bird_images_bird_idx",
+          "columns": [
+            {
+              "expression": "bird_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "bird_images_primary_idx": {
+          "name": "bird_images_primary_idx",
+          "columns": [
+            {
+              "expression": "bird_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "is_primary",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_images_bird_id_birds_id_fk": {
+          "name": "bird_images_bird_id_birds_id_fk",
+          "tableFrom": "bird_images",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_images_source_id_sources_id_fk": {
+          "name": "bird_images_source_id_sources_id_fk",
+          "tableFrom": "bird_images",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_occurrences": {
+      "name": "bird_occurrences",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "location_id": {
+          "name": "location_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "frequency_score": {
+          "name": "frequency_score",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "presence": {
+          "name": "presence",
+          "type": "presence_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "observation_period": {
+          "name": "observation_period",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "confidence": {
+          "name": "confidence",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "occurrence_location_season_idx": {
+          "name": "occurrence_location_season_idx",
+          "columns": [
+            {
+              "expression": "location_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "season",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "frequency_score",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_occurrences_bird_id_birds_id_fk": {
+          "name": "bird_occurrences_bird_id_birds_id_fk",
+          "tableFrom": "bird_occurrences",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_occurrences_location_id_locations_id_fk": {
+          "name": "bird_occurrences_location_id_locations_id_fk",
+          "tableFrom": "bird_occurrences",
+          "tableTo": "locations",
+          "columnsFrom": [
+            "location_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_occurrences_source_id_sources_id_fk": {
+          "name": "bird_occurrences_source_id_sources_id_fk",
+          "tableFrom": "bird_occurrences",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bird_occurrences_bird_id_location_id_season_pk": {
+          "name": "bird_occurrences_bird_id_location_id_season_pk",
+          "columns": [
+            "bird_id",
+            "location_id",
+            "season"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_plants": {
+      "name": "bird_plants",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plant_id": {
+          "name": "plant_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "benefit": {
+          "name": "benefit",
+          "type": "benefit_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'all'"
+        },
+        "strength_score": {
+          "name": "strength_score",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "bird_plants_plant_idx": {
+          "name": "bird_plants_plant_idx",
+          "columns": [
+            {
+              "expression": "plant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_plants_bird_id_birds_id_fk": {
+          "name": "bird_plants_bird_id_birds_id_fk",
+          "tableFrom": "bird_plants",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_plants_plant_id_plants_id_fk": {
+          "name": "bird_plants_plant_id_plants_id_fk",
+          "tableFrom": "bird_plants",
+          "tableTo": "plants",
+          "columnsFrom": [
+            "plant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_plants_source_id_sources_id_fk": {
+          "name": "bird_plants_source_id_sources_id_fk",
+          "tableFrom": "bird_plants",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bird_plants_bird_id_plant_id_benefit_season_pk": {
+          "name": "bird_plants_bird_id_plant_id_benefit_season_pk",
+          "columns": [
+            "bird_id",
+            "plant_id",
+            "benefit",
+            "season"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_related_species": {
+      "name": "bird_related_species",
+      "schema": "",
+      "columns": {
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "related_bird_id": {
+          "name": "related_bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "relationship_type": {
+          "name": "relationship_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "similarity_score": {
+          "name": "similarity_score",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "bird_related_bird_idx": {
+          "name": "bird_related_bird_idx",
+          "columns": [
+            {
+              "expression": "bird_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_related_species_bird_id_birds_id_fk": {
+          "name": "bird_related_species_bird_id_birds_id_fk",
+          "tableFrom": "bird_related_species",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_related_species_related_bird_id_birds_id_fk": {
+          "name": "bird_related_species_related_bird_id_birds_id_fk",
+          "tableFrom": "bird_related_species",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "related_bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bird_related_species_bird_id_related_bird_id_pk": {
+          "name": "bird_related_species_bird_id_related_bird_id_pk",
+          "columns": [
+            "bird_id",
+            "related_bird_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bird_sounds": {
+      "name": "bird_sounds",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "bird_id": {
+          "name": "bird_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "call_type": {
+          "name": "call_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "audio_url": {
+          "name": "audio_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "spectrogram_url": {
+          "name": "spectrogram_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "season": {
+          "name": "season",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credit": {
+          "name": "credit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "license": {
+          "name": "license",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "macaulay_id": {
+          "name": "macaulay_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_id": {
+          "name": "source_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "bird_sounds_bird_idx": {
+          "name": "bird_sounds_bird_idx",
+          "columns": [
+            {
+              "expression": "bird_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "bird_sounds_bird_id_birds_id_fk": {
+          "name": "bird_sounds_bird_id_birds_id_fk",
+          "tableFrom": "bird_sounds",
+          "tableTo": "birds",
+          "columnsFrom": [
+            "bird_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bird_sounds_source_id_sources_id_fk": {
+          "name": "bird_sounds_source_id_sources_id_fk",
+          "tableFrom": "bird_sounds",
+          "tableTo": "sources",
+          "columnsFrom": [
+            "source_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.birds": {
+      "name": "birds",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "common_name": {
+          "name": "common_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scientific_name": {
+          "name": "scientific_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "taxonomy_order": {
+          "name": "taxonomy_order",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "taxonomy_family": {
+          "name": "taxonomy_family",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size_min_cm": {
+          "name": "size_min_cm",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "size_max_cm": {
+          "name": "size_max_cm",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "colors": {
+          "name": "colors",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "habitats": {
+          "name": "habitats",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resident_status": {
+          "name": "resident_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "conservation_status": {
+          "name": "conservation_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "summary": {
+          "name": "summary",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "birds_slug_uq": {
+          "name": "birds_slug_uq",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "birds_scientific_name_uq": {
+          "name": "birds_scientific_name_uq",
+          "columns": [
+            {
+              "expression": "scientific_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "birds_status_idx": {
+          "name": "birds_status_idx",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "indexable",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.feeders": {
+      "name": "feeders",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feeder_type": {
+          "name": "feeder_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "compatible_foods": {
+          "name": "compatible_foods",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "placement_guidance": {
+          "name": "placement_guidance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cleaning_guidance": {
+          "name": "cleaning_guidance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "feeders_slug_uq": {
+          "name": "feeders_slug_uq",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.foods": {
+      "name": "foods",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "food_type": {
+          "name": "food_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "storage_guidance": {
+          "name": "storage_guidance",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "safety_notes": {
+          "name": "safety_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "foods_slug_uq": {
+          "name": "foods_slug_uq",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.locations": {
+      "name": "locations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "location_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ecoregion": {
+          "name": "ecoregion",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usda_zones": {
+          "name": "usda_zones",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "climate_attributes": {
+          "name": "climate_attributes",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "locations_slug_uq": {
+          "name": "locations_slug_uq",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "locations_parent_idx": {
+          "name": "locations_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.plants": {
+      "name": "plants",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "common_name": {
+          "name": "common_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scientific_name": {
+          "name": "scientific_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plant_type": {
+          "name": "plant_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "native_regions": {
+          "name": "native_regions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usda_zone_min": {
+          "name": "usda_zone_min",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "usda_zone_max": {
+          "name": "usda_zone_max",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sun_requirements": {
+          "name": "sun_requirements",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "water_requirements": {
+          "name": "water_requirements",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height_min_cm": {
+          "name": "height_min_cm",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height_max_cm": {
+          "name": "height_max_cm",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bloom_seasons": {
+          "name": "bloom_seasons",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fruit_seasons": {
+          "name": "fruit_seasons",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "toxicity_notes": {
+          "name": "toxicity_notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invasive_regions": {
+          "name": "invasive_regions",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "content_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
+        "indexable": {
+          "name": "indexable",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "source_count": {
+          "name": "source_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "reviewed_at": {
+          "name": "reviewed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_verified_at": {
+          "name": "last_verified_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "plants_slug_uq": {
+          "name": "plants_slug_uq",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "plants_scientific_name_uq": {
+          "name": "plants_scientific_name_uq",
+          "columns": [
+            {
+              "expression": "scientific_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.sources": {
+      "name": "sources",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "organization": {
+          "name": "organization",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dataset_identifier": {
+          "name": "dataset_identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "license": {
+          "name": "license",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "attribution": {
+          "name": "attribution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imported_at": {
+          "name": "imported_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allowed_fields": {
+          "name": "allowed_fields",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.benefit_type": {
+      "name": "benefit_type",
+      "schema": "public",
+      "values": [
+        "nectar",
+        "fruit",
+        "seed",
+        "insects",
+        "shelter",
+        "nesting"
+      ]
+    },
+    "public.content_status": {
+      "name": "content_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "reviewed",
+        "published",
+        "retired"
+      ]
+    },
+    "public.location_type": {
+      "name": "location_type",
+      "schema": "public",
+      "values": [
+        "country",
+        "state",
+        "county",
+        "city",
+        "region"
+      ]
+    },
+    "public.presence_type": {
+      "name": "presence_type",
+      "schema": "public",
+      "values": [
+        "resident",
+        "breeding",
+        "winter",
+        "migrant"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
