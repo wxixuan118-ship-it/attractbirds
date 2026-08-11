@@ -187,7 +187,7 @@ export default async function StatePage({
               <Link href="/feeders/platform-feeder" className="header-cta" style={{ display: "inline-block" }}>
                 Find the right feeder →
               </Link>
-              <Link href="/plants/attract-hummingbirds" className="region-pill" style={{ display: "inline-block" }}>
+              <Link href={`/plants/${state.slug}/native-plants`} className="region-pill" style={{ display: "inline-block" }}>
                 Bird-friendly plants →
               </Link>
             </div>

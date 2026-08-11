@@ -8,7 +8,7 @@ const links = {
     { label: "Attraction Guides", href: "/birds" },
   ],
   Garden: [
-    { label: "Bird-Friendly Plants", href: "/plants/attract-hummingbirds" },
+    { label: "Bird-Friendly Plants", href: "/plants" },
     { label: "Feeder Guide", href: "/feeders/platform-feeder" },
     { label: "Water Sources", href: "/#planner" },
     { label: "Nesting & Shelter", href: "/birds" },

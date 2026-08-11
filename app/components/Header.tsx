@@ -5,7 +5,7 @@ const nav = [
   { label: "Bird Encyclopedia", href: "/birds" },
   { label: "By Location", href: "/birds-by-location" },
   { label: "Seasonal Birds", href: "/seasonal-birds" },
-  { label: "Plants", href: "/plants/attract-hummingbirds" },
+  { label: "Plants", href: "/plants" },
   { label: "Feeders", href: "/feeders/platform-feeder" },
   { label: "Problems", href: "/bird-problems/no-birds-at-feeder" },
 ];

@@ -2,6 +2,8 @@ import { birdCatalog } from "../../data/bird-catalog";
 import { US_STATES_DATA } from "../../data/us-states-data";
 import { getComboStaticParams } from "../../lib/location-repository";
 import { indexedSeasonalBirds, seasonSlugs } from "../../lib/seasonal-repository";
+import { indexedPlants, plantCategories } from "../../lib/plant-repository";
+import { plantPurposes } from "../../data/pilot-plants";
 
 const ORIGIN = "https://attractbirds.app";
 const LAST_MODIFIED = "2026-08-11";
@@ -22,10 +24,14 @@ export async function GET() {
     "/birds-by-location",
     "/bird-problems/no-birds-at-feeder",
     "/feeders/platform-feeder",
-    "/plants/attract-hummingbirds",
+    "/plants",
   ]);
 
   for (const bird of birdCatalog) paths.add(`/birds/${bird.slug}`);
+  for (const plant of indexedPlants) paths.add(`/plants/${plant.slug}`);
+  for (const slug of Object.keys(plantCategories)) paths.add(`/plants/${slug}`);
+  for (const slug of Object.keys(plantPurposes)) paths.add(`/plants/${slug}`);
+  for (const bird of indexedSeasonalBirds) paths.add(`/plants/for/${bird.slug}`);
   for (const season of seasonSlugs) {
     paths.add(`/seasonal-birds/${season}`);
     for (const bird of indexedSeasonalBirds) paths.add(`/seasonal-birds/${season}/${bird.slug}`);

@@ -76,3 +76,23 @@ test("renders quality-gated seasonal SEO routes", async () => {
   assert.equal(state.status, 200);
   assert.match(await state.text(), /Planning preview/);
 });
+
+test("renders quality-gated plant SEO routes", async () => {
+  const hub = await render("/plants");
+  assert.equal(hub.status, 200);
+  assert.match(await hub.text(), /Grow habitat/);
+
+  const plant = await render("/plants/cardinal-flower");
+  assert.equal(plant.status, 200);
+  const plantHtml = await plant.text();
+  assert.match(plantHtml, /Lobelia cardinalis/);
+  assert.match(plantHtml, /FAQPage/);
+
+  const relationship = await render("/plants/for/ruby-throated-hummingbird");
+  assert.equal(relationship.status, 200);
+  assert.match(await relationship.text(), /Plants for.*Ruby-throated Hummingbirds/s);
+
+  const location = await render("/plants/california/native-plants");
+  assert.equal(location.status, 200);
+  assert.match(await location.text(), /Planning preview/);
+});
