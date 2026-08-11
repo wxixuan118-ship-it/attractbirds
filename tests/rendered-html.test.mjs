@@ -158,3 +158,29 @@ test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
   assert.match(plantHtml, /Strelitzia reginae/);
   assert.match(plantHtml, /FAQPage/);
 });
+
+test("renders the complete how-to-attract-birds topic cluster", async () => {
+  const pillar = await render("/how-to-attract-birds");
+  const pillarHtml = await pillar.text();
+  assert.equal(pillar.status, 200);
+  assert.match(pillarHtml, /href="\/attract-birds-to-bird-bath"/);
+  assert.match(pillarHtml, /href="\/birds-that-eat-yard-pests"/);
+
+  const paths = [
+    "/how-to-attract-birds-to-your-yard", "/how-to-attract-birds-to-feeder",
+    "/new-bird-feeder-tips", "/attract-birds-to-bird-bath",
+    "/attract-birds-without-feeder", "/attract-birds-with-sounds",
+    "/attract-birds-to-your-hand", "/attract-birds-in-winter",
+    "/attract-birds-to-balcony", "/attract-birds-to-birdhouse",
+    "/birds-that-eat-yard-pests",
+  ];
+  for (const path of paths) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /FAQPage/, path);
+    assert.match(html, /Continue planning/, path);
+  }
+  const unknown = await render("/not-a-real-attraction-guide");
+  assert.equal(unknown.status, 404);
+});

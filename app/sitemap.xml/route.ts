@@ -6,6 +6,7 @@ import { indexedPlants, plantCategories } from "../../lib/plant-repository";
 import { plantPurposes } from "../../data/pilot-plants";
 import { feederComparisons, feederFoods, feederGuides, feederProblems } from "../../data/pilot-feeders";
 import { pilotBirds } from "../../data/pilot-birds";
+import { attractionGuides } from "../../data/attraction-guides";
 
 const ORIGIN = "https://attractbirds.app";
 const LAST_MODIFIED = "2026-08-11";
@@ -35,6 +36,7 @@ export async function GET() {
   ]);
 
   for (const bird of birdCatalog) paths.add(`/birds/${bird.slug}`);
+  for (const guide of attractionGuides) paths.add(`/${guide.slug}`);
   for (const feeder of feederGuides) paths.add(`/feeders/${feeder.slug}`);
   for (const bird of pilotBirds) paths.add(`/feeders/for/${bird.slug}`);
   for (const food of Object.keys(feederFoods)) paths.add(`/feeders/for/${food}`);
