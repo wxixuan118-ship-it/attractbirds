@@ -5,101 +5,150 @@ import { PlannerForm } from "./components/PlannerForm";
 import { featuredBirds, plantPicks, problemGuides } from "../lib/content";
 
 const modules = [
-  { mark: "01", title: "Bird encyclopedia", copy: "Identify local birds and learn the exact food, plants, and shelter each species prefers.", href: "/birds" },
-  { mark: "02", title: "Birds near you", copy: "Explore common backyard birds by state, season, and local habitat.", href: "/birds/california" },
-  { mark: "03", title: "Bird-friendly plants", copy: "Choose region-appropriate plants that provide nectar, fruit, insects, and cover.", href: "/plants/attract-hummingbirds" },
-  { mark: "04", title: "Solve feeder problems", copy: "Diagnose quiet feeders, spoiled seed, predators, and placement issues.", href: "/bird-problems/no-birds-at-feeder" },
+  { icon: "🦜", num: "01", title: "Bird Encyclopedia", copy: "500+ species — diet, habitat, attraction tips, and nesting habits for every common backyard bird.", href: "/birds" },
+  { icon: "📍", num: "02", title: "Birds by Location", copy: "Explore backyard birds by state, city, or region. Discover what's visiting your area right now.", href: "/birds/california" },
+  { icon: "🌿", num: "03", title: "Bird-Friendly Plants", copy: "Native plants that attract the birds you love — filtered by region, bloom season, and bird species.", href: "/plants/attract-hummingbirds" },
+  { icon: "🪺", num: "04", title: "Feeder Guide", copy: "The right feeder for every bird. Types, placement, maintenance, and top product picks.", href: "/feeders/platform-feeder" },
+  { icon: "🍂", num: "05", title: "Seasonal Birds", copy: "Year-round calendar of arrivals and migrations. Know exactly what to expect each month.", href: "/birds" },
+  { icon: "🔍", num: "06", title: "Problem Diagnosis", copy: "Feeders gone quiet? Diagnose and fix 100+ common backyard bird problems fast.", href: "/bird-problems/no-birds-at-feeder" },
+  { icon: "🤖", num: "07", title: "AI Yard Planner", copy: "Input your location, yard size, and target birds. Get a personalized bird-garden plan in seconds.", href: "/#planner" },
+  { icon: "🗺️", num: "08", title: "Attraction Guides", copy: "Step-by-step habitat-building guides for specific species like hummingbirds, cardinals, and owls.", href: "/birds" },
 ];
+
+const locationPills = ["California", "Texas", "Florida", "New York", "Arizona", "Georgia", "Oregon", "Colorado", "Michigan", "North Carolina"];
 
 export default function Home() {
   return (
     <div className="site-shell">
       <Header />
       <main>
+
+        {/* HERO */}
         <section className="hero">
-          <div className="hero-copy">
-            <p className="eyebrow"><span /> A better backyard starts here</p>
-            <h1>Bring more <em>birds</em><br />to your backyard.</h1>
-            <p className="hero-text">Science-backed guidance for choosing the right plants, food, feeders, and shelter—personalized for where you live.</p>
-            <div className="hero-actions">
-              <Link className="button button-primary" href="#planner">Plan my bird garden <span>→</span></Link>
-              <Link className="text-link" href="/birds">Explore the bird guide <span>↗</span></Link>
-            </div>
-            <div className="trust-row">
-              <div><strong>500+</strong><span>bird profiles</span></div>
-              <div><strong>50</strong><span>state guides</span></div>
-              <div><strong>1,000+</strong><span>bird-friendly plants</span></div>
-            </div>
+          <div className="hero-badge">
+            <span className="hero-badge-dot" />
+            AI-powered bird garden planning
           </div>
-          <div className="hero-visual" aria-label="A stylized garden habitat plan">
-            <div className="sun-disc" />
-            <div className="branch branch-one" />
-            <div className="branch branch-two" />
-            <div className="bird-shape"><span className="bird-eye" /></div>
-            <div className="leaf leaf-one" />
-            <div className="leaf leaf-two" />
-            <div className="leaf leaf-three" />
-            <div className="visual-note note-one"><small>Plant</small><strong>Native berries</strong></div>
-            <div className="visual-note note-two"><small>Provide</small><strong>Fresh water</strong></div>
-            <p className="visual-caption">Four essentials: food, water, shelter, space.</p>
+          <h1>Build your<br /><em>bird paradise.</em></h1>
+          <p className="hero-sub">
+            Tell us where you live and which birds you love. Get a personalized plan — the right plants, feeders, and habitat for your backyard.
+          </p>
+          <div className="hero-search">
+            <input type="text" placeholder="Search a bird, plant, or problem…" aria-label="Search" />
+            <button type="button">Search</button>
           </div>
-        </section>
-
-        <section className="marquee" aria-label="Habitat essentials">
-          <span>Native plants</span><i>✦</i><span>Right food</span><i>✦</i><span>Clean water</span><i>✦</i><span>Safe shelter</span><i>✦</i><span>Local birds</span>
-        </section>
-
-        <section className="section explore-section">
-          <div className="section-heading split-heading">
-            <div><p className="eyebrow"><span /> Explore the knowledge base</p><h2>Everything your<br />backyard needs.</h2></div>
-            <p>Start with a bird you love, the place you live, or a problem you want to solve. Every guide connects to a practical next step.</p>
-          </div>
-          <div className="module-grid">
-            {modules.map((module) => (
-              <Link className="module-card" href={module.href} key={module.title}>
-                <span className="module-number">{module.mark}</span>
-                <div className="module-icon" aria-hidden="true">{module.mark === "01" ? "◒" : module.mark === "02" ? "⌖" : module.mark === "03" ? "❧" : "?"}</div>
-                <h3>{module.title}</h3><p>{module.copy}</p><span className="card-arrow">↗</span>
-              </Link>
+          <div className="hero-pills">
+            {locationPills.map((loc) => (
+              <Link href={`/birds/${loc.toLowerCase()}`} className="hero-pill" key={loc}>{loc}</Link>
             ))}
           </div>
         </section>
 
-        <section className="section birds-section">
-          <div className="section-heading row-heading">
-            <div><p className="eyebrow light"><span /> Meet your neighbors</p><h2>Popular backyard birds</h2></div>
-            <Link className="button button-light" href="/birds">View all birds <span>→</span></Link>
+        {/* TRUST BAR */}
+        <div className="trust-bar">
+          <div className="trust-item"><strong>500+</strong><span>Bird profiles</span></div>
+          <div className="trust-item"><strong>50</strong><span>State guides</span></div>
+          <div className="trust-item"><strong>1,000+</strong><span>Native plants</span></div>
+          <div className="trust-item"><strong>100+</strong><span>Problem fixes</span></div>
+        </div>
+
+        {/* BIRD GRID */}
+        <section className="section">
+          <div className="section-header">
+            <div>
+              <div className="section-tag">Popular birds</div>
+              <h2>Meet your backyard neighbors</h2>
+            </div>
+            <Link href="/birds" className="view-all">View all birds →</Link>
           </div>
           <div className="bird-grid">
-            {featuredBirds.map((bird, index) => (
-              <Link className={`bird-card bird-${index + 1}`} href={`/birds/${bird.slug}`} key={bird.slug}>
-                <span className="bird-monogram">{bird.initials}</span>
-                <div className="bird-card-copy"><small>{bird.family}</small><h3>{bird.commonName}</h3><p>{bird.hook}</p><span>Explore species →</span></div>
+            {featuredBirds.map((bird) => (
+              <Link className="bird-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                <div className="bird-circle">
+                  <div className="bird-circle-inner">{bird.initials}</div>
+                </div>
+                <span className="bird-card-name">{bird.commonName}</span>
+                <span className="bird-card-sci">{bird.scientificName}</span>
+                <span className="bird-card-tag">{bird.family}</span>
               </Link>
             ))}
           </div>
         </section>
 
-        <section className="section planner-section" id="planner">
-          <div className="planner-intro">
-            <p className="eyebrow"><span /> Backyard planner</p>
-            <h2>Your yard.<br /><em>Their</em> perfect habitat.</h2>
-            <p>Tell us where you live and which birds you hope to see. We’ll create a practical starter plan using suitable plants, feeders, water, and shelter.</p>
-            <ul><li><b>✓</b> Local bird recommendations</li><li><b>✓</b> Region-aware plant choices</li><li><b>✓</b> A simple seasonal checklist</li></ul>
+        {/* MARQUEE */}
+        <div className="marquee" aria-hidden="true">
+          <span>Native plants</span><span className="marquee-dot" />
+          <span>Right food</span><span className="marquee-dot" />
+          <span>Clean water</span><span className="marquee-dot" />
+          <span>Safe shelter</span><span className="marquee-dot" />
+          <span>Local birds</span><span className="marquee-dot" />
+          <span>AI planning</span><span className="marquee-dot" />
+          <span>Expert guides</span>
+        </div>
+
+        {/* MODULE GRID */}
+        <section className="section">
+          <div className="section-header">
+            <div>
+              <div className="section-tag">Knowledge base</div>
+              <h2>Everything your backyard needs</h2>
+            </div>
           </div>
-          <PlannerForm />
+          <div className="module-grid">
+            {modules.map((m) => (
+              <Link className="module-card" href={m.href} key={m.title}>
+                <div className="module-icon-wrap">{m.icon}</div>
+                <span className="module-number">{m.num}</span>
+                <h3>{m.title}</h3>
+                <p>{m.copy}</p>
+                <span className="card-arrow">→</span>
+              </Link>
+            ))}
+          </div>
         </section>
 
-        <section className="section field-notes">
-          <div className="section-heading row-heading dark-text">
-            <div><p className="eyebrow"><span /> Field notes</p><h2>Small changes, more birds.</h2></div>
-            <p>Begin with one useful improvement. A safer feeder, a native shrub, or a shallow water source can transform a quiet space.</p>
+        {/* AI PLANNER */}
+        <div className="planner-section" id="planner">
+          <div className="planner-intro">
+            <div className="section-tag" style={{background:"rgba(126,216,160,.15)", color:"#7ed8a0"}}>AI Yard Planner</div>
+            <h2>Your yard.<br /><em>Their</em> perfect home.</h2>
+            <p>Tell us where you live and which birds you want to attract. We&apos;ll generate a tailored plan — native plants, feeder types, water sources, and a seasonal checklist.</p>
+            <ul className="planner-checklist">
+              <li><span className="check-dot">✓</span> Local bird recommendations</li>
+              <li><span className="check-dot">✓</span> Region-native plant choices</li>
+              <li><span className="check-dot">✓</span> Feeder + water source plan</li>
+              <li><span className="check-dot">✓</span> Seasonal care checklist</li>
+            </ul>
+          </div>
+          <PlannerForm />
+        </div>
+
+        {/* FIELD NOTES */}
+        <section className="section">
+          <div className="section-header">
+            <div>
+              <div className="section-tag">Guides</div>
+              <h2>Small changes, more birds</h2>
+            </div>
           </div>
           <div className="notes-grid">
-            <article className="note-card note-feature"><span className="note-tag">Plant guide</span><h3>{plantPicks[0].title}</h3><p>{plantPicks[0].summary}</p><Link href="/plants/attract-hummingbirds">Read the guide →</Link></article>
-            {problemGuides.map((guide) => <article className="note-card" key={guide.title}><span className="note-tag">Problem solver</span><h3>{guide.title}</h3><p>{guide.summary}</p><Link href={guide.href}>Find the fix →</Link></article>)}
+            <article className="note-card note-feature">
+              <span className="note-tag">Plant guide</span>
+              <h3>{plantPicks[0].title}</h3>
+              <p>{plantPicks[0].summary}</p>
+              <Link href="/plants/attract-hummingbirds">Read the guide →</Link>
+            </article>
+            {problemGuides.map((guide) => (
+              <article className="note-card" key={guide.title}>
+                <span className="note-tag">Problem solver</span>
+                <h3>{guide.title}</h3>
+                <p>{guide.summary}</p>
+                <Link href={guide.href}>Find the fix →</Link>
+              </article>
+            ))}
           </div>
         </section>
+
       </main>
       <Footer />
     </div>
