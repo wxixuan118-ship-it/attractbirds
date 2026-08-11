@@ -12,5 +12,5 @@ export function BirdProfileLink({ children, className, href }: BirdProfileLinkPr
     window.location.assign(href);
   }
 
-  return <a className={className} href={href} onClick={openProfile}>{children}</a>;
+  return <a className={className} href={href} target="_top" onClick={openProfile}>{children}</a>;
 }
