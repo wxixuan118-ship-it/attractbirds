@@ -4,7 +4,7 @@ const links = {
   Birds: [
     { label: "Bird Encyclopedia", href: "/birds" },
     { label: "By Location", href: "/birds/california" },
-    { label: "Seasonal Birds", href: "/birds" },
+    { label: "Seasonal Birds", href: "/birds/seasonal" },
     { label: "Attraction Guides", href: "/birds" },
   ],
   Garden: [
@@ -17,7 +17,7 @@ const links = {
     { label: "AI Yard Planner", href: "/#planner" },
     { label: "Problem Diagnosis", href: "/bird-problems/no-birds-at-feeder" },
     { label: "Species Identifier", href: "/birds" },
-    { label: "Seasonal Calendar", href: "/birds" },
+    { label: "Seasonal Calendar", href: "/birds/seasonal" },
   ],
 };
 
