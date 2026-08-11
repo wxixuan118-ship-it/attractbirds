@@ -12,6 +12,7 @@ const links = {
     { label: "Feeder Guide", href: "/feeders" },
     { label: "Water Sources", href: "/#planner" },
     { label: "Nesting & Shelter", href: "/birds" },
+    { label: "Bird Food Guide", href: "/bird-food" },
   ],
   Tools: [
     { label: "AI Yard Planner", href: "/#planner" },
@@ -19,6 +20,7 @@ const links = {
     { label: "Species Identifier", href: "/birds" },
     { label: "Seasonal Calendar", href: "/seasonal-birds" },
     { label: "Feeder Planner", href: "/tools/bird-feeder-calculator" },
+    { label: "How to Attract Birds", href: "/how-to-attract-birds" },
   ],
 };
 

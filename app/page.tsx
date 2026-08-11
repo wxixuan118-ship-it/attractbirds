@@ -10,11 +10,11 @@ const modules = [
   { icon: "🦜", num: "01", title: "Bird Encyclopedia", copy: "500+ species — diet, habitat, attraction tips, and nesting habits for every common backyard bird.", href: "/birds" },
   { icon: "📍", num: "02", title: "Birds by Location", copy: "Explore backyard birds by state, city, or region. Discover what's visiting your area right now.", href: "/birds-by-location" },
   { icon: "🌿", num: "03", title: "Bird-Friendly Plants", copy: "Native plants that attract the birds you love — filtered by region, bloom season, and bird species.", href: "/plants/attract-hummingbirds" },
-  { icon: "🪺", num: "04", title: "Feeder Guide", copy: "The right feeder for every bird. Types, placement, maintenance, and top product picks.", href: "/feeders/platform-feeder" },
+  { icon: "🪺", num: "04", title: "Feeder Guide", copy: "Match feeder types to birds and food, then compare placement, cleaning, weather, and wildlife conflicts.", href: "/feeders" },
   { icon: "🍂", num: "05", title: "Seasonal Birds", copy: "Year-round calendar of arrivals and migrations. Know exactly what to expect each month.", href: "/birds/seasonal" },
   { icon: "🔍", num: "06", title: "Problem Diagnosis", copy: "Feeders gone quiet? Diagnose and fix 100+ common backyard bird problems fast.", href: "/bird-problems/no-birds-at-feeder" },
   { icon: "🤖", num: "07", title: "AI Yard Planner", copy: "Input your location, yard size, and target birds. Get a personalized bird-garden plan in seconds.", href: "/#planner" },
-  { icon: "🗺️", num: "08", title: "Attraction Guides", copy: "Step-by-step habitat-building guides for specific species like hummingbirds, cardinals, and owls.", href: "/birds" },
+  { icon: "🗺️", num: "08", title: "How to Attract Birds", copy: "A safe beginner roadmap covering native plants, food, feeders, water, shelter, windows, cats, and hygiene.", href: "/how-to-attract-birds" },
 ];
 
 const locationPills = [

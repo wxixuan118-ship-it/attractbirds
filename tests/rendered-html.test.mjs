@@ -132,3 +132,29 @@ test("renders quality-gated feeder routes and calculator", async () => {
   assert.equal(calculator.status, 200);
   assert.match(await calculator.text(), /Bird feeder planner/);
 });
+
+test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
+  const pillar = await render("/how-to-attract-birds");
+  assert.equal(pillar.status, 200);
+  const pillarHtml = await pillar.text();
+  assert.match(pillarHtml, /How to attract birds/);
+  assert.match(pillarHtml, /HowTo/);
+
+  const food = await render("/bird-food");
+  assert.equal(food.status, 200);
+  assert.match(await food.text(), /Bird food/);
+
+  const oriole = await render("/birds/oriole");
+  assert.equal(oriole.status, 200);
+  assert.match(await oriole.text(), /Oriole birds/);
+
+  const killdeer = await render("/birds/killdeer");
+  assert.equal(killdeer.status, 200);
+  assert.match(await killdeer.text(), /two black breast bands/);
+
+  const plant = await render("/plants/bird-of-paradise");
+  assert.equal(plant.status, 200);
+  const plantHtml = await plant.text();
+  assert.match(plantHtml, /Strelitzia reginae/);
+  assert.match(plantHtml, /FAQPage/);
+});
