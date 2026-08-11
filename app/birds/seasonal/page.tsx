@@ -8,6 +8,8 @@ import { getPublishedBirds } from "../../../lib/bird-repository";
 export const metadata: Metadata = {
   title: "Seasonal Backyard Birds",
   description: "Learn how backyard bird activity changes through spring, summer, fall, and winter, then explore reviewed species profiles.",
+  alternates: { canonical: "/seasonal-birds" },
+  robots: { index: false, follow: true },
 };
 
 const seasons = [
@@ -45,7 +47,7 @@ export default async function SeasonalBirdsPage() {
           <div>
             <p className="eyebrow"><span /> Seasonal birds</p>
             <h1>What to expect<br />in every season.</h1>
-            <p className="lede">Bird activity changes with migration, nesting, weather, and natural food. Use this seasonal overview as a starting point, then check local observations for your area.</p>
+            <p className="lede">Bird activity changes with migration, nesting, weather, and natural food. This legacy overview has moved to the expanded Seasonal Birds guide.</p>
           </div>
           <aside className="fact-panel">
             <div><small>Spring focus</small><strong>Migration + nesting</strong></div>
@@ -63,6 +65,7 @@ export default async function SeasonalBirdsPage() {
             </section>
           ))}
           <section className="info-block wide">
+            <a className="button button-primary" href="/seasonal-birds">Open the new Seasonal Birds guide →</a>
             <h2>Explore birds you may see through the year</h2>
             <div className="index-grid">
               {birds.map((bird) => (

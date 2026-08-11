@@ -56,3 +56,23 @@ test("location landing exposes direct state links", async () => {
   assert.match(html, /<a[^>]+href="\/birds-by-location\/california"[^>]*class="state-card"/);
   assert.match(html, /<a[^>]+href="\/birds-by-location\/texas"[^>]*class="us-map-tile/);
 });
+
+test("renders quality-gated seasonal SEO routes", async () => {
+  const hub = await render("/seasonal-birds");
+  assert.equal(hub.status, 200);
+  assert.match(await hub.text(), /Seasonal bird guides/);
+
+  const season = await render("/seasonal-birds/spring");
+  assert.equal(season.status, 200);
+  assert.match(await season.text(), /Spring.*birds by state/s);
+
+  const species = await render("/seasonal-birds/spring/american-robin");
+  assert.equal(species.status, 200);
+  const speciesHtml = await species.text();
+  assert.match(speciesHtml, /American Robin.*in.*Spring/s);
+  assert.match(speciesHtml, /FAQPage/);
+
+  const state = await render("/seasonal-birds/winter/ohio");
+  assert.equal(state.status, 200);
+  assert.match(await state.text(), /Planning preview/);
+});

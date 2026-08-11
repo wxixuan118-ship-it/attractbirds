@@ -1,6 +1,7 @@
 import { birdCatalog } from "../../data/bird-catalog";
 import { US_STATES_DATA } from "../../data/us-states-data";
 import { getComboStaticParams } from "../../lib/location-repository";
+import { indexedSeasonalBirds, seasonSlugs } from "../../lib/seasonal-repository";
 
 const ORIGIN = "https://attractbirds.app";
 const LAST_MODIFIED = "2026-08-11";
@@ -16,6 +17,7 @@ export async function GET() {
     "/",
     "/birds",
     "/birds/seasonal",
+    "/seasonal-birds",
     "/birds/california",
     "/birds-by-location",
     "/bird-problems/no-birds-at-feeder",
@@ -24,6 +26,10 @@ export async function GET() {
   ]);
 
   for (const bird of birdCatalog) paths.add(`/birds/${bird.slug}`);
+  for (const season of seasonSlugs) {
+    paths.add(`/seasonal-birds/${season}`);
+    for (const bird of indexedSeasonalBirds) paths.add(`/seasonal-birds/${season}/${bird.slug}`);
+  }
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
   for (const item of getComboStaticParams()) paths.add(`/birds-by-location/${item.state}/${item.slug}`);
 
