@@ -650,3 +650,298 @@ export const BACKYARD_BIRDS_BY_STATE: Record<string, string[]> = {
   arizona: ["house-finch", "northern-mockingbird", "cactus-wren", "verdin", "gambels-quail", "curve-billed-thrasher"],
   colorado: ["american-robin", "black-capped-chickadee", "house-finch", "blue-jay", "downy-woodpecker", "dark-eyed-junco"],
 };
+
+// ─── City data for Bird+City programmatic SEO pages ────────────────
+
+export type CityData = {
+  slug: string;
+  name: string;
+  stateSlug: string;
+  stateName: string;
+  lat: number;
+  lng: number;
+  habitats: string[];
+  commonBirdSlugs: string[];
+  backyardBirdSlugs: string[];
+  summary: string;
+  birdingSpots: { name: string; blurb: string }[];
+};
+
+/**
+ * Curated city data for the largest U.S. cities.
+ * Cities not listed here fall back to state-level data via getFallbackCityData().
+ */
+export const CITIES: CityData[] = [
+  // ── California ──────────────────────────────────────────────────
+  {
+    slug: "los-angeles", name: "Los Angeles", stateSlug: "california", stateName: "California",
+    lat: 34.05, lng: -118.24,
+    habitats: ["Urban", "Coastal", "Wetland"],
+    commonBirdSlugs: ["american-robin", "house-finch", "annas-hummingbird", "northern-mockingbird", "california-scrub-jay", "mourning-dove"],
+    backyardBirdSlugs: ["house-finch", "annas-hummingbird", "northern-mockingbird", "mourning-dove", "lesser-goldfinch"],
+    summary: "Los Angeles' Mediterranean climate and varied terrain—from coastal bluffs to chaparral hills—support year-round bird diversity with over 400 recorded species.",
+    birdingSpots: [
+      { name: "Kenneth Hahn State Recreation Area", blurb: "Urban oasis in Baldwin Hills with chaparral birds and migrants." },
+      { name: "Ballona Creek & Wetlands", blurb: "Shorebirds, waterfowl, and coastal species minutes from LAX." },
+    ],
+  },
+  {
+    slug: "san-francisco", name: "San Francisco", stateSlug: "california", stateName: "California",
+    lat: 37.77, lng: -122.42,
+    habitats: ["Coastal", "Urban", "Wetland"],
+    commonBirdSlugs: ["american-robin", "annas-hummingbird", "house-finch", "white-crowned-sparrow", "california-scrub-jay", "northern-mockingbird"],
+    backyardBirdSlugs: ["annas-hummingbird", "house-finch", "white-crowned-sparrow", "chestnut-backed-chickadee", "dark-eyed-junco"],
+    summary: "San Francisco's cool, foggy climate and bay shoreline make it a year-round birding destination with strong Pacific Flyway migration.",
+    birdingSpots: [
+      { name: "Golden Gate Park", blurb: "Urban green space with resident and migrating songbirds." },
+      { name: "Heron's Head Park", blurb: "Shorebirds and waterfowl along the bay shoreline." },
+    ],
+  },
+  {
+    slug: "san-diego", name: "San Diego", stateSlug: "california", stateName: "California",
+    lat: 32.72, lng: -117.16,
+    habitats: ["Coastal", "Desert", "Urban", "Wetland"],
+    commonBirdSlugs: ["house-finch", "annas-hummingbird", "northern-mockingbird", "american-robin", "mourning-dove", "california-scrub-jay"],
+    backyardBirdSlugs: ["house-finch", "annas-hummingbird", "northern-mockingbird", "lesser-goldfinch", "mourning-dove"],
+    summary: "San Diego's mild climate and diverse habitats—from coastal lagoons to desert canyons—make it one of the most bird-rich cities in the U.S.",
+    birdingSpots: [
+      { name: "San Diego River Estuary", blurb: "Shorebirds, terns, and waterfowl in the heart of the city." },
+      { name: "Balboa Park", blurb: "Urban canyon and garden birding with migrants and residents." },
+    ],
+  },
+  {
+    slug: "sacramento", name: "Sacramento", stateSlug: "california", stateName: "California",
+    lat: 38.58, lng: -121.49,
+    habitats: ["Wetland", "Urban", "Forest"],
+    commonBirdSlugs: ["american-robin", "northern-mockingbird", "house-finch", "mourning-dove", "white-crowned-sparrow", "annas-hummingbird"],
+    backyardBirdSlugs: ["house-finch", "annas-hummingbird", "white-crowned-sparrow", "lesser-goldfinch", "dark-eyed-junco"],
+    summary: "Sacramento's position at the confluence of two rivers and the edge of the Central Valley makes it a key stopover for Pacific Flyway migrants.",
+    birdingSpots: [
+      { name: "Cosumnes River Preserve", blurb: "Sandhill Cranes and wintering waterfowl in restored wetlands." },
+    ],
+  },
+  // ── Texas ───────────────────────────────────────────────────────
+  {
+    slug: "houston", name: "Houston", stateSlug: "texas", stateName: "Texas",
+    lat: 29.76, lng: -95.37,
+    habitats: ["Wetland", "Coastal", "Urban", "Forest"],
+    commonBirdSlugs: ["northern-cardinal", "northern-mockingbird", "mourning-dove", "carolina-wren", "red-bellied-woodpecker", "house-finch"],
+    backyardBirdSlugs: ["northern-cardinal", "northern-mockingbird", "carolina-wren", "house-finch", "ruby-throated-hummingbird"],
+    summary: "Houston's proximity to the Gulf Coast and its subtropical climate make it a magnet for migrating birds and a year-round home for southern species.",
+    birdingSpots: [
+      { name: "High Island", blurb: "Legendary trans-Gulf migrant fallouts in spring." },
+      { name: "Anahuac NWR", blurb: "Coastal marsh with rails, bitterns, and waterfowl." },
+    ],
+  },
+  {
+    slug: "dallas", name: "Dallas", stateSlug: "texas", stateName: "Texas",
+    lat: 32.78, lng: -96.80,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["northern-cardinal", "northern-mockingbird", "mourning-dove", "carolina-wren", "blue-jay", "house-finch"],
+    backyardBirdSlugs: ["northern-cardinal", "northern-mockingbird", "carolina-wren", "house-finch", "ruby-throated-hummingbird"],
+    summary: "Dallas sits at the transition of eastern forests and western plains, giving it a blend of eastern and western backyard birds.",
+    birdingSpots: [
+      { name: "White Rock Lake", blurb: "Urban lake with wintering waterfowl and migrating songbirds." },
+    ],
+  },
+  {
+    slug: "austin", name: "Austin", stateSlug: "texas", stateName: "Texas",
+    lat: 30.27, lng: -97.74,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["northern-cardinal", "northern-mockingbird", "carolina-wren", "mourning-dove", "house-finch", "blue-jay"],
+    backyardBirdSlugs: ["northern-cardinal", "northern-mockingbird", "carolina-wren", "house-finch", "ruby-throated-hummingbird"],
+    summary: "Austin's Hill Country terrain and Colorado River corridor create rich birding in the heart of Texas.",
+    birdingSpots: [
+      { name: "Hornsby Bend", blurb: "Ponds and fields that attract shorebirds, raptors, and sparrows." },
+    ],
+  },
+  // ── Florida ─────────────────────────────────────────────────────
+  {
+    slug: "miami", name: "Miami", stateSlug: "florida", stateName: "Florida",
+    lat: 25.76, lng: -80.19,
+    habitats: ["Coastal", "Wetland", "Urban"],
+    commonBirdSlugs: ["northern-mockingbird", "northern-cardinal", "mourning-dove", "red-bellied-woodpecker", "boat-tailed-grackle", "white-ibis"],
+    backyardBirdSlugs: ["northern-mockingbird", "northern-cardinal", "mourning-dove", "red-bellied-woodpecker", "ruby-throated-hummingbird"],
+    summary: "Miami's subtropical climate makes it a hotspot for Caribbean species, wading birds, and exotics found nowhere else in the U.S.",
+    birdingSpots: [
+      { name: "Bill Baggs Cape Florida State Park", blurb: "Migrant trap for warblers and raptors on Key Biscayne." },
+      { name: "Everglades National Park (main entrance)", blurb: "Wading birds, raptors, and specialties within an hour of downtown." },
+    ],
+  },
+  {
+    slug: "orlando", name: "Orlando", stateSlug: "florida", stateName: "Florida",
+    lat: 28.54, lng: -81.38,
+    habitats: ["Wetland", "Urban", "Forest"],
+    commonBirdSlugs: ["northern-mockingbird", "northern-cardinal", "mourning-dove", "red-bellied-woodpecker", "carolina-wren", "boat-tailed-grackle"],
+    backyardBirdSlugs: ["northern-mockingbird", "northern-cardinal", "mourning-dove", "red-bellied-woodpecker", "ruby-throated-hummingbird"],
+    summary: "Orlando's lakes, wetlands, and subtropical gardens make it a year-round birding destination in central Florida.",
+    birdingSpots: [
+      { name: "Mead Botanical Garden", blurb: "Spring warbler fallout site in Winter Park." },
+    ],
+  },
+  // ── New York ────────────────────────────────────────────────────
+  {
+    slug: "new-york-city", name: "New York City", stateSlug: "new-york", stateName: "New York",
+    lat: 40.71, lng: -74.01,
+    habitats: ["Urban", "Coastal", "Wetland"],
+    commonBirdSlugs: ["american-robin", "northern-cardinal", "house-sparrow", "blue-jay", "mourning-dove", "red-bellied-woodpecker"],
+    backyardBirdSlugs: ["american-robin", "northern-cardinal", "blue-jay", "black-capped-chickadee", "dark-eyed-junco"],
+    summary: "New York City's parks and coastal location on the Atlantic Flyway make it one of the best urban birding destinations in North America.",
+    birdingSpots: [
+      { name: "Jamaica Bay Wildlife Refuge", blurb: "Salt marsh and ponds—one of the East Coast's top migration stops." },
+      { name: "Central Park", blurb: "Famous migrant trap for warblers in spring and fall." },
+    ],
+  },
+  // ── Arizona ─────────────────────────────────────────────────────
+  {
+    slug: "phoenix", name: "Phoenix", stateSlug: "arizona", stateName: "Arizona",
+    lat: 33.45, lng: -112.07,
+    habitats: ["Desert", "Urban", "Wetland"],
+    commonBirdSlugs: ["house-finch", "northern-mockingbird", "mourning-dove", "gambels-quail", "verdin", "curve-billed-thrasher"],
+    backyardBirdSlugs: ["house-finch", "northern-mockingbird", "gambels-quail", "verdin", "curve-billed-thrasher"],
+    summary: "Phoenix's Sonoran Desert setting supports unique desert species alongside urban-adapted birds in one of America's sunniest cities.",
+    birdingSpots: [
+      { name: "Riparian Preserve at Water Ranch", blurb: "Desert oasis with waterfowl, shorebirds, and desert species." },
+    ],
+  },
+  {
+    slug: "tucson", name: "Tucson", stateSlug: "arizona", stateName: "Arizona",
+    lat: 32.22, lng: -110.93,
+    habitats: ["Desert", "Forest", "Urban"],
+    commonBirdSlugs: ["house-finch", "northern-mockingbird", "mourning-dove", "gambels-quail", "verdin", "cactus-wren"],
+    backyardBirdSlugs: ["house-finch", "northern-mockingbird", "gambels-quail", "verdin", "cactus-wren"],
+    summary: "Tucson's sky island geography—desert floor to pine-clad mountains—gives it extraordinary bird diversity for a U.S. city.",
+    birdingSpots: [
+      { name: "Madera Canyon", blurb: "Southeast Arizona specialties like Elegant Trogon and hummingbirds." },
+    ],
+  },
+  // ── Washington ──────────────────────────────────────────────────
+  {
+    slug: "seattle", name: "Seattle", stateSlug: "washington", stateName: "Washington",
+    lat: 47.61, lng: -122.33,
+    habitats: ["Coastal", "Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["american-robin", "chestnut-backed-chickadee", "house-finch", "dark-eyed-junco", "northern-flicker", "stellers-jay"],
+    backyardBirdSlugs: ["chestnut-backed-chickadee", "house-finch", "dark-eyed-junco", "american-robin", "annas-hummingbird"],
+    summary: "Seattle's Puget Sound location and temperate rainforest climate make it a year-round birding city with strong Pacific Flyway migration.",
+    birdingSpots: [
+      { name: "Discovery Park", blurb: "Magnolia bluff with migrants, raptors, and seabirds." },
+    ],
+  },
+  // ── Oregon ──────────────────────────────────────────────────────
+  {
+    slug: "portland", name: "Portland", stateSlug: "oregon", stateName: "Oregon",
+    lat: 45.52, lng: -122.67,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["american-robin", "chestnut-backed-chickadee", "house-finch", "dark-eyed-junco", "northern-flicker", "stellers-jay"],
+    backyardBirdSlugs: ["chestnut-backed-chickadee", "house-finch", "dark-eyed-junco", "american-robin", "annas-hummingbird"],
+    summary: "Portland's location at the confluence of two rivers, with forests and wetlands nearby, makes it a rich Pacific Northwest birding hub.",
+    birdingSpots: [
+      { name: "Oaks Bottom Wildlife Refuge", blurb: "Floodplain wetland with waterfowl, raptors, and songbirds." },
+    ],
+  },
+  // ── Colorado ────────────────────────────────────────────────────
+  {
+    slug: "denver", name: "Denver", stateSlug: "colorado", stateName: "Colorado",
+    lat: 39.74, lng: -104.99,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["american-robin", "house-finch", "black-capped-chickadee", "northern-flicker", "blue-jay", "dark-eyed-junco"],
+    backyardBirdSlugs: ["house-finch", "black-capped-chickadee", "american-robin", "dark-eyed-junco", "blue-jay"],
+    summary: "Denver's high-altitude Front Range location—at the junction of plains and mountains—creates diverse birding from prairie to alpine.",
+    birdingSpots: [
+      { name: "Chatfield State Park", blurb: "Reservoir and riparian habitat for waterfowl and migrants." },
+    ],
+  },
+  // ── Illinois ────────────────────────────────────────────────────
+  {
+    slug: "chicago", name: "Chicago", stateSlug: "illinois", stateName: "Illinois",
+    lat: 41.88, lng: -87.63,
+    habitats: ["Urban", "Coastal", "Wetland"],
+    commonBirdSlugs: ["american-robin", "northern-cardinal", "house-sparrow", "blue-jay", "black-capped-chickadee", "red-bellied-woodpecker"],
+    backyardBirdSlugs: ["american-robin", "northern-cardinal", "black-capped-chickadee", "blue-jay", "dark-eyed-junco"],
+    summary: "Chicago's Lake Michigan shoreline is one of the best migration corridors in the Midwest, funneling warblers and raptors through the city.",
+    birdingSpots: [
+      { name: "Montrose Point Bird Sanctuary", blurb: "Chicago's lakefront migrant trap—warblers in May." },
+      { name: "Jackson Park", blurb: "South Side lakefront birding with migrants and nesting species." },
+    ],
+  },
+  // ── Massachusetts ───────────────────────────────────────────────
+  {
+    slug: "boston", name: "Boston", stateSlug: "massachusetts", stateName: "Massachusetts",
+    lat: 42.36, lng: -71.06,
+    habitats: ["Coastal", "Urban", "Wetland"],
+    commonBirdSlugs: ["american-robin", "house-sparrow", "northern-cardinal", "black-capped-chickadee", "blue-jay", "mourning-dove"],
+    backyardBirdSlugs: ["american-robin", "black-capped-chickadee", "northern-cardinal", "blue-jay", "dark-eyed-junco"],
+    summary: "Boston's harbor islands, coastal marshes, and urban parks create a rich Atlantic Flyway birding experience.",
+    birdingSpots: [
+      { name: "Boston Harbor Islands", blurb: "Nesting terns, gulls, and coastal migrants." },
+    ],
+  },
+  // ── Georgia ─────────────────────────────────────────────────────
+  {
+    slug: "atlanta", name: "Atlanta", stateSlug: "georgia", stateName: "Georgia",
+    lat: 33.75, lng: -84.39,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["northern-cardinal", "northern-mockingbird", "carolina-wren", "mourning-dove", "tufted-titmouse", "red-bellied-woodpecker"],
+    backyardBirdSlugs: ["northern-cardinal", "carolina-wren", "tufted-titmouse", "northern-mockingbird", "ruby-throated-hummingbird"],
+    summary: "Atlanta's dense tree canopy—the highest of any major U.S. city—makes it a haven for forest birds in an urban setting.",
+    birdingSpots: [
+      { name: "Kennesaw Mountain", blurb: "Raptor and warbler migration watch north of the city." },
+    ],
+  },
+  // ── North Carolina ──────────────────────────────────────────────
+  {
+    slug: "charlotte", name: "Charlotte", stateSlug: "north-carolina", stateName: "North Carolina",
+    lat: 35.23, lng: -80.84,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["northern-cardinal", "carolina-wren", "northern-mockingbird", "mourning-dove", "tufted-titmouse", "red-bellied-woodpecker"],
+    backyardBirdSlugs: ["northern-cardinal", "carolina-wren", "tufted-titmouse", "northern-mockingbird", "ruby-throated-hummingbird"],
+    summary: "Charlotte's Piedmont location and urban forest create excellent habitat for southeastern backyard birds.",
+    birdingSpots: [
+      { name: "Cowans Ford Wildlife Refuge", blurb: "Lakeside habitat for waterfowl and forest birds." },
+    ],
+  },
+  {
+    slug: "raleigh", name: "Raleigh", stateSlug: "north-carolina", stateName: "North Carolina",
+    lat: 35.78, lng: -78.64,
+    habitats: ["Urban", "Forest", "Wetland"],
+    commonBirdSlugs: ["northern-cardinal", "carolina-wren", "northern-mockingbird", "mourning-dove", "tufted-titmouse", "red-bellied-woodpecker"],
+    backyardBirdSlugs: ["northern-cardinal", "carolina-wren", "tufted-titmouse", "northern-mockingbird", "ruby-throated-hummingbird"],
+    summary: "Raleigh's oak-filled parks and greenway system support rich bird life in North Carolina's Research Triangle.",
+    birdingSpots: [
+      { name: "Lake Johnson Park", blurb: "Lakeside trails with waterfowl and forest birds." },
+    ],
+  },
+];
+
+/** Quick city lookup by composite key `${stateSlug}:${citySlug}` */
+export const CITY_MAP = new Map(CITIES.map((c) => [`${c.stateSlug}:${c.slug}`, c]));
+
+/** Get all city slugs for a given state */
+export function getCitiesForState(stateSlug: string): CityData[] {
+  return CITIES.filter((c) => c.stateSlug === stateSlug);
+}
+
+/**
+ * Generate fallback city data for cities not in the curated CITIES list.
+ * Uses the state's popularCities array and derives slug + coordinates.
+ */
+export function getFallbackCityData(stateSlug: string, cityName: string): CityData | undefined {
+  const state = STATE_BY_SLUG[stateSlug];
+  if (!state) return undefined;
+  const slug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  const regionBirds = BACKYARD_BIRDS_BY_REGION[state.region] ?? [];
+  const stateBirds = BACKYARD_BIRDS_BY_STATE[stateSlug] ?? regionBirds;
+  return {
+    slug,
+    name: cityName,
+    stateSlug,
+    stateName: state.name,
+    lat: state.lat,
+    lng: state.lng,
+    habitats: state.habitats,
+    commonBirdSlugs: stateBirds,
+    backyardBirdSlugs: stateBirds,
+    summary: `${cityName} is located in ${state.name}. ${state.summary}`,
+    birdingSpots: state.topBirdingSpots.slice(0, 2),
+  };
+}

@@ -1,5 +1,5 @@
 import { pilotBirds } from "../data/pilot-birds";
-import { birdWhitelist } from "../data/bird-whitelist";
+import { birdCatalog, type CatalogBird } from "../data/bird-catalog";
 
 export type BirdPageData = {
   slug:string; commonName:string; scientificName:string; family:string; hook:string; initials:string;
@@ -7,28 +7,48 @@ export type BirdPageData = {
   foods:string[]; plants:string[]; feeders:string[];
   identification?:string|null; migrationPattern?:string|null; nestType?:string|null; nestLocations?:string[]|null; clutchSize?:string|null;
   imageUrl?:string|null; imageAlt?:string|null; imageAttribution?:string|null; imageSourceUrl?:string|null; imageLicenseUrl?:string|null;
+  sourceUrl?:string|null;
   qualityScore:number; sourceCount:number;
 };
 
 function fallbackBird(item:(typeof pilotBirds)[number]):BirdPageData{return {slug:item.slug,commonName:item.commonName,scientificName:item.scientificName,family:item.family,hook:item.residentStatus,initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:item.colors.join(", "),size:`${item.size[0]}–${item.size[1]} cm`,diet:item.dietSummary,habitat:item.habitats.join(", "),residentStatus:item.residentStatus,summary:item.summary,foods:item.foods,plants:item.plants,feeders:item.feeders,identification:item.identification.features,migrationPattern:item.behavior.migrationPattern,nestType:item.behavior.nestType,nestLocations:item.behavior.nestLocations,clutchSize:item.behavior.clutchSize,qualityScore:85,sourceCount:1}}
 
 const fallback=pilotBirds.map(fallbackBird);
-const candidateFallback:BirdPageData[]=birdWhitelist.map(item=>{
+function catalogProfile(item:CatalogBird):BirdPageData {
   const reviewed=fallback.find(bird=>bird.slug===item.slug);
   if(reviewed)return reviewed;
+  const waterbird=/Anatidae|Alcidae|Gaviidae|Podicipedidae|Procellariidae|Pelecanidae|Ardeidae|Rallidae|Scolopacidae|Laridae/.test(item.family);
+  const raptor=/Accipitridae|Falconidae|Cathartidae|Pandionidae/.test(item.family);
+  const owl=/Strigidae|Tytonidae/.test(item.family);
+  const hummingbird=item.family==="Trochilidae";
+  const woodpecker=item.family==="Picidae";
+  const habitat=waterbird?"Wetlands, coasts, lakes, rivers, or open water":raptor?"Open country, woodland edges, cliffs, and forest":owl?"Woodland, forest edges, grassland, and suitable roost sites":hummingbird?"Flower-rich woodland edges, scrub, gardens, and open habitats":woodpecker?"Woodland, forest edges, orchards, and areas with mature trees":"Habitat varies across the species' documented range";
+  const diet=raptor||owl?"Animal prey; diet varies by species and season":hummingbird?"Flower nectar and small arthropods":woodpecker?"Insects, larvae, fruit, nuts, and sap depending on species":waterbird?"Aquatic plants or animals depending on species":"Natural foods vary by species, habitat, and season";
+  const status=item.accidental?"Accidental or casual in the AOS checklist area":item.nonbreeding?"Regular nonbreeding visitor in parts of the AOS checklist area":item.introduced?"Introduced in parts of the AOS checklist area":"Recorded in the North and Middle American checklist area";
   return {
-    slug:item.slug,commonName:item.commonName,scientificName:item.scientificName,family:"Taxonomy pending review",
-    hook:"North American backyard bird profile queued for editorial review",
-    initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),
-    colors:"Pending review",size:"Pending review",diet:"Pending review",habitat:"Pending review",
-    residentStatus:"Distribution and seasonal status pending review",
-    summary:`${item.commonName} is included in the AttractBirds 100-species editorial pipeline. Its identification, diet, habitat, attraction, and nesting guidance is being prepared and will appear at this permanent URL after review.`,
-    foods:[],plants:[],feeders:[],qualityScore:0,sourceCount:0,
+    slug:item.slug,commonName:item.commonName,scientificName:item.scientificName,family:item.family,
+    hook:`${item.order} · ${item.family}`,
+    initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:"Plumage varies by age, sex, season, and population",size:"Consult a regional field guide",diet,habitat,residentStatus:status,
+    summary:`The ${item.commonName} (${item.scientificName}) is a member of the ${item.family} family in the order ${item.order}. This taxonomic profile follows the American Ornithological Society checklist; local abundance and seasonality should be confirmed with current regional observations.`,
+    foods:raptor||owl?["Natural prey; do not bait"]:hummingbird?["Native flower nectar","Small insects"]:waterbird?["Natural aquatic foods"]:["Species-appropriate natural foods"],
+    plants:hummingbird?["Regionally native nectar flowers"]:["Regionally native plants that provide cover and natural food"],
+    feeders:raptor||owl||waterbird?["Not typically a feeder species"]:hummingbird?["Clean nectar feeder where appropriate"]:["Use only after confirming species-specific guidance"],
+    identification:`Confirm identification using overall shape, bill form, plumage pattern, voice, behavior, habitat, and range. Compare similar ${item.family} species in a current regional field guide.`,
+    migrationPattern:"Varies across the species' range; use current regional records",
+    nestType:"Species-specific",nestLocations:["Suitable habitat within the breeding range"],clutchSize:"Varies",
+    sourceUrl:`https://checklist.americanornithology.org/taxa/${item.sourceId}`,
+    qualityScore:65,sourceCount:1,
   };
+}
+
+const candidateFallback:BirdPageData[]=birdCatalog.map(item=>{
+  const reviewed=fallback.find(bird=>bird.slug===item.slug);
+  if(reviewed)return reviewed;
+  return catalogProfile(item);
 });
 const shouldUseDatabase=()=>Boolean(process.env.DATABASE_URL)&&process.env.ATTRACTBIRDS_STATIC_ONLY!=="1";
 
-export function getBirdStaticParams(){return birdWhitelist.map(({slug})=>({slug}))}
+export function getBirdStaticParams(){return birdCatalog.map(({slug})=>({slug}))}
 
 export async function getPublishedBirds():Promise<BirdPageData[]>{
   if(!shouldUseDatabase())return candidateFallback;

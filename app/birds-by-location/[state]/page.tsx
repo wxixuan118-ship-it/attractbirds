@@ -106,11 +106,19 @@ export default async function StatePage({
             <h2 style={{ fontSize: "20px" }}>Popular cities in {state.name}</h2>
           </div>
           <div className="city-pills">
-            {state.popularCities.map((city) => (
-              <span key={city} className="city-pill">
-                {city}
-              </span>
-            ))}
+            {state.popularCities.map((city) => {
+              const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+              return (
+                <Link
+                  key={city}
+                  href={`/birds-by-location/${state.slug}/${citySlug}`}
+                  className="city-pill"
+                  style={{ textDecoration: "none" }}
+                >
+                  {city}
+                </Link>
+              );
+            })}
           </div>
         </section>
 
@@ -128,7 +136,7 @@ export default async function StatePage({
               {commonBirds.slice(0, 18).map((bird) => (
                 <BirdProfileLink
                   key={bird.slug}
-                  href={`/birds/${bird.slug}`}
+                  href={`/birds-by-location/${state.slug}/${bird.slug}`}
                   className="loc-bird-card"
                 >
                   <div className="loc-bird-initials">{bird.initials}</div>
@@ -163,7 +171,7 @@ export default async function StatePage({
               {backyardBirds.map((bird) => (
                 <BirdProfileLink
                   key={bird.slug}
-                  href={`/birds/${bird.slug}`}
+                  href={`/birds-by-location/${state.slug}/${bird.slug}`}
                   className="loc-bird-card"
                 >
                   <div className="loc-bird-initials">{bird.initials}</div>
@@ -244,7 +252,7 @@ export default async function StatePage({
                       highlight.birds.map((bird) => (
                         <Link
                           key={bird.slug}
-                          href={`/birds/${bird.slug}`}
+                          href={`/birds-by-location/${state.slug}/${bird.slug}`}
                           style={{ display: "block" }}
                         >
                           <span className="month-bird">{bird.name}</span>

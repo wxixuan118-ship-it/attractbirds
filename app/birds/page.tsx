@@ -6,8 +6,9 @@ import { BirdProfileLink } from "../components/BirdProfileLink";
 import { getPublishedBirds } from "../../lib/bird-repository";
 
 export const metadata: Metadata = {
-  title: "A–Z Backyard Bird Encyclopedia",
-  description: "Browse backyard birds from A to Z, then open each reviewed species profile for identification, diet, plants, feeders, nesting, and seasonal guidance.",
+  title: "A–Z Bird Encyclopedia — 1,000 Species",
+  description: "Browse 1,000 birds from the North and Middle American checklist, with taxonomy, identification, habitat, diet, nesting, and seasonal guidance.",
+  alternates: { canonical: "/birds" },
 };
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -34,7 +35,7 @@ export default async function BirdsPage() {
             <p>Identify the birds outside your window and learn what helps them thrive. Every profile brings together field marks, natural diet, useful plants, feeders, nesting, and seasonal movement.</p>
             <div className="encyclopedia-stats">
               <div><strong>{birds.length}</strong><span>species directory</span></div>
-              <div><strong>{birds.filter((bird) => bird.sourceCount > 0).length}</strong><span>reviewed profiles</span></div>
+              <div><strong>{birds.filter((bird) => bird.sourceCount > 0).length}</strong><span>sourced profiles</span></div>
               <div><strong>{groups.length}</strong><span>active letters</span></div>
             </div>
           </div>
@@ -72,13 +73,13 @@ export default async function BirdsPage() {
                       )}
                     </div>
                     <div className="species-card-body">
-                      <div className="species-card-meta"><span>{bird.sourceCount > 0 ? bird.family : "Editorial queue"}</span><span>{bird.sourceCount > 0 ? bird.size : "To be filled"}</span></div>
+                      <div className="species-card-meta"><span>{bird.family}</span><span>{bird.size}</span></div>
                       <h2>{bird.commonName}</h2>
                       <p className="species-scientific">{bird.scientificName}</p>
                       <p className="species-summary">{bird.summary}</p>
                       <div className="species-card-footer">
-                        <span>{bird.sourceCount > 0 ? bird.residentStatus : "Profile fields ready for enrichment"}</span>
-                        <strong>{bird.sourceCount > 0 ? "View profile →" : "Open profile →"}</strong>
+                        <span>{bird.residentStatus}</span>
+                        <strong>View profile →</strong>
                       </div>
                     </div>
                   </BirdProfileLink>

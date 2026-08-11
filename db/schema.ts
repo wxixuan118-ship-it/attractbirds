@@ -243,3 +243,39 @@ export const birdRelatedSpecies = pgTable("bird_related_species", {
   primaryKey({ columns: [table.birdId, table.relatedBirdId] }),
   index("bird_related_bird_idx").on(table.birdId),
 ]);
+
+/**
+ * Bird × Location distribution summary — one row per (bird, location) pair.
+ *
+ * Aggregated from `bird_occurrence_stats` monthly data for O(1) lookups on
+ * state/city pages and bird+location combo pages. Powers:
+ *   - /birds-by-location/[state]        (top birds by abundance)
+ *   - /birds-by-location/[state]/[bird] (combo page)
+ *   - "Where can I find this bird?" section on species profiles
+ */
+export const birdLocationDistribution = pgTable("bird_location_distribution", {
+  birdId:              uuid("bird_id").notNull().references(() => birds.id, { onDelete: "cascade" }),
+  locationId:          uuid("location_id").notNull().references(() => locations.id, { onDelete: "cascade" }),
+  // abundance label for quick display + sorting
+  abundance:           text("abundance").notNull().default("uncommon"), // abundant | common | uncommon | rare | accidental
+  // overall seasonal presence
+  presence:            presenceType("presence").notNull().default("resident"), // resident | breeding | winter | migrant
+  // which months the bird is present (1-12)
+  bestMonths:          integer("best_months").array(),
+  // peak months (highest frequency)
+  peakMonths:          integer("peak_months").array(),
+  // aggregate stats
+  totalObservations:   integer("total_observations").notNull().default(0),
+  avgFrequency:        real("avg_frequency"),
+  maxFrequency:        real("max_frequency"),
+  // data quality
+  confidence:          real("confidence").notNull().default(0),
+  datasetVersion:      text("dataset_version").notNull(),
+  sourceId:            uuid("source_id").references(() => sources.id),
+  updatedAt:           timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  primaryKey({ columns: [table.birdId, table.locationId] }),
+  index("bird_location_dist_location_idx").on(table.locationId, table.avgFrequency),
+  index("bird_location_dist_bird_idx").on(table.birdId),
+  index("bird_location_dist_abundance_idx").on(table.locationId, table.abundance),
+]);

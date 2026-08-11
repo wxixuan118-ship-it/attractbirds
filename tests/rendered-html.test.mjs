@@ -17,3 +17,34 @@ test("renders the AttractBirds homepage", async () => {
   assert.match(html, /AttractBirds\.app/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });
+
+test("serves crawlable sitemap and robots files", async () => {
+  const sitemapResponse = await render("/sitemap.xml");
+  assert.equal(sitemapResponse.status, 200);
+  assert.match(sitemapResponse.headers.get("content-type") ?? "", /application\/xml/);
+  const sitemap = await sitemapResponse.text();
+  assert.match(sitemap, /<urlset/);
+  assert.match(sitemap, /https:\/\/attractbirds\.app\/birds\/northern-cardinal/);
+  assert.match(sitemap, /https:\/\/attractbirds\.app\/birds-by-location\/california/);
+  assert.ok((sitemap.match(/<url>/g) ?? []).length >= 6000);
+
+  const robotsResponse = await render("/robots.txt");
+  assert.equal(robotsResponse.status, 200);
+  const robots = await robotsResponse.text();
+  assert.match(robots, /Allow: \//);
+  assert.match(robots, /Sitemap: https:\/\/attractbirds\.app\/sitemap\.xml/);
+});
+
+test("renders encyclopedia and location detail pages", async () => {
+  const encyclopedia = await render("/birds");
+  assert.equal(encyclopedia.status, 200);
+  assert.match(await encyclopedia.text(), /1,000|1000/);
+
+  const bird = await render("/birds/highland-tinamou");
+  assert.equal(bird.status, 200);
+  assert.match(await bird.text(), /Nothocercus bonapartei/);
+
+  const location = await render("/birds-by-location/california/los-angeles");
+  assert.equal(location.status, 200);
+  assert.match(await location.text(), /Birds in/);
+});
