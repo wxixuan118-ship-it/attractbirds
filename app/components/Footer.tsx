@@ -3,7 +3,7 @@ import Link from "next/link";
 const links = {
   Birds: [
     { label: "Bird Encyclopedia", href: "/birds" },
-    { label: "By Location", href: "/birds/california" },
+    { label: "By Location", href: "/birds-by-location" },
     { label: "Seasonal Birds", href: "/birds/seasonal" },
     { label: "Attraction Guides", href: "/birds" },
   ],

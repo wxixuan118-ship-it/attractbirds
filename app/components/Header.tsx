@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const nav = [
   { label: "Bird Encyclopedia", href: "/birds" },
-  { label: "By Location", href: "/birds/california" },
+  { label: "By Location", href: "/birds-by-location" },
   { label: "Seasonal Birds", href: "/birds/seasonal" },
   { label: "Plants", href: "/plants/attract-hummingbirds" },
   { label: "Feeders", href: "/feeders/platform-feeder" },

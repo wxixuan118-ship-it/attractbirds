@@ -8,7 +8,7 @@ import { getPublishedBirds } from "../lib/bird-repository";
 
 const modules = [
   { icon: "🦜", num: "01", title: "Bird Encyclopedia", copy: "500+ species — diet, habitat, attraction tips, and nesting habits for every common backyard bird.", href: "/birds" },
-  { icon: "📍", num: "02", title: "Birds by Location", copy: "Explore backyard birds by state, city, or region. Discover what's visiting your area right now.", href: "/birds/california" },
+  { icon: "📍", num: "02", title: "Birds by Location", copy: "Explore backyard birds by state, city, or region. Discover what's visiting your area right now.", href: "/birds-by-location" },
   { icon: "🌿", num: "03", title: "Bird-Friendly Plants", copy: "Native plants that attract the birds you love — filtered by region, bloom season, and bird species.", href: "/plants/attract-hummingbirds" },
   { icon: "🪺", num: "04", title: "Feeder Guide", copy: "The right feeder for every bird. Types, placement, maintenance, and top product picks.", href: "/feeders/platform-feeder" },
   { icon: "🍂", num: "05", title: "Seasonal Birds", copy: "Year-round calendar of arrivals and migrations. Know exactly what to expect each month.", href: "/birds/seasonal" },
@@ -17,7 +17,18 @@ const modules = [
   { icon: "🗺️", num: "08", title: "Attraction Guides", copy: "Step-by-step habitat-building guides for specific species like hummingbirds, cardinals, and owls.", href: "/birds" },
 ];
 
-const locationPills = ["California", "Texas", "Florida", "New York", "Arizona", "Georgia", "Oregon", "Colorado", "Michigan", "North Carolina"];
+const locationPills = [
+  { label: "California", slug: "california" },
+  { label: "Texas", slug: "texas" },
+  { label: "Florida", slug: "florida" },
+  { label: "New York", slug: "new-york" },
+  { label: "Arizona", slug: "arizona" },
+  { label: "Georgia", slug: "georgia" },
+  { label: "Oregon", slug: "oregon" },
+  { label: "Colorado", slug: "colorado" },
+  { label: "Michigan", slug: "michigan" },
+  { label: "North Carolina", slug: "north-carolina" },
+];
 
 export default async function Home() {
   const featuredBirds=(await getPublishedBirds()).slice(0,4);
@@ -42,7 +53,7 @@ export default async function Home() {
           </div>
           <div className="hero-pills">
             {locationPills.map((loc) => (
-              <Link href={`/birds/${loc.toLowerCase()}`} className="hero-pill" key={loc}>{loc}</Link>
+              <Link href={`/birds-by-location/${loc.slug}`} className="hero-pill" key={loc.slug}>{loc.label}</Link>
             ))}
           </div>
         </section>
