@@ -642,6 +642,88 @@ h1, h2, h3, p { margin-top: 0; }
 .index-card span { font-size: 12px; font-weight: 800; color: var(--green); }
 .eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--green); margin-bottom: 10px; }
 
+/* ─── BIRD ENCYCLOPEDIA ───────────────────────────────────────── */
+.bird-encyclopedia { padding-top: 32px; }
+.encyclopedia-hero {
+  display: grid;
+  grid-template-columns: 1.35fr .65fr;
+  align-items: end;
+  gap: 8vw;
+  padding: 56px 0 48px;
+}
+.encyclopedia-hero h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(52px, 7vw, 92px);
+  font-weight: 400;
+  letter-spacing: -4px;
+  line-height: .94;
+  margin: 0;
+}
+.encyclopedia-hero h1 em { color: var(--green); font-weight: 400; }
+.encyclopedia-intro > p { color: var(--text-muted); font-size: 15px; line-height: 1.75; margin-bottom: 28px; }
+.encyclopedia-stats { display: flex; gap: 32px; }
+.encyclopedia-stats div { display: flex; flex-direction: column; gap: 2px; }
+.encyclopedia-stats strong { font-family: Georgia, serif; color: var(--green); font-size: 30px; font-weight: 400; }
+.encyclopedia-stats span { color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
+.alphabet-nav {
+  position: sticky;
+  top: 68px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 13px 16px;
+  background: rgba(247,249,246,.96);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(31,65,43,.06);
+  backdrop-filter: blur(12px);
+}
+.alphabet-label { color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px; white-space: nowrap; }
+.alphabet-links { display: grid; grid-template-columns: repeat(26, minmax(24px, 1fr)); gap: 3px; width: 100%; }
+.alphabet-link {
+  min-width: 24px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 800;
+  transition: background .15s, color .15s;
+}
+a.alphabet-link:hover { background: var(--green); color: white; }
+.alphabet-link.is-disabled { color: #bcc4bc; cursor: default; }
+.bird-directory { display: grid; gap: 64px; padding-top: 64px; }
+.letter-section { scroll-margin-top: 140px; }
+.letter-heading { display: flex; align-items: baseline; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 22px; }
+.letter-heading > span { font-family: Georgia, serif; color: var(--green); font-size: 52px; line-height: 1; }
+.letter-heading p { color: var(--text-muted); font-size: 12px; margin: 0; }
+.letter-heading a { color: var(--green); font-size: 11px; font-weight: 700; margin-left: auto; }
+.encyclopedia-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.species-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  overflow: hidden;
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.species-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: var(--green-pill); }
+.species-card-visual { min-height: 225px; display: grid; place-items: center; overflow: hidden; background: linear-gradient(145deg, var(--green-light), #dfeade); }
+.species-card-visual img { width: 100%; height: 100%; object-fit: cover; }
+.species-card-visual span { width: 74px; height: 74px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.72); color: var(--green); font: italic 28px Georgia, serif; }
+.species-card-body { min-width: 0; display: flex; flex-direction: column; padding: 20px; }
+.species-card-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--text-muted); font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; }
+.species-card h2 { font-size: 22px; line-height: 1.12; letter-spacing: -.5px; margin: 12px 0 2px; }
+.species-scientific { color: var(--green); font: italic 12px Georgia, serif; margin-bottom: 13px; }
+.species-summary { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; color: var(--text-muted); font-size: 12px; line-height: 1.55; }
+.species-card-footer { display: flex; align-items: end; justify-content: space-between; gap: 16px; border-top: 1px solid var(--border); margin-top: auto; padding-top: 13px; }
+.species-card-footer > span { max-width: 60%; color: var(--text-muted); font-size: 9px; line-height: 1.4; }
+.species-card-footer strong { color: var(--green); font-size: 11px; white-space: nowrap; }
+
 /* ─── BUTTONS ────────────────────────────────────────────────────── */
 .button {
   display: inline-flex;
@@ -716,6 +798,9 @@ h1, h2, h3, p { margin-top: 0; }
   .bird-grid { grid-template-columns: repeat(4, 1fr); }
   .module-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-top { grid-template-columns: 1fr 1fr; }
+  .alphabet-links { grid-template-columns: repeat(13, 1fr); }
+  .alphabet-nav { align-items: flex-start; }
+  .species-card { grid-template-columns: 120px 1fr; }
 }
 @media (max-width: 620px) {
   .hero h1 { font-size: 38px; }
@@ -728,6 +813,11 @@ h1, h2, h3, p { margin-top: 0; }
   .notes-grid { grid-template-columns: 1fr; }
   .trust-bar { gap: 24px; }
   .index-grid { grid-template-columns: 1fr 1fr; }
+  .encyclopedia-hero { grid-template-columns: 1fr; gap: 28px; padding: 40px 0; }
+  .encyclopedia-hero h1 { letter-spacing: -2.5px; }
+  .alphabet-nav { position: static; flex-direction: column; gap: 8px; }
+  .alphabet-links { grid-template-columns: repeat(9, 1fr); }
+  .encyclopedia-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .site-header { padding: 0 16px; gap: 16px; }
@@ -741,6 +831,11 @@ h1, h2, h3, p { margin-top: 0; }
   .form-row { grid-template-columns: 1fr; }
   .footer-top { grid-template-columns: 1fr; gap: 32px; }
   .index-grid { grid-template-columns: 1fr; }
+  .bird-directory { gap: 48px; padding-top: 48px; }
+  .species-card { grid-template-columns: 100px 1fr; }
+  .species-card-visual { min-height: 235px; }
+  .species-card-body { padding: 16px; }
+  .species-card h2 { font-size: 19px; }
   .section-header { flex-direction: column; align-items: flex-start; }
   .marquee { gap: 12px; font-size: 10px; }
   .marquee span:nth-child(n+7) { display: none; }
