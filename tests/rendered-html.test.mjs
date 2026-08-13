@@ -198,7 +198,9 @@ test("renders the complete how-to-attract-birds topic cluster", async () => {
   for (const [source, destination] of Object.entries(redirects)) {
     const legacy = await render(source);
     assert.equal(legacy.status, 301, source);
-    assert.equal(new URL(legacy.headers.get("location")).pathname, destination, source);
+    const location = new URL(legacy.headers.get("location"));
+    assert.equal(location.origin, "https://attractbirds.app", source);
+    assert.equal(location.pathname, destination, source);
   }
   const unknown = await render("/not-a-real-attraction-guide");
   assert.equal(unknown.status, 404);
