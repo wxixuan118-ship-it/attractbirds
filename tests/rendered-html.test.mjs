@@ -134,7 +134,7 @@ test("renders quality-gated feeder routes and calculator", async () => {
 });
 
 test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
-  const pillar = await render("/how-to-attract-birds");
+  const pillar = await render("/how-to-attract");
   assert.equal(pillar.status, 200);
   const pillarHtml = await pillar.text();
   assert.match(pillarHtml, /How to attract birds/);
@@ -160,7 +160,7 @@ test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
 });
 
 test("renders the complete how-to-attract-birds topic cluster", async () => {
-  const pillar = await render("/how-to-attract-birds");
+  const pillar = await render("/how-to-attract");
   const pillarHtml = await pillar.text();
   assert.equal(pillar.status, 200);
   assert.match(pillarHtml, /href="\/how-to-attract\/birds-to-a-bird-bath"/);
@@ -181,9 +181,25 @@ test("renders the complete how-to-attract-birds topic cluster", async () => {
     assert.match(html, /FAQPage/, path);
     assert.match(html, /Continue planning/, path);
   }
-  const legacy = await render("/attract-birds-to-bird-bath");
-  assert.equal(legacy.status, 308);
-  assert.equal(legacy.headers.get("location"), "/how-to-attract/birds-to-a-bird-bath");
+  const redirects = {
+    "/how-to-attract-birds": "/how-to-attract",
+    "/how-to-attract-birds-to-your-yard": "/how-to-attract/birds-to-your-yard",
+    "/how-to-attract-birds-to-feeder": "/how-to-attract/birds-to-a-feeder",
+    "/new-bird-feeder-tips": "/how-to-attract/birds-to-a-new-feeder",
+    "/attract-birds-to-bird-bath": "/how-to-attract/birds-to-a-bird-bath",
+    "/attract-birds-without-feeder": "/how-to-attract/birds-without-a-feeder",
+    "/attract-birds-with-sounds": "/how-to-attract/birds-with-sounds",
+    "/attract-birds-to-your-hand": "/how-to-attract/birds-to-your-hand",
+    "/attract-birds-in-winter": "/how-to-attract/birds-in-winter",
+    "/attract-birds-to-balcony": "/how-to-attract/birds-to-a-balcony",
+    "/attract-birds-to-birdhouse": "/how-to-attract/birds-to-a-birdhouse",
+    "/birds-that-eat-yard-pests": "/how-to-attract/birds-that-eat-yard-pests",
+  };
+  for (const [source, destination] of Object.entries(redirects)) {
+    const legacy = await render(source);
+    assert.equal(legacy.status, 301, source);
+    assert.equal(new URL(legacy.headers.get("location")).pathname, destination, source);
+  }
   const unknown = await render("/not-a-real-attraction-guide");
   assert.equal(unknown.status, 404);
 });
@@ -206,6 +222,8 @@ test("enforces bird and location index eligibility", async () => {
   assert.doesNotMatch(sitemap, /\/birds\/highland-tinamou/);
   assert.doesNotMatch(sitemap, /\/birds-by-location\/california\/northern-cardinal/);
   assert.doesNotMatch(sitemap, /\/attract-birds-to-bird-bath/);
+  assert.doesNotMatch(sitemap, /\/how-to-attract-birds/);
+  assert.match(sitemap, /https:\/\/attractbirds\.app\/how-to-attract<\/loc>/);
   assert.match(sitemap, /\/how-to-attract\/birds-to-a-bird-bath/);
   assert.ok((sitemap.match(/<url>/g) ?? []).length < 300);
 });

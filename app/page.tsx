@@ -14,7 +14,7 @@ const modules = [
   { icon: "🍂", num: "05", title: "Seasonal Birds", copy: "Year-round calendar of arrivals and migrations. Know exactly what to expect each month.", href: "/birds/seasonal" },
   { icon: "🔍", num: "06", title: "Problem Diagnosis", copy: "Feeders gone quiet? Diagnose and fix 100+ common backyard bird problems fast.", href: "/bird-problems/no-birds-at-feeder" },
   { icon: "🤖", num: "07", title: "AI Yard Planner", copy: "Input your location, yard size, and target birds. Get a personalized bird-garden plan in seconds.", href: "/#planner" },
-  { icon: "🗺️", num: "08", title: "How to Attract Birds", copy: "A safe beginner roadmap covering native plants, food, feeders, water, shelter, windows, cats, and hygiene.", href: "/how-to-attract-birds" },
+  { icon: "🗺️", num: "08", title: "How to Attract Birds", copy: "A safe beginner roadmap covering native plants, food, feeders, water, shelter, windows, cats, and hygiene.", href: "/how-to-attract" },
 ];
 
 const locationPills = [

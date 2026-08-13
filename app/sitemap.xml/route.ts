@@ -6,8 +6,9 @@ import { feederComparisons, feederFoods, feederGuides, feederProblems } from "..
 import { pilotBirds } from "../../data/pilot-birds";
 import { attractionGuides, attractionGuidePath } from "../../data/attraction-guides";
 import { getIndexEligibleBirds } from "../../lib/bird-repository";
+import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 
-const ORIGIN = "https://attractbirds.app";
+const ORIGIN = SITE.origin;
 const LAST_MODIFIED = "2026-08-11";
 
 function escapeXml(value: string) {
@@ -25,7 +26,7 @@ export async function GET() {
     "/birds/california",
     "/birds-by-location",
     "/bird-problems/no-birds-at-feeder",
-    "/how-to-attract-birds",
+    URL_REGISTRY.howTo.hub,
     "/bird-food",
     "/birds/oriole",
     "/plants/bird-of-paradise",

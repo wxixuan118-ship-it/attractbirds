@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 
 const links = {
   Birds: [
@@ -20,7 +21,7 @@ const links = {
     { label: "Species Identifier", href: "/birds" },
     { label: "Seasonal Calendar", href: "/seasonal-birds" },
     { label: "Feeder Planner", href: "/tools/bird-feeder-calculator" },
-    { label: "How to Attract Birds", href: "/how-to-attract-birds" },
+    { label: "How to Attract Birds", href: URL_REGISTRY.howTo.hub },
   ],
 };
 
@@ -34,7 +35,7 @@ export function Footer() {
               <span className="brand-mark">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.5 2 3 6 3 10c0 2.5 1.5 4.5 3.5 5.5L4 22l4-2 2 2 2-2 2 2 4-2-2.5-6.5C17.5 14.5 19 12.5 19 10c0-4-3.5-8-7-8z"/><circle cx="9" cy="9" r="1" fill="currentColor" stroke="none"/></svg>
               </span>
-              <span>Bird<strong>GardenAI</strong></span>
+              <span>{SITE.brand}</span>
             </Link>
             <p>Build a bird-friendly backyard — personalized for where you live, what you have, and which birds you love.</p>
           </div>
@@ -48,7 +49,7 @@ export function Footer() {
           ))}
         </div>
         <div className="footer-bottom">
-          <span>© 2026 BirdGardenAI. All rights reserved.</span>
+          <span>© 2026 {SITE.brand}. All rights reserved.</span>
           <span>Built for birds. Backed by science.</span>
         </div>
       </div>

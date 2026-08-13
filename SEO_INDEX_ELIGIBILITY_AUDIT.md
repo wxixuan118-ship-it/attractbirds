@@ -25,4 +25,4 @@ The remaining 988 taxonomy profiles stay accessible as `noindex, follow`, retain
 
 ## How-to URL consolidation
 
-The Pillar remains `/how-to-attract-birds`. All eleven child guides now use `/how-to-attract/{intent}`. Previous root-level guide URLs permanently redirect to the matching canonical route and are excluded from the sitemap.
+The pillar is `/how-to-attract`. All eleven child guides use `/how-to-attract/{intent}`. The previous pillar and root-level guide URLs return HTTP 301 to their matching canonical routes and are excluded from the sitemap.

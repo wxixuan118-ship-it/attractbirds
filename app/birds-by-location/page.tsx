@@ -5,7 +5,7 @@ import { USMap } from "../components/USMap";
 import { US_STATES_DATA, REGIONS } from "../../data/us-states-data";
 
 export const metadata: Metadata = {
-  title: "Birds by Location — Discover Birds in Your State | BirdGardenAI",
+  title: "Birds by Location — Discover Birds in Your State | AttractBirds.app",
   description:
     "Explore backyard birds across all 50 U.S. states. Interactive map, species counts, birding hotspots, and seasonal guides for California, Texas, Florida, New York, and more.",
   alternates: { canonical: "/birds-by-location" },
