@@ -232,6 +232,24 @@ test("renders twelve indexable species attraction guides", async () => {
   assert.match(killdeer, /not feeder birds|not a feeder/i);
 });
 
+test("renders a researched bluebird attraction guide with keyword-focused TDK", async () => {
+  const response = await render("/how-to-attract/bluebirds");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<title>How to Attract Bluebirds: Food, Houses &amp; Habitat \| AttractBirds\.app<\/title>/);
+  assert.match(html, /name="description" content="Learn how to attract bluebirds/);
+  assert.match(html, /rel="canonical" href="https:\/\/attractbirds\.app\/how-to-attract\/bluebirds"/);
+  assert.match(html, /Which bluebird are you trying to attract\?/);
+  assert.match(html, /How to attract bluebirds to a bluebird house/i);
+  assert.match(html, /Common mistakes that keep bluebirds away/);
+  assert.match(html, /FAQPage/);
+  assert.match(html, /audubon\.org\/magazine/);
+  assert.match(html, /wbu\.com\/birds\/bluebirds/);
+  assert.match(html, /wildbirdstore\.com\/resources\/attracting-specific-birds\/attracting-bluebirds/);
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.match(sitemap, /https:\/\/attractbirds\.app\/how-to-attract\/bluebirds<\/loc>/);
+});
+
 test("enforces bird and location index eligibility", async () => {
   const reviewed = await render("/birds/northern-cardinal");
   assert.equal(reviewed.status, 200);
