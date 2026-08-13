@@ -1,12 +1,11 @@
-import { birdCatalog } from "../../data/bird-catalog";
 import { US_STATES_DATA } from "../../data/us-states-data";
-import { getComboStaticParams } from "../../lib/location-repository";
 import { indexedSeasonalBirds, seasonSlugs } from "../../lib/seasonal-repository";
 import { indexedPlants, plantCategories } from "../../lib/plant-repository";
 import { plantPurposes } from "../../data/pilot-plants";
 import { feederComparisons, feederFoods, feederGuides, feederProblems } from "../../data/pilot-feeders";
 import { pilotBirds } from "../../data/pilot-birds";
-import { attractionGuides } from "../../data/attraction-guides";
+import { attractionGuides, attractionGuidePath } from "../../data/attraction-guides";
+import { getIndexEligibleBirds } from "../../lib/bird-repository";
 
 const ORIGIN = "https://attractbirds.app";
 const LAST_MODIFIED = "2026-08-11";
@@ -35,8 +34,8 @@ export async function GET() {
     "/plants",
   ]);
 
-  for (const bird of birdCatalog) paths.add(`/birds/${bird.slug}`);
-  for (const guide of attractionGuides) paths.add(`/${guide.slug}`);
+  for (const bird of await getIndexEligibleBirds()) paths.add(`/birds/${bird.slug}`);
+  for (const guide of attractionGuides) paths.add(attractionGuidePath(guide));
   for (const feeder of feederGuides) paths.add(`/feeders/${feeder.slug}`);
   for (const bird of pilotBirds) paths.add(`/feeders/for/${bird.slug}`);
   for (const food of Object.keys(feederFoods)) paths.add(`/feeders/for/${food}`);
@@ -51,7 +50,6 @@ export async function GET() {
     for (const bird of indexedSeasonalBirds) paths.add(`/seasonal-birds/${season}/${bird.slug}`);
   }
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
-  for (const item of getComboStaticParams()) paths.add(`/birds-by-location/${item.state}/${item.slug}`);
 
   const body = [...paths]
     .sort()

@@ -40,6 +40,7 @@ export async function generateMetadata({
       title,
       description,
       alternates: { canonical: `/birds-by-location/${stateSlug}/${slug}` },
+      robots: { index: false, follow: true },
       openGraph: { title, description, type: "article" },
     };
   }
@@ -53,6 +54,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `/birds-by-location/${stateSlug}/${slug}` },
+    robots: { index: false, follow: true },
     openGraph: { title, description, type: "website" },
   };
 }

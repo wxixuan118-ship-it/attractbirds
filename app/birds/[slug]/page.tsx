@@ -3,14 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
-import { getBirdBySlug, getBirdStaticParams } from "../../../lib/bird-repository";
+import { getBirdBySlug, getBirdStaticParams, isBirdIndexEligible } from "../../../lib/bird-repository";
 
 export function generateStaticParams(){return getBirdStaticParams()}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const bird=await getBirdBySlug((await params).slug);return bird?{title:`${bird.commonName}: Identification, Habitat & Diet`,description:`Learn the taxonomy, identification approach, habitat, diet, and regional status of ${bird.commonName} (${bird.scientificName}).`,alternates:{canonical:`/birds/${bird.slug}`}}:{}}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const bird=await getBirdBySlug((await params).slug);return bird?{title:`${bird.commonName}: Identification, Habitat & Diet`,description:`Learn the taxonomy, identification approach, habitat, diet, and regional status of ${bird.commonName} (${bird.scientificName}).`,alternates:{canonical:`/birds/${bird.slug}`},robots:isBirdIndexEligible(bird)?{index:true,follow:true}:{index:false,follow:true}}:{}}
 
 export default async function BirdPage({params}:{params:Promise<{slug:string}>}){
   const bird=await getBirdBySlug((await params).slug);if(!bird)notFound();
-  const isReviewed=bird.sourceCount>0;
+  const isReviewed=isBirdIndexEligible(bird);
   return <div><Header/><main className="content-main"><div className="breadcrumb"><Link href="/">Home</Link> / <Link href="/birds">Birds</Link> / {bird.commonName}</div>
     <section className="content-hero"><div><p className="eyebrow"><span/> {isReviewed?"Reviewed bird profile":"Bird profile editorial queue"}</p><h1>{bird.commonName}</h1><p className="scientific">{bird.scientificName}</p><p className="lede">{bird.summary}</p></div>{bird.imageUrl?<figure className="bird-profile-image"><img src={bird.imageUrl} alt={bird.imageAlt??bird.commonName}/><figcaption>{bird.imageSourceUrl?<a href={bird.imageSourceUrl} target="_blank" rel="noreferrer">{bird.imageAttribution}</a>:bird.imageAttribution}{bird.imageLicenseUrl&&<> · <a href={bird.imageLicenseUrl} target="_blank" rel="noreferrer">License</a></>}</figcaption></figure>:<aside className="fact-panel"><div><small>Size</small><strong>{bird.size}</strong></div><div><small>Colors</small><strong>{bird.colors}</strong></div><div><small>Useful feeder foods</small><strong>{bird.diet}</strong></div><div><small>Habitat</small><strong>{bird.habitat}</strong></div></aside>}</section>
     {bird.imageUrl&&<aside className="fact-strip"><div><small>Size</small><strong>{bird.size}</strong></div><div><small>Colors</small><strong>{bird.colors}</strong></div><div><small>Useful feeder foods</small><strong>{bird.diet}</strong></div><div><small>Habitat</small><strong>{bird.habitat}</strong></div></aside>}

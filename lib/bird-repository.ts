@@ -11,6 +11,10 @@ export type BirdPageData = {
   qualityScore:number; sourceCount:number;
 };
 
+export function isBirdIndexEligible(bird:BirdPageData){
+  return bird.qualityScore>=80&&bird.sourceCount>=1&&Boolean(bird.identification)&&Boolean(bird.nestType)&&bird.foods.length>0&&bird.plants.length>0&&bird.feeders.length>0;
+}
+
 function fallbackBird(item:(typeof pilotBirds)[number]):BirdPageData{return {slug:item.slug,commonName:item.commonName,scientificName:item.scientificName,family:item.family,hook:item.residentStatus,initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:item.colors.join(", "),size:`${item.size[0]}–${item.size[1]} cm`,diet:item.dietSummary,habitat:item.habitats.join(", "),residentStatus:item.residentStatus,summary:item.summary,foods:item.foods,plants:item.plants,feeders:item.feeders,identification:item.identification.features,migrationPattern:item.behavior.migrationPattern,nestType:item.behavior.nestType,nestLocations:item.behavior.nestLocations,clutchSize:item.behavior.clutchSize,qualityScore:85,sourceCount:1}}
 
 const fallback=pilotBirds.map(fallbackBird);
@@ -65,6 +69,8 @@ export async function getPublishedBirds():Promise<BirdPageData[]>{
     return [...published,...candidateFallback.filter(item=>!publishedSlugs.has(item.slug))].sort((a,b)=>a.commonName.localeCompare(b.commonName));
   }catch(error){console.warn("PostgreSQL unavailable; using reviewed build snapshot.",error);return candidateFallback}
 }
+
+export async function getIndexEligibleBirds(){return(await getPublishedBirds()).filter(isBirdIndexEligible)}
 
 export async function getBirdBySlug(slug:string):Promise<BirdPageData|undefined>{
   if(!shouldUseDatabase())return candidateFallback.find(item=>item.slug===slug);
