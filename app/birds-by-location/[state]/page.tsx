@@ -27,6 +27,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `/birds-by-location/${stateData.slug}` },
+    robots: { index: true, follow: true },
     openGraph: {
       title,
       description,

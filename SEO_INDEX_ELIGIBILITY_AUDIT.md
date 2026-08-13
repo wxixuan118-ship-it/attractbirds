@@ -14,6 +14,8 @@ Audit date: 2026-08-13
 
 State × bird eligibility requires real observation data, positive frequency, a current dataset version, source provenance, non-inferred seasonality, and reviewed location-specific copy. Static fallback months never qualify.
 
+All 50 state hubs explicitly return `index, follow`; they must not inherit the `noindex` rule used for city and state-by-bird combinations. Their canonical URLs and sitemap entries remain active to preserve state-level keyword signals already recognized by search engines.
+
 ## Bird inventory
 
 | Route class | Audited | Index eligible now | Decision |

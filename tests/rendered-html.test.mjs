@@ -57,6 +57,19 @@ test("location landing exposes direct state links", async () => {
   assert.match(html, /<a[^>]+href="\/birds-by-location\/texas"[^>]*class="us-map-tile/);
 });
 
+test("keeps all state hub pages explicitly indexable", async () => {
+  for (const state of ["california", "texas", "new-york", "florida", "alaska", "hawaii"]) {
+    const response = await render(`/birds-by-location/${state}`);
+    assert.equal(response.status, 200, state);
+    const html = await response.text();
+    assert.match(html, /name="robots" content="index, follow"/, state);
+    assert.match(html, new RegExp(`rel="canonical" href="https://attractbirds\\.app/birds-by-location/${state}"`), state);
+  }
+  const sitemap = await (await render("/sitemap.xml")).text();
+  const stateUrls = sitemap.match(/<loc>https:\/\/attractbirds\.app\/birds-by-location\/[a-z-]+<\/loc>/g) ?? [];
+  assert.equal(stateUrls.length, 50);
+});
+
 test("renders quality-gated seasonal SEO routes", async () => {
   const hub = await render("/seasonal-birds");
   assert.equal(hub.status, 200);
