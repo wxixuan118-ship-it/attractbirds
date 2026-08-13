@@ -22,6 +22,7 @@ const links = {
     { label: "Seasonal Calendar", href: "/seasonal-birds" },
     { label: "Feeder Planner", href: "/tools/bird-feeder-calculator" },
     { label: "How to Attract Birds", href: URL_REGISTRY.howTo.hub },
+    { label: "Species Attraction Guides", href: "/how-to-attract/species" },
   ],
 };
 

@@ -206,6 +206,32 @@ test("renders the complete how-to-attract-birds topic cluster", async () => {
   assert.equal(unknown.status, 404);
 });
 
+test("renders twelve indexable species attraction guides", async () => {
+  const species = [
+    "northern-cardinal", "american-robin", "blue-jay", "american-goldfinch",
+    "black-capped-chickadee", "tufted-titmouse", "house-finch", "mourning-dove",
+    "downy-woodpecker", "ruby-throated-hummingbird", "baltimore-oriole", "killdeer",
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  const index = await render("/how-to-attract/species");
+  assert.equal(index.status, 200);
+  const indexHtml = await index.text();
+  for (const slug of species) {
+    const path = `/how-to-attract/${slug}`;
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /Species attraction guide/, path);
+    assert.match(html, /HowTo/, path);
+    assert.match(html, /FAQPage/, path);
+    assert.match(html, new RegExp(`rel="canonical" href="https://attractbirds\\.app${path}"`), path);
+    assert.match(sitemap, new RegExp(`${path.replaceAll("-", "\\-")}<\\/loc>`), path);
+    assert.match(indexHtml, new RegExp(`href="${path.replaceAll("-", "\\-")}"`), path);
+  }
+  const killdeer = await (await render("/how-to-attract/killdeer")).text();
+  assert.match(killdeer, /not feeder birds|not a feeder/i);
+});
+
 test("enforces bird and location index eligibility", async () => {
   const reviewed = await render("/birds/northern-cardinal");
   assert.equal(reviewed.status, 200);

@@ -7,6 +7,7 @@ import { pilotBirds } from "../../data/pilot-birds";
 import { attractionGuides, attractionGuidePath } from "../../data/attraction-guides";
 import { getIndexEligibleBirds } from "../../lib/bird-repository";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
+import { speciesAttractionGuides } from "../../data/species-attraction-guides";
 
 const ORIGIN = SITE.origin;
 const LAST_MODIFIED = "2026-08-11";
@@ -27,6 +28,7 @@ export async function GET() {
     "/birds-by-location",
     "/bird-problems/no-birds-at-feeder",
     URL_REGISTRY.howTo.hub,
+    "/how-to-attract/species",
     "/bird-food",
     "/birds/oriole",
     "/plants/bird-of-paradise",
@@ -37,6 +39,7 @@ export async function GET() {
 
   for (const bird of await getIndexEligibleBirds()) paths.add(`/birds/${bird.slug}`);
   for (const guide of attractionGuides) paths.add(attractionGuidePath(guide));
+  for (const guide of speciesAttractionGuides) paths.add(URL_REGISTRY.howTo.species(guide.slug));
   for (const feeder of feederGuides) paths.add(`/feeders/${feeder.slug}`);
   for (const bird of pilotBirds) paths.add(`/feeders/for/${bird.slug}`);
   for (const food of Object.keys(feederFoods)) paths.add(`/feeders/for/${food}`);

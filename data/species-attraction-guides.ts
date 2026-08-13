@@ -1,0 +1,24 @@
+export type SpeciesAttractionGuide = {
+  slug: string;
+  name: string;
+  priority: string;
+  habitatAction: string;
+  caution: string;
+};
+
+export const speciesAttractionGuides: SpeciesAttractionGuide[] = [
+  { slug: "northern-cardinal", name: "Northern Cardinals", priority: "Dense shrub cover paired with fresh seed and berries", habitatAction: "Build a layered edge with serviceberry, elderberry, dogwood, or other regionally native shrubs.", caution: "Use a broad, stable feeder that accommodates a cardinal’s size; discard wet seed promptly." },
+  { slug: "american-robin", name: "American Robins", priority: "Pesticide-free ground habitat, fruit, leaf litter, and shallow water", habitatAction: "Keep some leaf litter and add locally native fruiting trees or shrubs while maintaining an open foraging patch.", caution: "Robins are not typical seed-feeder birds; habitat and water usually matter more than a feeder." },
+  { slug: "blue-jay", name: "Blue Jays", priority: "Native oaks, nuts, sturdy feeding surfaces, and water", habitatAction: "Retain mature native oaks where safe and provide layered tree cover near an open feeding area.", caution: "Offer unsalted peanuts only in modest amounts and keep shells or leftovers from accumulating." },
+  { slug: "american-goldfinch", name: "American Goldfinches", priority: "Standing seed heads, nyjer or sunflower chips, and open garden structure", habitatAction: "Let coneflower, sunflower, and regionally native thistle seed heads remain after flowering.", caution: "Replace nyjer frequently; stale or damp seed is a common reason finches stop visiting." },
+  { slug: "black-capped-chickadee", name: "Black-capped Chickadees", priority: "Insect-rich native trees, cavities, sunflower seed, and winter cover", habitatAction: "Plant native willow, birch, or other locally appropriate caterpillar-supporting trees and preserve safe cavities.", caution: "Confirm that Black-capped Chickadees—not a similar chickadee species—occur in your location." },
+  { slug: "tufted-titmouse", name: "Tufted Titmice", priority: "Mature deciduous trees, cavities, sunflower seed, peanuts, and cover", habitatAction: "Retain native oak or beech canopy and protect suitable natural cavities where it is safe to do so.", caution: "A nest box only helps when its dimensions, habitat, mounting, and predator protection are species-appropriate." },
+  { slug: "house-finch", name: "House Finches", priority: "Clean feeders, dry seed, water, and nearby shrub cover", habitatAction: "Provide native seed-bearing plants and shrubs so supplemental feeding is not the only resource.", caution: "House Finches are vulnerable to conjunctivitis; remove feeders and clean thoroughly when sick birds appear." },
+  { slug: "mourning-dove", name: "Mourning Doves", priority: "Clean ground or platform feeding, open sight lines, native seed plants, and water", habitatAction: "Grow native grasses and seed-bearing flowers beside a safe open foraging area with nearby trees.", caution: "Regularly remove hulls and droppings from ground-feeding areas to reduce spoilage and disease risk." },
+  { slug: "downy-woodpecker", name: "Downy Woodpeckers", priority: "Native trees, insect habitat, safe dead wood, and carefully maintained suet", habitatAction: "Retain dead limbs or snags only after a qualified safety assessment and reduce pesticide use.", caution: "Use rendered suet suited to the weather and remove any product that becomes rancid or excessively soft." },
+  { slug: "ruby-throated-hummingbird", name: "Ruby-throated Hummingbirds", priority: "A sequence of native blooms, tiny insects, perches, and clean nectar", habitatAction: "Combine spring-through-fall native flowers such as cardinal flower and trumpet honeysuckle where regionally suitable.", caution: "Use only plain white sugar and water at 1:4; never add dye, honey, sweeteners, or flavoring." },
+  { slug: "baltimore-oriole", name: "Baltimore Orioles", priority: "Deciduous canopy, native flowers, insects, ripe fruit, and clean nectar", habitatAction: "Retain tall deciduous trees for foraging and nesting, with native fruit and nectar plants below.", caution: "Fruit and nectar spoil quickly in warm weather; offer small portions and clean equipment frequently." },
+  { slug: "killdeer", name: "Killdeer", priority: "Undisturbed open ground and protection for inconspicuous ground nests", habitatAction: "Where Killdeer already occur, preserve suitable open habitat and mark active nesting areas from a distance.", caution: "Do not bait or lure Killdeer. They are not feeder birds, and approaching a nest can trigger distraction displays." },
+];
+
+export const speciesAttractionBySlug = Object.fromEntries(speciesAttractionGuides.map((guide) => [guide.slug, guide])) as Record<string, SpeciesAttractionGuide>;

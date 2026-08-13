@@ -8,6 +8,7 @@ The executable source of truth is `lib/url-registry.ts`. Navigation, canonical U
 | --- | --- |
 | How-to hub | `/how-to-attract` |
 | How-to guides | `/how-to-attract/{intent}` |
+| Species attraction guides | `/how-to-attract/{bird-slug}` |
 | Bird encyclopedia | `/birds/{bird}` |
 | Locations | `/birds-by-location/{state}` and `/birds-by-location/{state}/{location-or-bird}` |
 | Seasonal birds | `/seasonal-birds/{season}` and `/seasonal-birds/{season}/{bird-or-state}` |
