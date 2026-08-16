@@ -33,14 +33,23 @@ export async function generateMetadata({
     if (!data) return { title: "Birds by Location" };
 
     const birdName = data.bird.commonName;
-    const title = `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "Abundant" : data.abundance === "common" ? "Common" : data.abundance === "uncommon" ? "Uncommon" : "Rare"} — When & Where to Spot`;
-    const description = `${birdName} in ${stateData.name}: ${data.presence} species${data.bestMonths.length > 0 ? `, best seen in ${data.bestMonths.slice(0, 3).join(", ")}` : ""}. Identification, habitat, seasonal status, and birding tips for ${stateData.name}.`;
+    const birdPlural = pluralizeBird(birdName);
+    const isLowAbundance = data.abundance === "rare" || data.abundance === "accidental" || data.abundance === "uncommon";
+    const indexEligible = data.totalObservations > 0;
+
+    const title = isLowAbundance
+      ? `Are There ${birdPlural} in ${stateData.name}? Range & ${data.abundance === "uncommon" ? "Status" : "Rarity"} Guide`
+      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "Abundant" : "Common"} — Seasonal Guide & Tips`;
+
+    const description = isLowAbundance
+      ? `${birdName} in ${stateData.name}: find out if this species occurs here, where sightings have been reported, and how to identify them. Range, status, and similar species.`
+      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "abundant" : "common"} ${data.presence === "resident" ? "year-round resident" : "seasonal visitor"}${data.bestMonths.length > 0 ? `, best seen in ${data.bestMonths.slice(0, 3).join(", ")}` : ""}. Identification, habitat, and tips for attracting them to your backyard.`;
 
     return {
       title,
       description,
       alternates: { canonical: `/birds-by-location/${stateSlug}/${slug}` },
-      robots: { index: false, follow: true },
+      robots: { index: indexEligible, follow: true },
       openGraph: { title, description, type: "article" },
     };
   }
@@ -57,6 +66,14 @@ export async function generateMetadata({
     robots: { index: false, follow: true },
     openGraph: { title, description, type: "website" },
   };
+}
+
+function pluralizeBird(name: string): string {
+  const lower = name.toLowerCase();
+  if (lower.endsWith("goose")) return name.slice(0, -5) + "geese";
+  if (lower.endsWith("mouse")) return name.slice(0, -5) + "mice"; // Titmouse → Titmice
+  if (lower.endsWith("finch") || lower.endsWith("thrush")) return name + "es";
+  return name + "s";
 }
 
 const ABUNDANCE_LABELS: Record<string, { label: string; color: string }> = {
@@ -100,7 +117,8 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
 
   const { bird, state, monthlyData, abundance, presence, bestMonths, peakMonths, totalObservations, avgFrequency, relatedBirds, nearbyStatesWithBird } = data;
   const abundanceInfo = ABUNDANCE_LABELS[abundance] ?? ABUNDANCE_LABELS.common;
-  const pilot = birdSlug ? undefined : undefined; // already have bird data
+  const isLowAbundance = abundance === "rare" || abundance === "accidental" || abundance === "uncommon";
+  const birdPlural = pluralizeBird(bird.commonName);
   const maxFreq = Math.max(...monthlyData.map((m) => m.frequencyScore), 0.01);
 
   return (
@@ -121,7 +139,11 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
             <span /> {state.region} · {state.flyway} Flyway
           </p>
           <h1>
-            <em>{bird.commonName}</em> in {state.name}
+            {isLowAbundance ? (
+              <>Are There <em>{birdPlural}</em> in {state.name}?</>
+            ) : (
+              <><em>{bird.commonName}</em> in {state.name}</>
+            )}
           </h1>
           <p className="lede">
             {bird.scientificName} — {bird.family}
@@ -155,9 +177,20 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
         {/* Bird summary */}
         <section className="loc-section" style={{ paddingTop: "20px" }}>
           <div className="loc-section-header">
-            <h2 style={{ fontSize: "20px" }}>About {bird.commonName} in {state.name}</h2>
+            <h2 style={{ fontSize: "20px" }}>
+              {isLowAbundance
+                ? `Is the ${bird.commonName} Found in ${state.name}?`
+                : `About ${bird.commonName} in ${state.name}`}
+            </h2>
           </div>
           <div style={{ fontSize: "15px", lineHeight: 1.7, color: "var(--text-muted)", maxWidth: "760px" }}>
+            {isLowAbundance && (
+              <p style={{ marginBottom: "12px" }}>
+                {abundance === "accidental" || abundance === "rare"
+                  ? `${birdPlural} are not regularly found in ${state.name}. This species is considered ${abundanceInfo.label.toLowerCase()} here — sightings are exceptional and may represent individuals outside the typical North American range for this species.`
+                  : `${birdPlural} do occur in ${state.name}, but they are considered ${abundanceInfo.label.toLowerCase()}. Encountering one requires patience and the right habitat${presence === "migrant" ? " during migration windows" : presence === "winter" ? " in winter" : presence === "breeding" ? " during the breeding season" : ""}.`}
+              </p>
+            )}
             <p>{bird.summary}</p>
             <p style={{ marginTop: "12px" }}>
               In {state.name}, this species is classified as <strong style={{ color: abundanceInfo.color }}>{abundanceInfo.label.toLowerCase()}</strong>.
