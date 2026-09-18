@@ -1,4 +1,25 @@
-import type { Metadata } from "next"; import Link from "next/link"; import {Header} from "../../components/Header"; import {Footer} from "../../components/Footer";
-export const metadata:Metadata={title:"Why Aren't Birds Coming to My Feeder?",description:"Check the most common reasons birds stop visiting a feeder and make practical, safe fixes."};
-const causes=["The food is stale, wet, or poorly matched to local birds","Birds have abundant natural food right now","The feeder is too exposed or difficult to approach","A predator or frequent disturbance is nearby","The feeder needs cleaning","Recent landscaping removed useful cover"];
-export default function ProblemPage(){return <div><Header/><main className="content-main"><div className="breadcrumb"><Link href="/">Home</Link> / Bird problems / No birds at feeder</div><section className="content-hero"><div><p className="eyebrow"><span/> Problem solver</p><h1>Why aren’t birds coming to my feeder?</h1><p className="lede">A quiet feeder does not always mean something is wrong. Work through food quality, season, safety, placement, and habitat before making big changes.</p></div><aside className="fact-panel"><div><small>First check</small><strong>Food freshness</strong></div><div><small>Then check</small><strong>Safety and nearby cover</strong></div><div><small>Allow</small><strong>Time for birds to discover it</strong></div></aside></section><div className="content-grid"><section className="info-block wide"><h2>Six likely causes</h2><ol>{causes.map(c=><li key={c}>{c}</li>)}</ol></section><section className="info-block"><h2>Quick reset</h2><p>Empty and clean the feeder, add a small amount of fresh food appropriate for common local birds, and observe from a distance for several days.</p></section><section className="info-block"><h2>When to pause feeding</h2><p>If birds appear ill or local wildlife authorities report a disease event, follow current official guidance. Cleaning and temporary removal may be recommended.</p></section><section className="info-block wide"><h2>Improve the whole habitat</h2><p>Feeders work best as one part of a yard that also offers clean water, native plants, natural food, and protective cover.</p><Link className="button button-primary" href="/#planner">Build my habitat plan <span>→</span></Link></section></div></main><Footer/></div>}
+import Link from "next/link";
+import type { Metadata } from "next";
+import { EditorialPage, editorialMetadata } from "../../components/Editorial";
+import { FeederLinks } from "../../components/FeederLinks";
+import { miscEditorial } from "../../../data/editorial/misc";
+
+const content = miscEditorial["/bird-problems/no-birds-at-feeder"];
+export const metadata: Metadata = editorialMetadata(content);
+
+export default function ProblemPage() {
+  return (
+    <EditorialPage content={content} eyebrow="Problem solver" breadcrumbs={[{ name: "Bird problems", path: "/bird-problems/no-birds-at-feeder" }, { name: "No birds at feeder", path: content.path }]}>
+      <section className="loc-section">
+        <div className="loc-section-header"><h2>Related guides</h2></div>
+        <div className="chip-list">
+          <Link href="/how-to-attract/birds-to-a-new-feeder">Attract birds to a new feeder →</Link>
+          <Link href="/how-to-attract/birds-to-a-bird-bath">Attract birds to a bird bath →</Link>
+          <Link href="/bird-food">Bird feed guide →</Link>
+          <Link href="/tools/bird-feeder-calculator">Bird feeder calculator →</Link>
+        </div>
+      </section>
+      <FeederLinks exclude={[content.path]} />
+    </EditorialPage>
+  );
+}

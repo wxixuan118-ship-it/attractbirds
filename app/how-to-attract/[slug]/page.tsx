@@ -3,6 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
+import { EditorialPage, editorialMetadata } from "../../components/Editorial";
+import { HowToLinks } from "../../components/HowToLinks";
+import { howtoEditorial } from "../../../data/editorial/howto";
 import { attractionGuideByCanonicalSlug, attractionCanonicalSlugByLegacy, canonicalizeAttractionHref } from "../../../data/attraction-guides";
 import { speciesAttractionBySlug, speciesAttractionGuides } from "../../../data/species-attraction-guides";
 import { getBirdBySlug } from "../../../lib/bird-repository";
@@ -14,6 +17,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const ed = howtoEditorial[`/how-to-attract/${slug}`];
+  if (ed) return editorialMetadata(ed);
   const guide = attractionGuideByCanonicalSlug[slug];
   if (guide) return { title: guide.title, description: guide.description, alternates: { canonical: URL_REGISTRY.howTo.guide(slug) } };
   const speciesGuide = speciesAttractionBySlug[slug];
@@ -62,5 +67,15 @@ async function SpeciesGuide({ slug }: { slug: string }) {
 export default async function AttractionGuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   if (!attractionGuideByCanonicalSlug[slug] && !speciesAttractionBySlug[slug]) notFound();
+  const ed = howtoEditorial[`/how-to-attract/${slug}`];
+  if (ed) {
+    const bird = speciesAttractionBySlug[slug] ? slug : null;
+    return (
+      <EditorialPage content={ed} eyebrow={bird ? "How to attract · species guide" : "How to attract · guide"} breadcrumbs={[{ name: "How to attract", path: "/how-to-attract" }, { name: ed.title.split(":")[0].replace(/^How to Attract /, ""), path: ed.path }]}>
+        {bird && <section className="loc-section"><div className="loc-section-header"><h2>Related guides for this bird</h2></div><div className="chip-list"><a href={`/birds/${bird}`}>Species profile →</a><a href={`/feeders/for/${bird}`}>Feeder guide →</a><a href={`/plants/for/${bird}`}>Plant guide →</a></div></section>}
+        <HowToLinks exclude={[ed.path]} />
+      </EditorialPage>
+    );
+  }
   return <div><Header/><main className="content-main">{attractionGuideByCanonicalSlug[slug] ? <GeneralGuide slug={slug}/> : <SpeciesGuide slug={slug}/>}</main><Footer/></div>;
 }

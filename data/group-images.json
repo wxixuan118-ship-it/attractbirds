@@ -21,6 +21,17 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "title": "File:Echinacea purpurea Spinus tristis JRVdH 05.jpg"
  },
+ "american-robin": {
+  "species": "American Robin",
+  "src": "/images/birds/american-robin.webp",
+  "width": 1280,
+  "height": 960,
+  "credit": "Rhododendrites",
+  "creditUrl": "https://commons.wikimedia.org/wiki/File:American_robin_(71307).jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "title": "File:American robin (71307).jpg"
+ },
  "annas-hummingbird": {
   "species": "Anna's Hummingbird",
   "src": "/images/birds/annas-hummingbird.webp",
@@ -285,6 +296,17 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "title": "File:Mourning dove perched (61179).jpg"
  },
+ "northern-cardinal": {
+  "species": "Northern Cardinal",
+  "src": "/images/birds/northern-cardinal.webp",
+  "width": 1280,
+  "height": 1017,
+  "credit": "Rhododendrites",
+  "creditUrl": "https://commons.wikimedia.org/wiki/File:Northern_cardinal_in_Prospect_Park_(60690).jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "title": "File:Northern cardinal in Prospect Park (60690).jpg"
+ },
  "northern-flicker": {
   "species": "Northern Flicker",
   "src": "/images/birds/northern-flicker.webp",
@@ -394,6 +416,17 @@
   "license": "CC BY 4.0",
   "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
   "title": "File:Steller's jay Cyanocitta stelleri Vancouver Island 2526a 01.jpg"
+ },
+ "tufted-titmouse": {
+  "species": "Tufted Titmouse",
+  "src": "/images/birds/tufted-titmouse.webp",
+  "width": 1280,
+  "height": 933,
+  "credit": "Rhododendrites",
+  "creditUrl": "https://commons.wikimedia.org/wiki/File:Tufted_titmouse_(84917).jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "title": "File:Tufted titmouse (84917).jpg"
  },
  "white-crowned-sparrow": {
   "species": "White-crowned Sparrow",

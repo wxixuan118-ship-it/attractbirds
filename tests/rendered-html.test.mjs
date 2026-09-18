@@ -131,11 +131,11 @@ test("renders quality-gated feeder routes and calculator", async () => {
 
   const problem = await render("/feeders/squirrel-proof");
   assert.equal(problem.status, 200);
-  assert.match(await problem.text(), /Squirrel-resistant/);
+  assert.match(await problem.text(), /Squirrel Proof Bird Feeder/);
 
   const comparison = await render("/feeders/compare/tube-vs-hopper");
   assert.equal(comparison.status, 200);
-  assert.match(await comparison.text(), /Tube Feeder vs Hopper Feeder/);
+  assert.match(await comparison.text(), /Tube vs Hopper Feeder/);
 
   const state = await render("/feeders/california");
   assert.equal(state.status, 200);
@@ -143,7 +143,7 @@ test("renders quality-gated feeder routes and calculator", async () => {
 
   const calculator = await render("/tools/bird-feeder-calculator");
   assert.equal(calculator.status, 200);
-  assert.match(await calculator.text(), /Bird feeder planner/);
+  assert.match(await calculator.text(), /Bird Feeder Calculator/);
 });
 
 test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
@@ -151,11 +151,11 @@ test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
   assert.equal(pillar.status, 200);
   const pillarHtml = await pillar.text();
   assert.match(pillarHtml, /How to attract birds/);
-  assert.match(pillarHtml, /HowTo/);
+  assert.match(pillarHtml, /"@type":"(HowTo|Article)"/);
 
   const food = await render("/bird-food");
   assert.equal(food.status, 200);
-  assert.match(await food.text(), /Bird food/);
+  assert.match(await food.text(), /Bird Feed Guide/);
 
   const oriole = await render("/birds/oriole");
   assert.equal(oriole.status, 200);
@@ -192,7 +192,8 @@ test("renders the complete how-to-attract-birds topic cluster", async () => {
     assert.equal(response.status, 200, path);
     const html = await response.text();
     assert.match(html, /FAQPage/, path);
-    assert.match(html, /Continue planning/, path);
+    // Editorial guides end with a shared cross-link block; legacy guides with a "Continue planning" section.
+    assert.match(html, /More attraction guides|Continue planning/, path);
   }
   const redirects = {
     "/how-to-attract-birds": "/how-to-attract",
@@ -234,8 +235,8 @@ test("renders twelve indexable species attraction guides", async () => {
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
-    assert.match(html, /Species attraction guide/, path);
-    assert.match(html, /HowTo/, path);
+    assert.match(html, /species (attraction )?guide/i, path);
+    assert.match(html, /"@type":"(HowTo|Article)"/, path);
     assert.match(html, /FAQPage/, path);
     assert.match(html, new RegExp(`rel="canonical" href="https://attractbirds\\.app${path}"`), path);
     assert.match(sitemap, new RegExp(`${path.replaceAll("-", "\\-")}<\\/loc>`), path);
@@ -249,16 +250,15 @@ test("renders a researched bluebird attraction guide with keyword-focused TDK", 
   const response = await render("/how-to-attract/bluebirds");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<title>How to Attract Bluebirds: Food, Houses &amp; Habitat \| AttractBirds\.app<\/title>/);
-  assert.match(html, /name="description" content="Learn how to attract bluebirds/);
+  assert.match(html, /<title>How to Attract Bluebirds: Nest Boxes, Open Ground &amp; Food<\/title>/);
+  assert.match(html, /name="description" content="How to attract bluebirds:/);
   assert.match(html, /rel="canonical" href="https:\/\/attractbirds\.app\/how-to-attract\/bluebirds"/);
-  assert.match(html, /Which bluebird are you trying to attract\?/);
-  assert.match(html, /How to attract bluebirds to a bluebird house/i);
-  assert.match(html, /Common mistakes that keep bluebirds away/);
+  assert.match(html, /How to attract bluebirds with the right box in the right place/);
+  assert.match(html, /Bluebird habitat, food and water/);
   assert.match(html, /FAQPage/);
-  assert.match(html, /audubon\.org\/magazine/);
-  assert.match(html, /wbu\.com\/birds\/bluebirds/);
-  assert.match(html, /wildbirdstore\.com\/resources\/attracting-specific-birds\/attracting-bluebirds/);
+  // Every claim is cited to NestWatch or Audubon's field guide.
+  assert.match(html, /nestwatch\.org\/learn\/all-about-birdhouses\/birds\/eastern-bluebird/);
+  assert.match(html, /audubon\.org\/field-guide\/bird\/eastern-bluebird/);
   const sitemap = await (await render("/sitemap.xml")).text();
   assert.match(sitemap, /https:\/\/attractbirds\.app\/how-to-attract\/bluebirds<\/loc>/);
 });
@@ -364,4 +364,37 @@ test("group × state pages render from occurrence data with image, FAQ and sitem
   const sitemap = await (await render("/sitemap.xml")).text();
   assert.match(sitemap, /https:\/\/attractbirds\.app\/birds-by-location\/florida\/hummingbirds/);
   assert.match(sitemap, /birds-by-location\/rhode-island\/magpies/);
+});
+
+test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sources, a licensed image, FAQ and canonical", async () => {
+  const samples = [
+    ["/feeders/finch-mesh-feeder", /feederwatch\.org\/learn\/feeding-birds/],
+    ["/feeders/for/mourning-dove", /allaboutbirds\.org\/guide\/Mourning_Dove/],
+    ["/feeders/compare/suet-vs-seed", /feederwatch\.org/],
+    ["/plants/cardinal-flower", /wildflower\.org\/plants\/result\.php\?id_plant=LOCA2/],
+    ["/plants/for/american-goldfinch", /wildflower\.org\/plants/],
+    ["/plants/native-plants", /audubon\.org\/content\/why-native-plants-matter/],
+    ["/how-to-attract/birds-to-a-birdhouse", /nestwatch\.org/],
+    ["/how-to-attract/birds-with-sounds", /aba\.org\/aba-code-of-birding-ethics/],
+    ["/seasonal-birds/fall", /gbif\.org\/dataset\/4fa7b334/],
+    ["/seasonal-birds/summer/ruby-throated-hummingbird", /eBird records by state/],
+    ["/bird-problems/no-birds-at-feeder", /feederwatch\.org\/learn\/sick-birds/],
+    ["/bird-food", /feederwatch\.org/],
+    ["/tools/bird-feeder-calculator", /feederwatch\.org/],
+    ["/birds", /checklist\.americanornithology\.org/],
+    ["/", /feederwatch\.org/],
+  ];
+  for (const [path, source] of samples) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, source, path);
+    assert.match(html, /<h2>Sources<\/h2>/, path);
+    assert.match(html, /<img src="\/images\/(birds|topics)\/[a-z-]+\.webp" alt="[^"]+" width="\d+" height="\d+"/, path);
+    assert.match(html, /"@type":"FAQPage"/, path);
+    assert.match(html, new RegExp(`rel="canonical" href="https://attractbirds\\.app${path === "/" ? "/?" : path.replaceAll("-", "\\-")}"`), path);
+    assert.match(html, /name="robots" content="index, follow"/, path);
+    // Citation markers link straight to the source list.
+    assert.match(html, /<sup class="cite"><a href="https?:\/\/[^"]+" rel="noopener noreferrer"/, path);
+  }
 });

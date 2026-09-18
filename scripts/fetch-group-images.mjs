@@ -61,13 +61,22 @@ const OVERRIDE = {
   "california-scrub-jay": "File:California Scrub-Jay (Aphelocoma Californica) perched in a Toyon shrub.jpg",
   "chestnut-backed-chickadee": "File:Chestnut-backed chickadee (Poecile rufescens rufescens) Seward Park.jpg",
   "broad-tailed-hummingbird": "File:Broad-tailed Hummingbird male, in flight; Selasphorus platycercus.JPG",
+  "northern-cardinal": "File:Northern cardinal in Prospect Park (60690).jpg",
+  "american-robin": "File:American robin (71307).jpg",
+  "tufted-titmouse": "File:Tufted titmouse (84917).jpg",
 };
+// Species that need a photo beyond the group-page leaders (bird profiles, feeder/plant guides).
+const EXTRA_SPECIES = [
+  { slug: "northern-cardinal", commonName: "Northern Cardinal", scientificName: "Cardinalis cardinalis" },
+  { slug: "american-robin", commonName: "American Robin", scientificName: "Turdus migratorius" },
+  { slug: "tufted-titmouse", commonName: "Tufted Titmouse", scientificName: "Baeolophus bicolor" },
+];
 async function exact(title) {
   const d = await api({ titles: title, prop: "imageinfo", iiprop: "url|extmetadata|size", iiurlwidth: 1280 });
   return candidatesFrom(d)[0];
 }
 const wanted = new Map();
-for (const t of getGroupTopSpecies()) wanted.set(t.slug, t);
+for (const t of [...getGroupTopSpecies(), ...EXTRA_SPECIES]) wanted.set(t.slug, t);
 let n = 0;
 for (const [slug, t] of wanted) {
   if (images[slug] && !refetch.has(slug)) continue;

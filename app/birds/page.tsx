@@ -1,96 +1,71 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
+import { EditorialPage, editorialMetadata } from "../components/Editorial";
 import { BirdProfileLink } from "../components/BirdProfileLink";
+import { miscEditorial } from "../../data/editorial/misc";
+import { birdEditorial } from "../../data/editorial/birds";
 import { getPublishedBirds } from "../../lib/bird-repository";
 
-export const metadata: Metadata = {
-  title: "A–Z Bird Encyclopedia — 1,000 Species",
-  description: "Browse 1,000 birds from the North and Middle American checklist, with taxonomy, identification, habitat, diet, nesting, and seasonal guidance.",
-  alternates: { canonical: "/birds" },
-};
+const content = miscEditorial["/birds"];
+export const metadata: Metadata = editorialMetadata(content);
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default async function BirdsPage() {
   // Copy before sorting: the static fallback is a shared module-level array and the homepage relies on its curated order.
   const birds = [...(await getPublishedBirds())].sort((a, b) => a.commonName.localeCompare(b.commonName));
+  const reviewed = birds.filter((b) => birdEditorial[b.slug]);
   const groups = alphabet
     .map((letter) => ({ letter, birds: birds.filter((bird) => bird.commonName.toUpperCase().startsWith(letter)) }))
     .filter((group) => group.birds.length > 0);
-  const availableLetters = new Set(groups.map((group) => group.letter));
 
   return (
-    <div>
-      <Header />
-      <main className="content-main bird-encyclopedia" id="top">
-        <div className="breadcrumb"><Link href="/">Home</Link> / Bird Encyclopedia</div>
-
-        <section className="encyclopedia-hero">
-          <div>
-            <p className="eyebrow"><span /> Bird encyclopedia</p>
-            <h1>Backyard birds,<br /><em>from A to Z.</em></h1>
-          </div>
-          <div className="encyclopedia-intro">
-            <p>Identify the birds outside your window and learn what helps them thrive. Every profile brings together field marks, natural diet, useful plants, feeders, nesting, and seasonal movement.</p>
-            <div className="encyclopedia-stats">
-              <div><strong>{birds.length}</strong><span>species directory</span></div>
-              <div><strong>{birds.filter((bird) => bird.sourceCount > 0).length}</strong><span>sourced profiles</span></div>
-              <div><strong>{groups.length}</strong><span>active letters</span></div>
-            </div>
+    <EditorialPage content={content} eyebrow={`Bird encyclopedia · ${reviewed.length} reviewed profiles · ${birds.length} species`} breadcrumbs={[{ name: "Backyard birds", path: "/birds" }]}
+      before={
+        <section className="loc-section">
+          <div className="loc-section-header"><h2>Reviewed backyard birds</h2></div>
+          <div className="bird-grid">
+            {reviewed.map((bird) => (
+              <BirdProfileLink className="bird-card" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>
+                <div className="bird-circle"><div className="bird-circle-inner">{bird.initials}</div></div>
+                <span className="bird-card-name">{bird.commonName}</span>
+                <span className="bird-card-sci">{bird.scientificName}</span>
+                {bird.family && <span className="bird-card-tag">{bird.family}</span>}
+              </BirdProfileLink>
+            ))}
           </div>
         </section>
-
+      }
+    >
+      <section className="loc-section">
+        <div className="loc-section-header"><h2>Backyard birds by state and group</h2></div>
+        <div className="chip-list">
+          {["florida", "arizona", "california", "colorado", "oregon", "tennessee", "texas", "michigan", "rhode-island"].map((st) => (
+            <Link href={`/birds-by-location/${st}`} key={st}>Birds in {st.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())} →</Link>
+          ))}
+          <Link href="/birds-by-location">All states →</Link>
+          <Link href="/seasonal-birds/spring">Spring birds →</Link>
+          <Link href="/seasonal-birds/summer">Summer birds →</Link>
+          <Link href="/seasonal-birds/fall">Fall birds →</Link>
+        </div>
+      </section>
+      <section className="loc-section bird-encyclopedia" id="top">
+        <div className="loc-section-header"><h2>All {birds.length} species A–Z</h2></div>
         <nav className="alphabet-nav" aria-label="Browse birds alphabetically">
           <span className="alphabet-label">Jump to</span>
           <div className="alphabet-links">
-            {alphabet.map((letter) => availableLetters.has(letter) ? (
-              <a className="alphabet-link" href={`#letter-${letter.toLowerCase()}`} key={letter}>{letter}</a>
-            ) : (
-              <span className="alphabet-link is-disabled" aria-disabled="true" key={letter}>{letter}</span>
-            ))}
+            {groups.map((g) => <a className="alphabet-link" href={`/birds#letter-${g.letter.toLowerCase()}`} key={g.letter}>{g.letter}</a>)}
           </div>
         </nav>
-
-        <div className="bird-directory">
-          {groups.map((group) => (
-            <section className="letter-section" id={`letter-${group.letter.toLowerCase()}`} key={group.letter}>
-              <header className="letter-heading">
-                <span>{group.letter}</span>
-                <p>{group.birds.length} species</p>
-                <a href="#top" aria-label="Back to the top of the encyclopedia">Back to top ↑</a>
-              </header>
-              <div className="encyclopedia-grid">
-                {group.birds.map((bird) => (
-                  <BirdProfileLink className="species-card" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>
-                    <div className="species-card-visual">
-                      {bird.imageUrl ? (
-                        // The repository supplies reviewed, attributed bird imagery when available.
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={bird.imageUrl} alt={bird.imageAlt ?? bird.commonName} />
-                      ) : (
-                        <span>{bird.initials}</span>
-                      )}
-                    </div>
-                    <div className="species-card-body">
-                      <div className="species-card-meta">{bird.family&&<span>{bird.family}</span>}{bird.size&&<span>{bird.size}</span>}</div>
-                      <h2>{bird.commonName}</h2>
-                      <p className="species-scientific">{bird.scientificName}</p>
-                      <p className="species-summary">{bird.summary}</p>
-                      <div className="species-card-footer">
-                        {bird.residentStatus&&<span>{bird.residentStatus}</span>}
-                        <strong>View profile →</strong>
-                      </div>
-                    </div>
-                  </BirdProfileLink>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </main>
-      <Footer />
-    </div>
+        {groups.map((group) => (
+          <div className="letter-section" id={`letter-${group.letter.toLowerCase()}`} key={group.letter}>
+            <header className="letter-heading"><span>{group.letter}</span><p>{group.birds.length} species</p></header>
+            <div className="chip-list">
+              {group.birds.map((bird) => <BirdProfileLink className="species-chip" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>{bird.commonName}</BirdProfileLink>)}
+            </div>
+          </div>
+        ))}
+      </section>
+    </EditorialPage>
   );
 }
