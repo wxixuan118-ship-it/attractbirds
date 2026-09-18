@@ -30,20 +30,20 @@ function catalogProfile(item:CatalogBird):BirdPageData {
   const owl=/Strigidae|Tytonidae/.test(item.family);
   const hummingbird=item.family==="Trochilidae";
   const woodpecker=item.family==="Picidae";
-  const habitat=waterbird?"Wetlands, coasts, lakes, rivers, or open water":raptor?"Open country, woodland edges, cliffs, and forest":owl?"Woodland, forest edges, grassland, and suitable roost sites":hummingbird?"Flower-rich woodland edges, scrub, gardens, and open habitats":woodpecker?"Woodland, forest edges, orchards, and areas with mature trees":"Habitat varies across the species' documented range";
-  const diet=raptor||owl?"Animal prey; diet varies by species and season":hummingbird?"Flower nectar and small arthropods":woodpecker?"Insects, larvae, fruit, nuts, and sap depending on species":waterbird?"Aquatic plants or animals depending on species":"Natural foods vary by species, habitat, and season";
+  const habitat=waterbird?"Wetlands, coasts, lakes, rivers, or open water":raptor?"Open country, woodland edges, cliffs, and forest":owl?"Woodland, forest edges, grassland, and suitable roost sites":hummingbird?"Flower-rich woodland edges, scrub, gardens, and open habitats":woodpecker?"Woodland, forest edges, orchards, and areas with mature trees":"";
+  const diet=raptor||owl?"Animal prey; diet varies by species and season":hummingbird?"Flower nectar and small arthropods":woodpecker?"Insects, larvae, fruit, nuts, and sap depending on species":waterbird?"Aquatic plants or animals depending on species":"";
   const status=item.accidental?"Accidental or casual in the AOS checklist area":item.nonbreeding?"Regular nonbreeding visitor in parts of the AOS checklist area":item.introduced?"Introduced in parts of the AOS checklist area":"Recorded in the North and Middle American checklist area";
   const base:BirdPageData={
     slug:item.slug,commonName:item.commonName,scientificName:item.scientificName,family:item.family,
     hook:`${item.order} · ${item.family}`,
-    initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:"Plumage varies by age, sex, season, and population",size:"Consult a regional field guide",diet,habitat,residentStatus:status,
+    initials:item.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:"",size:"",diet,habitat,residentStatus:status,
     summary:`The ${item.commonName} (${item.scientificName}) is a member of the ${item.family} family in the order ${item.order}. This taxonomic profile follows the American Ornithological Society checklist; local abundance and seasonality should be confirmed with current regional observations.`,
     foods:raptor||owl?["Natural prey; do not bait"]:hummingbird?["Native flower nectar","Small insects"]:waterbird?["Natural aquatic foods"]:["Species-appropriate natural foods"],
     plants:hummingbird?["Regionally native nectar flowers"]:["Regionally native plants that provide cover and natural food"],
     feeders:raptor||owl||waterbird?["Not typically a feeder species"]:hummingbird?["Clean nectar feeder where appropriate"]:["Use only after confirming species-specific guidance"],
     identification:`Confirm identification using overall shape, bill form, plumage pattern, voice, behavior, habitat, and range. Compare similar ${item.family} species in a current regional field guide.`,
-    migrationPattern:"Varies across the species' range; use current regional records",
-    nestType:"Species-specific",nestLocations:["Suitable habitat within the breeding range"],clutchSize:"Varies",
+    migrationPattern:null,
+    nestType:null,nestLocations:null,clutchSize:null,
     sourceUrl:`https://checklist.americanornithology.org/taxa/${item.sourceId}`,
     qualityScore:65,sourceCount:1,
   };return{...base,...(curatedCatalog[item.slug]??{})};
@@ -64,7 +64,7 @@ export async function getPublishedBirds():Promise<BirdPageData[]>{
     const [{getDb},schema,orm]=await Promise.all([import("../db/index"),import("../db/schema"),import("drizzle-orm")]);
     const db=getDb();
     const rows=await db.select().from(schema.birds).where(orm.and(orm.eq(schema.birds.status,"published"),orm.eq(schema.birds.indexable,true))).orderBy(orm.asc(schema.birds.commonName));
-    const published=rows.map(row=>({slug:row.slug,commonName:row.commonName,scientificName:row.scientificName,family:row.taxonomyFamily??"Aves",hook:row.residentStatus??"North American bird",initials:row.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:(row.colors??[]).join(", "),size:row.sizeMinCm&&row.sizeMaxCm?`${row.sizeMinCm}–${row.sizeMaxCm} cm`:"See profile",diet:"Open profile for food guidance",habitat:(row.habitats??[]).join(", "),residentStatus:row.residentStatus??"Distribution varies",summary:row.summary,foods:[],plants:[],feeders:[],qualityScore:row.qualityScore,sourceCount:row.sourceCount}));
+    const published=rows.map(row=>({slug:row.slug,commonName:row.commonName,scientificName:row.scientificName,family:row.taxonomyFamily??"Aves",hook:row.residentStatus??"North American bird",initials:row.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:(row.colors??[]).join(", "),size:row.sizeMinCm&&row.sizeMaxCm?`${row.sizeMinCm}–${row.sizeMaxCm} cm`:"",diet:"Open profile for food guidance",habitat:(row.habitats??[]).join(", "),residentStatus:row.residentStatus??"",summary:row.summary,foods:[],plants:[],feeders:[],qualityScore:row.qualityScore,sourceCount:row.sourceCount}));
     const publishedSlugs=new Set(published.map(item=>item.slug));
     return [...published,...candidateFallback.filter(item=>!publishedSlugs.has(item.slug))].sort((a,b)=>a.commonName.localeCompare(b.commonName));
   }catch(error){console.warn("PostgreSQL unavailable; using reviewed build snapshot.",error);return candidateFallback}
@@ -88,5 +88,5 @@ async function hydrate(slug:string):Promise<BirdPageData>{
     db.select().from(schema.birdBehaviors).where(orm.eq(schema.birdBehaviors.birdId,row.id)).limit(1),
     db.select().from(schema.birdImages).where(orm.and(orm.eq(schema.birdImages.birdId,row.id),orm.eq(schema.birdImages.isPrimary,true))).limit(1),
   ]);
-  const behavior=behaviorRows[0],image=imageRows[0];return {slug:row.slug,commonName:row.commonName,scientificName:row.scientificName,family:row.taxonomyFamily??"Aves",hook:row.residentStatus??"North American bird",initials:row.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:(row.colors??[]).join(", "),size:row.sizeMinCm&&row.sizeMaxCm?`${row.sizeMinCm}–${row.sizeMaxCm} cm`:"See profile",diet:foodRows.map(x=>x.name).slice(0,3).join(", ")||"Varied natural foods",habitat:(row.habitats??[]).join(", "),residentStatus:row.residentStatus??"Distribution varies by location and season",summary:row.summary,foods:foodRows.map(x=>x.name),plants:plantRows.map(x=>x.name),feeders:feederRows.map(x=>x.name),identification:identRows[0]?.distinguishingFeatures,migrationPattern:behavior?.migrationPattern,nestType:behavior?.nestType,nestLocations:behavior?.nestLocations,clutchSize:behavior?.clutchSize,imageUrl:image?.thumbnailUrl??image?.imageUrl,imageAlt:image?.altText,imageAttribution:image?.attributionText,imageSourceUrl:image?.sourcePageUrl,imageLicenseUrl:image?.licenseUrl,qualityScore:row.qualityScore,sourceCount:row.sourceCount};
+  const behavior=behaviorRows[0],image=imageRows[0];return {slug:row.slug,commonName:row.commonName,scientificName:row.scientificName,family:row.taxonomyFamily??"Aves",hook:row.residentStatus??"North American bird",initials:row.commonName.split(/\s+/).map(x=>x[0]).join("").slice(0,2),colors:(row.colors??[]).join(", "),size:row.sizeMinCm&&row.sizeMaxCm?`${row.sizeMinCm}–${row.sizeMaxCm} cm`:"",diet:foodRows.map(x=>x.name).slice(0,3).join(", ")||"Varied natural foods",habitat:(row.habitats??[]).join(", "),residentStatus:row.residentStatus??"",summary:row.summary,foods:foodRows.map(x=>x.name),plants:plantRows.map(x=>x.name),feeders:feederRows.map(x=>x.name),identification:identRows[0]?.distinguishingFeatures,migrationPattern:behavior?.migrationPattern,nestType:behavior?.nestType,nestLocations:behavior?.nestLocations,clutchSize:behavior?.clutchSize,imageUrl:image?.thumbnailUrl??image?.imageUrl,imageAlt:image?.altText,imageAttribution:image?.attributionText,imageSourceUrl:image?.sourcePageUrl,imageLicenseUrl:image?.licenseUrl,qualityScore:row.qualityScore,sourceCount:row.sourceCount};
 }

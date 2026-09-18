@@ -77,13 +77,13 @@ export default async function Home() {
           </div>
           <div className="bird-grid">
             {featuredBirds.map((bird) => (
-              <BirdProfileLink className="bird-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+              <BirdProfileLink className="bird-card" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>
                 <div className="bird-circle">
                   <div className="bird-circle-inner">{bird.initials}</div>
                 </div>
                 <span className="bird-card-name">{bird.commonName}</span>
                 <span className="bird-card-sci">{bird.scientificName}</span>
-                <span className="bird-card-tag">{bird.family}</span>
+                {bird.family&&<span className="bird-card-tag">{bird.family}</span>}
               </BirdProfileLink>
             ))}
           </div>

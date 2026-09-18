@@ -352,8 +352,6 @@ h1, h2, h3, p { margin-top: 0; }
   box-shadow: var(--shadow-hover);
   border-color: var(--green-pill);
 }
-.bird-profile-form { display: flex; min-width: 0; margin: 0; }
-.bird-profile-form > button { width: 100%; color: inherit; font: inherit; text-align: inherit; cursor: pointer; }
 .bird-circle {
   width: 80px;
   height: 80px;
@@ -1159,7 +1157,6 @@ a.alphabet-link:hover { background: var(--green); color: white; }
   font-weight: 800;
   flex-shrink: 0;
 }
-.spot-info h4 { margin: 0 0 4px; font-size: 15px; }
 .spot-info p { margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 
 /* Monthly calendar */
@@ -1191,6 +1188,29 @@ a.alphabet-link:hover { background: var(--green); color: white; }
   display: block;
   padding: 2px 0;
 }
+.month-bird-note { font-style: normal; font-size: 10px; color: var(--green); margin-left: 6px; }
+
+/* Researched state pages: hero image, cited prose, sources */
+.state-hero-figure { margin: 28px 0 8px; max-width: 760px; }
+.state-hero-figure img { width: 100%; height: auto; border-radius: var(--radius); display: block; }
+.state-hero-figure figcaption { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+.state-hero-figure figcaption a { color: var(--green); }
+.city-pills-label { font-size: 13px; color: var(--text-muted); margin: 28px 0 8px; }
+.loc-prose .prose { max-width: 760px; font-size: 16px; line-height: 1.75; color: var(--text); }
+.loc-prose .prose p { margin: 0 0 16px; }
+.loc-prose .prose .spot-list { margin-top: 24px; }
+.cite { font-size: 10px; margin-left: 2px; }
+.cite a { color: var(--green); font-weight: 700; }
+.faq-item { margin-bottom: 20px; }
+.faq-item h3 { font-size: 17px; margin: 0 0 6px; }
+.attribution { font-size: 13px; color: var(--text-muted); }
+.source-list { font-size: 13px; color: var(--text-muted); padding-left: 20px; line-height: 1.7; }
+.source-list a { color: var(--green); }
+.source-list li:target { background: var(--green-light); }
+.loc-bird-card-static { cursor: default; }
+.loc-bird-card-static:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.spot-info .spot-name { margin: 0 0 4px; font-size: 15px; font-weight: 700; color: var(--text); }
+.spot-info .spot-name a { color: var(--green); }
 
 /* Section wrapper for location pages */
 .loc-section {

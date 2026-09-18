@@ -11,9 +11,11 @@ import {
   getBirdStateData,
   getCityPageData,
 } from "../../../../lib/location-repository";
+import { getGroupPageData, getGroupStaticParams, isGroupSlug } from "../../../../lib/group-data";
+import { GroupView, groupMetadata } from "../GroupView";
 
 export function generateStaticParams() {
-  return getComboStaticParams();
+  return [...getComboStaticParams(), ...getGroupStaticParams()];
 }
 
 export async function generateMetadata({
@@ -25,6 +27,8 @@ export async function generateMetadata({
   const stateData = STATE_BY_SLUG[stateSlug];
   if (!stateData) return { title: "Birds by Location" };
 
+  if (isGroupSlug(slug)) return groupMetadata(stateSlug, slug) ?? { title: "Birds by Location", robots: { index: false, follow: true } };
+
   const resolved = resolveSubSlug(stateSlug, slug);
   if (!resolved) return { title: "Birds by Location" };
 
@@ -35,7 +39,9 @@ export async function generateMetadata({
     const birdName = data.bird.commonName;
     const birdPlural = pluralizeBird(birdName);
     const isLowAbundance = data.abundance === "rare" || data.abundance === "accidental" || data.abundance === "uncommon";
-    const indexEligible = data.totalObservations > 0;
+    // Index only pages backed by real occurrence data for a bird that is actually part of the
+    // state's avifauna; "Are there X in Y?" pages for rare/absent birds stay noindex.
+    const indexEligible = data.totalObservations > 0 && (data.abundance === "abundant" || data.abundance === "common" || data.abundance === "uncommon");
 
     const title = isLowAbundance
       ? `Are There ${birdPlural} in ${stateData.name}? Range & ${data.abundance === "uncommon" ? "Status" : "Rarity"} Guide`
@@ -43,7 +49,7 @@ export async function generateMetadata({
 
     const description = isLowAbundance
       ? `${birdName} in ${stateData.name}: find out if this species occurs here, where sightings have been reported, and how to identify them. Range, status, and similar species.`
-      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "abundant" : "common"} ${data.presence === "resident" ? "year-round resident" : "seasonal visitor"}${data.bestMonths.length > 0 ? `, best seen in ${data.bestMonths.slice(0, 3).join(", ")}` : ""}. Identification, habitat, and tips for attracting them to your backyard.`;
+      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "abundant" : "common"} ${data.presence === "resident" ? "year-round resident" : "seasonal visitor"}${data.presence !== "resident" && data.bestMonths.length > 0 ? `, best seen in ${data.bestMonths.slice(0, 3).join(", ")}` : ""}. Identification, habitat, and tips for attracting them to your backyard.`;
 
     return {
       title,
@@ -89,6 +95,7 @@ const PRESENCE_LABELS: Record<string, string> = {
   breeding: "Summer breeder",
   winter: "Winter visitor",
   migrant: "Migrant / Transient",
+  absent: "Not regularly recorded",
 };
 
 export default async function ComboPage({
@@ -99,6 +106,12 @@ export default async function ComboPage({
   const { state: stateSlug, slug } = await params;
   const state = STATE_BY_SLUG[stateSlug];
   if (!state) notFound();
+
+  if (isGroupSlug(slug)) {
+    const groupData = getGroupPageData(stateSlug, slug);
+    if (!groupData) notFound();
+    return <GroupView data={groupData} />;
+  }
 
   const resolved = resolveSubSlug(stateSlug, slug);
   if (!resolved) notFound();
@@ -146,7 +159,7 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
             )}
           </h1>
           <p className="lede">
-            {bird.scientificName} — {bird.family}
+            {bird.scientificName}{bird.family && ` — ${bird.family}`}
           </p>
 
           {/* Quick stats */}
@@ -198,7 +211,8 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
               {presence === "breeding" && ` It visits during the breeding season, typically spring through summer.`}
               {presence === "winter" && ` It is primarily a winter visitor to ${state.name}.`}
               {presence === "migrant" && ` It passes through ${state.name} during migration.`}
-              {bestMonths.length > 0 && ` The best months to observe this bird are ${bestMonths.join(", ")}.`}
+              {presence === "absent" && ` There is no regular population in ${state.name}; check neighboring states listed below.`}
+              {presence !== "resident" && bestMonths.length > 0 && ` The best months to observe this bird are ${bestMonths.join(", ")}.`}
               {peakMonths.length > 0 && ` Peak activity occurs in ${peakMonths.join(", ")}.`}
             </p>
           </div>
@@ -249,22 +263,14 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
             <h2>Identification</h2>
           </div>
           <div className="bird-quick-facts">
-            <div className="fact-card">
-              <span className="fact-label">Colors</span>
-              <span className="fact-value">{bird.colors}</span>
-            </div>
-            <div className="fact-card">
-              <span className="fact-label">Size</span>
-              <span className="fact-value">{bird.size}</span>
-            </div>
-            <div className="fact-card">
-              <span className="fact-label">Habitat</span>
-              <span className="fact-value">{bird.habitat}</span>
-            </div>
-            <div className="fact-card">
-              <span className="fact-label">Family</span>
-              <span className="fact-value">{bird.family}</span>
-            </div>
+            {([["Colors", bird.colors], ["Size", bird.size], ["Habitat", bird.habitat], ["Family", bird.family]] as const)
+              .filter(([, value]) => Boolean(value))
+              .map(([label, value]) => (
+                <div className="fact-card" key={label}>
+                  <span className="fact-label">{label}</span>
+                  <span className="fact-value">{value}</span>
+                </div>
+              ))}
           </div>
           <div style={{ marginTop: "20px" }}>
             <BirdProfileLink
@@ -323,6 +329,7 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
                   key={b.slug}
                   href={`/birds-by-location/${state.slug}/${b.slug}`}
                   className="loc-bird-card"
+                  birdName={b.commonName}
                 >
                   <div className="loc-bird-initials">{b.initials}</div>
                   <span className="loc-bird-name">{b.commonName}</span>
@@ -370,7 +377,7 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
             </p>
             <p style={{ marginTop: "12px" }}>
               {bird.habitat && `Preferred habitats include ${bird.habitat.toLowerCase()}. `}
-              {bestMonths.length > 0 && `The best months to spot this species in ${state.name} are ${bestMonths.join(", ")}. `}
+              {presence !== "resident" && bestMonths.length > 0 && `The best months to spot this species in ${state.name} are ${bestMonths.join(", ")}. `}
               For birders in {state.popularCities[0]} and throughout {state.name}, knowing the seasonal patterns of {bird.commonName} can help plan birding trips and backyard feeding strategies.
             </p>
             <p style={{ marginTop: "12px" }}>
@@ -449,6 +456,7 @@ async function CityView({ stateSlug, citySlug }: { stateSlug: string; citySlug: 
                   key={bird.slug}
                   href={`/birds-by-location/${state.slug}/${bird.slug}`}
                   className="loc-bird-card"
+                  birdName={bird.commonName}
                 >
                   <div className="loc-bird-initials">{bird.initials}</div>
                   <span className="loc-bird-name">{bird.commonName}</span>
@@ -456,7 +464,7 @@ async function CityView({ stateSlug, citySlug }: { stateSlug: string; citySlug: 
                   {bird.seasonalStatus && (
                     <span className="loc-bird-status">{bird.seasonalStatus}</span>
                   )}
-                  <span className="loc-bird-meta">{bird.family}</span>
+                  {bird.family && <span className="loc-bird-meta">{bird.family}</span>}
                 </BirdProfileLink>
               ))}
             </div>
@@ -478,11 +486,12 @@ async function CityView({ stateSlug, citySlug }: { stateSlug: string; citySlug: 
                   key={bird.slug}
                   href={`/birds-by-location/${state.slug}/${bird.slug}`}
                   className="loc-bird-card"
+                  birdName={bird.commonName}
                 >
                   <div className="loc-bird-initials">{bird.initials}</div>
                   <span className="loc-bird-name">{bird.commonName}</span>
                   <span className="loc-bird-sci">{bird.scientificName}</span>
-                  <span className="loc-bird-meta">{bird.habitat}</span>
+                  {bird.habitat && <span className="loc-bird-meta">{bird.habitat}</span>}
                 </BirdProfileLink>
               ))}
             </div>

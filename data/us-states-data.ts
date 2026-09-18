@@ -37,25 +37,30 @@ export const US_STATES_DATA: USState[] = [
     slug: "california", name: "California", abbr: "CA", lat: 36.78, lng: -119.42, region: "West", flyway: "Pacific",
     gridRow: 5, gridCol: 1,
     popularCities: ["Los Angeles", "San Diego", "San Francisco", "Sacramento", "Fresno", "San Jose"],
+    // Facts sourced in data/state-content/california.ts.
     topBirdingSpots: [
-      { name: "Point Reyes National Seashore", blurb: "Coastal migrants and pelagic species along one of California's richest flyways." },
-      { name: "Salton Sea", blurb: "Critical stopover for millions of migratory waterbirds in the Colorado Desert." },
-      { name: "Yosemite National Park", blurb: "Sierra Nevada specialities like Black-backed Woodpecker and Cassin's Finch." },
+      { name: "Point Reyes National Seashore", blurb: "With nearly 490 species recorded — over 50% of the bird species in North America — Point Reyes claims the greatest avian diversity of any U.S. national park." },
+      { name: "Sonny Bono Salton Sea National Wildlife Refuge", blurb: "Established in 1930; over 400 species recorded and one of the most important nesting sites and stopovers along the Pacific Flyway." },
+      { name: "Yosemite National Park", blurb: "262 documented bird species across an elevation gradient from 2,000 feet to more than 13,000 feet." },
+      { name: "Channel Islands National Park", blurb: "Santa Cruz Island is the only place in the world to see the Island Scrub-Jay, North America's only island-endemic bird." },
     ],
     habitats: ["Coastal", "Desert", "Forest", "Wetland", "Urban"],
-    speciesCount: 660,
+    speciesCount: 696,
     summary: "California's extraordinary habitat range—from Pacific coastline to Sierra peaks to Mojave Desert—supports the highest bird diversity of any U.S. state.",
   },
   {
     slug: "oregon", name: "Oregon", abbr: "OR", lat: 44.57, lng: -122.32, region: "West", flyway: "Pacific",
     gridRow: 4, gridCol: 2,
     popularCities: ["Portland", "Salem", "Eugene", "Bend", "Medford"],
+    // Facts sourced in data/state-content/oregon.ts.
     topBirdingSpots: [
-      { name: "Malheur National Wildlife Refuge", blurb: "Southeast Oregon oasis that draws rarities and western migrants." },
-      { name: "Cannon Beach", blurb: "Tufted Puffins and seabird colonies nest on Haystack Rock." },
+      { name: "Malheur National Wildlife Refuge", blurb: "Over 187,000 acres, established in 1908; disproportionately important as a stop along the Pacific Flyway and as a resting, breeding, and nesting area for hundreds of thousands of migratory birds." },
+      { name: "Sauvie Island Wildlife Area", blurb: "11,643 acres 20 minutes from downtown Portland with at least 275 species of birds; September to March for waterfowl and Sandhill Cranes." },
+      { name: "Three Arch Rocks National Wildlife Refuge", blurb: "The first National Wildlife Refuge west of the Mississippi (1907) and the largest and most diverse seabird colony in Oregon, historically with over 200,000 Common Murres in the breeding season." },
+      { name: "Lower Klamath National Wildlife Refuge", blurb: "Established by President Theodore Roosevelt in 1908 as the nation's first waterfowl refuge, straddling southern Oregon and northeastern California." },
     ],
     habitats: ["Coastal", "Forest", "Wetland", "Desert", "Urban"],
-    speciesCount: 510,
+    speciesCount: 550,
     summary: "Oregon's Pacific coast, Cascade range, and high desert create diverse birding from puffins to sage-grouse.",
   },
   {
@@ -74,13 +79,15 @@ export const US_STATES_DATA: USState[] = [
     slug: "arizona", name: "Arizona", abbr: "AZ", lat: 34.05, lng: -111.09, region: "West", flyway: "Pacific",
     gridRow: 7, gridCol: 2,
     popularCities: ["Phoenix", "Tucson", "Mesa", "Flagstaff", "Sedona"],
+    // Facts sourced in data/state-content/arizona.ts.
     topBirdingSpots: [
-      { name: "Madera Canyon", blurb: "Southeast Arizona specialty birds like Elegant Trogon and Painted Redstart." },
-      { name: "Ramsey Canyon Preserve", blurb: "Hummingbird haven in the Huachuca Mountains." },
-      { name: "San Pedro River", blurb: "Riparian corridor drawing tropical species at their northern range limit." },
+      { name: "Madera Canyon", blurb: "A world-class birding destination hosting over 250 species, including the Elegant Trogon and 15 hummingbird species." },
+      { name: "San Pedro Riparian National Conservation Area", blurb: "Almost 57,000 acres along 40 miles of the upper San Pedro River; 100 species of breeding birds call the river home and it provides habitat for 250 species of migrant and wintering birds." },
+      { name: "Saguaro National Park", blurb: "Sonoran Desert birds seen in few other places in the United States, including Gila Woodpeckers nesting inside saguaros and Elf Owls using their old cavities." },
+      { name: "Ramsey Canyon Preserve", blurb: "Nature Conservancy preserve in the Huachuca Mountains; a migratory corridor and critical nesting habitat for hummingbirds including Rivoli's and Anna's." },
     ],
     habitats: ["Desert", "Forest", "Wetland", "Urban"],
-    speciesCount: 550,
+    speciesCount: 570,
     summary: "Arizona's sky islands and Sonoran Desert make it a premier destination for specialty birds found nowhere else in the U.S.",
   },
   {
@@ -142,12 +149,14 @@ export const US_STATES_DATA: USState[] = [
     slug: "colorado", name: "Colorado", abbr: "CO", lat: 39.06, lng: -105.55, region: "West", flyway: "Central",
     gridRow: 6, gridCol: 4,
     popularCities: ["Denver", "Colorado Springs", "Aurora", "Boulder", "Fort Collins"],
+    // Facts sourced in data/state-content/colorado.ts.
     topBirdingSpots: [
-      { name: "Rocky Mountain National Park", blurb: "White-tailed Ptarmigan and alpine tundra species above treeline." },
-      { name: "Barr Lake State Park", blurb: "Bald Eagle nest and fall hawk migration along the Front Range." },
+      { name: "Rocky Mountain National Park", blurb: "Over 270 species reported over the last 100 years, many unique to mountainous habitats from aspen and ponderosa pine up to alpine tundra." },
+      { name: "Pawnee National Grassland", blurb: "193,060 acres of shortgrass prairie where over 200 species can be found; Crow Valley Recreation Area is a very popular site with bird enthusiasts, and a 21-mile self-guided bird tour passes through a variety of bird habitats." },
+      { name: "Rocky Mountain Arsenal National Wildlife Refuge", blurb: "A 15,000-acre refuge just 10 miles northeast of downtown Denver, established in 2004 in part to protect the bald eagle; bison, raptors, songbirds, and waterfowl." },
     ],
     habitats: ["Forest", "Desert", "Wetland", "Urban"],
-    speciesCount: 490,
+    speciesCount: 522,
     summary: "Colorado's dramatic elevation range from plains to 14,000-foot peaks creates diverse birding across life zones.",
   },
   {
@@ -299,11 +308,15 @@ export const US_STATES_DATA: USState[] = [
     slug: "michigan", name: "Michigan", abbr: "MI", lat: 44.31, lng: -85.60, region: "Midwest", flyway: "Mississippi",
     gridRow: 3, gridCol: 7,
     popularCities: ["Detroit", "Grand Rapids", "Warren", "Lansing"],
+    // Facts sourced in data/state-content/michigan.ts.
     topBirdingSpots: [
-      { name: "Whitefish Point Bird Observatory", blurb: "Owl and raptor migration funnel at Lake Superior's tip." },
+      { name: "Whitefish Point Bird Observatory", blurb: "A Lake Superior peninsula that funnels thousands of migrating birds each spring and fall; over 340 species recorded and an identified Important Bird Area." },
+      { name: "Seney National Wildlife Refuge", blurb: "95,238 acres of marshes, swamps, bogs, and forests in the Upper Peninsula, established in 1935; over 200 species of birds, with abundant Trumpeter Swans, Common Loons, Ospreys, and Bald Eagles." },
+      { name: "Shiawassee National Wildlife Refuge", blurb: "A 10,000-acre refuge established in 1953; more than 280 species of migratory birds observed." },
+      { name: "Kirtland's Warbler Wildlife Management Area", blurb: "125 separate tracts totaling 6,684 acres across eight counties in the northern Lower Peninsula, managed as the young jack pine forest the warbler depends on." },
     ],
     habitats: ["Forest", "Wetland", "Urban"],
-    speciesCount: 450,
+    speciesCount: 466,
     summary: "Michigan's two peninsulas and Great Lakes shoreline create a migration highway for raptors and songbirds.",
   },
   {
@@ -323,13 +336,15 @@ export const US_STATES_DATA: USState[] = [
     slug: "texas", name: "Texas", abbr: "TX", lat: 31.49, lng: -98.34, region: "South", flyway: "Central",
     gridRow: 8, gridCol: 4,
     popularCities: ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth", "El Paso"],
+    // Facts sourced in data/state-content/texas.ts.
     topBirdingSpots: [
-      { name: "Bolivar Flats Shorebird Sanctuary", blurb: "Gulf Coast shorebird magnet with thousands of peep and terns." },
-      { name: "Santa Ana NWR", blurb: "Lower Rio Grande Valley—Mexican species at their northern limit." },
-      { name: "High Island", blurb: "Trans-Gulf migrant fallouts in spring after storms." },
+      { name: "Aransas National Wildlife Refuge", blurb: "More than 115,000 acres along the Texas Gulf Coast, established in 1937, and the wintering home of the last wild flock of endangered Whooping Cranes." },
+      { name: "High Island (Boy Scout Woods)", blurb: "Houston Audubon's 60-acre sanctuary one mile from the Gulf; staffed daily from mid-March to early May for spring migration." },
+      { name: "Santa Ana National Wildlife Refuge", blurb: "2,088 acres on the Rio Grande at the juncture of two major migratory routes; the northernmost point for many Central and South American species." },
+      { name: "Big Bend National Park", blurb: "450 species reported in the park, of which only 56 live in Big Bend year-round." },
     ],
     habitats: ["Coastal", "Desert", "Forest", "Wetland", "Urban"],
-    speciesCount: 640,
+    speciesCount: 677,
     summary: "Texas has the second-highest bird diversity in the U.S., spanning Gulf Coast beaches to Chihuahuan Desert.",
   },
   {
@@ -391,13 +406,16 @@ export const US_STATES_DATA: USState[] = [
     slug: "florida", name: "Florida", abbr: "FL", lat: 28.50, lng: -82.51, region: "South", flyway: "Atlantic",
     gridRow: 8, gridCol: 8,
     popularCities: ["Miami", "Orlando", "Tampa", "Jacksonville", "Tallahassee"],
+    // Facts sourced in data/state-content/florida.ts (NPS, USFWS, Audubon).
     topBirdingSpots: [
-      { name: "Corkscrew Swamp Sanctuary", blurb: "Old-growth cypress and nesting Wood Storks in spring." },
-      { name: "Merritt Island NWR", blurb: "Florida Scrub-Jay and massive wintering waterfowl near Kennedy Space Center." },
-      { name: "Dry Tortugas National Park", blurb: "Sooty Tern and Brown Noddy colonies 70 miles west of Key West." },
+      { name: "Everglades National Park", blurb: "More than 360 bird species recorded, including sixteen species of wading birds." },
+      { name: "Merritt Island National Wildlife Refuge", blurb: "140,000 acres of dunes, salt marsh, impoundments, scrub, and flatwoods overlaying Kennedy Space Center." },
+      { name: "Dry Tortugas National Park", blurb: "Almost 70 miles west of Key West; 299 species on the park list and a Sooty Tern colony on Bush Key." },
+      { name: "Corkscrew Swamp Sanctuary", blurb: "The largest remaining old-growth bald cypress forest in the world." },
     ],
     habitats: ["Coastal", "Forest", "Wetland", "Urban"],
-    speciesCount: 530,
+    // Florida Ornithological Society official state list: 545 extant species (fosbirds.org/fos-bird-checklist/).
+    speciesCount: 545,
     summary: "Florida's subtropical climate, vast wetlands, and Gulf Coast make it one of America's premier birding destinations.",
   },
   {
@@ -437,11 +455,15 @@ export const US_STATES_DATA: USState[] = [
     slug: "tennessee", name: "Tennessee", abbr: "TN", lat: 35.86, lng: -86.35, region: "South", flyway: "Mississippi",
     gridRow: 6, gridCol: 7,
     popularCities: ["Nashville", "Memphis", "Knoxville", "Chattanooga"],
+    // Facts sourced in data/state-content/tennessee.ts.
     topBirdingSpots: [
-      { name: "Reelfoot NWR", blurb: "Cypress swamp Bald Eagle nest site and waterfowl wintering." },
+      { name: "Great Smoky Mountains National Park", blurb: "More than 240 documented species; about 60 live in the park year-round and nearly 120 nest there in the warmer months, with high-elevation specialties along Kuwohi Road." },
+      { name: "Reelfoot Lake", blurb: "The only large naturally occurring lake in Tennessee, created by the New Madrid earthquakes of 1811–1812; a wintering ground for waterfowl and bald eagles." },
+      { name: "Radnor Lake State Park", blurb: "1,389 acres and a Class II Natural Area nestled in the heart of Nashville." },
+      { name: "Hatchie National Wildlife Refuge", blurb: "11,556 acres in west Tennessee, including approximately 9,764 acres of bottomland hardwood forest, supplying critical habitat for wintering waterfowl and other migratory birds." },
     ],
     habitats: ["Forest", "Wetland", "Urban"],
-    speciesCount: 410,
+    speciesCount: 434,
     summary: "Tennessee's Mississippi River corridor and Great Smoky Mountains offer forest and wetland birding.",
   },
   {
@@ -560,11 +582,14 @@ export const US_STATES_DATA: USState[] = [
     slug: "rhode-island", name: "Rhode Island", abbr: "RI", lat: 41.68, lng: -71.51, region: "Northeast", flyway: "Atlantic",
     gridRow: 4, gridCol: 11,
     popularCities: ["Providence", "Warwick", "Newport"],
+    // Facts sourced in data/state-content/rhode-island.ts.
     topBirdingSpots: [
-      { name: "Sachuest Point NWR", blurb: "Rocky coastline with wintering Purple Sandpipers and harlequin Ducks." },
+      { name: "Sachuest Point National Wildlife Refuge", blurb: "A 242-acre refuge in Middletown of fields, shrublands, woodlands, ponds, and sandy beaches; an important stopover and wintering area for migratory birds including Harlequin Ducks." },
+      { name: "Ninigret National Wildlife Refuge", blurb: "858 acres of upland and wetland habitats on the largest coastal salt pond in Rhode Island, formerly part of Charlestown Naval Auxiliary Landing Field; over 250 species of birds recorded." },
+      { name: "Block Island National Wildlife Refuge", blurb: "134 acres established in 1973 on the Atlantic Flyway, with a large concentration of over 70 species of migratory songbirds each fall." },
     ],
     habitats: ["Coastal", "Forest", "Wetland", "Urban"],
-    speciesCount: 410,
+    speciesCount: 446,
     summary: "Rhode Island's Narragansett Bay and coastal refuges support seabirds and wintering waterfowl.",
   },
   {

@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default async function BirdsPage() {
-  const birds = (await getPublishedBirds()).sort((a, b) => a.commonName.localeCompare(b.commonName));
+  // Copy before sorting: the static fallback is a shared module-level array and the homepage relies on its curated order.
+  const birds = [...(await getPublishedBirds())].sort((a, b) => a.commonName.localeCompare(b.commonName));
   const groups = alphabet
     .map((letter) => ({ letter, birds: birds.filter((bird) => bird.commonName.toUpperCase().startsWith(letter)) }))
     .filter((group) => group.birds.length > 0);
@@ -62,7 +63,7 @@ export default async function BirdsPage() {
               </header>
               <div className="encyclopedia-grid">
                 {group.birds.map((bird) => (
-                  <BirdProfileLink className="species-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                  <BirdProfileLink className="species-card" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>
                     <div className="species-card-visual">
                       {bird.imageUrl ? (
                         // The repository supplies reviewed, attributed bird imagery when available.
@@ -73,12 +74,12 @@ export default async function BirdsPage() {
                       )}
                     </div>
                     <div className="species-card-body">
-                      <div className="species-card-meta"><span>{bird.family}</span><span>{bird.size}</span></div>
+                      <div className="species-card-meta">{bird.family&&<span>{bird.family}</span>}{bird.size&&<span>{bird.size}</span>}</div>
                       <h2>{bird.commonName}</h2>
                       <p className="species-scientific">{bird.scientificName}</p>
                       <p className="species-summary">{bird.summary}</p>
                       <div className="species-card-footer">
-                        <span>{bird.residentStatus}</span>
+                        {bird.residentStatus&&<span>{bird.residentStatus}</span>}
                         <strong>View profile →</strong>
                       </div>
                     </div>

@@ -8,6 +8,7 @@ import { attractionGuides, attractionGuidePath } from "../../data/attraction-gui
 import { getIndexEligibleBirds } from "../../lib/bird-repository";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 import { speciesAttractionGuides } from "../../data/species-attraction-guides";
+import { getGroupStaticParams } from "../../lib/group-data";
 
 const ORIGIN = SITE.origin;
 const LAST_MODIFIED = "2026-08-11";
@@ -54,6 +55,7 @@ export async function GET() {
     for (const bird of indexedSeasonalBirds) paths.add(`/seasonal-birds/${season}/${bird.slug}`);
   }
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
+  for (const { state, slug } of getGroupStaticParams()) paths.add(`/birds-by-location/${state}/${slug}`);
 
   const body = [...paths]
     .sort()

@@ -69,7 +69,7 @@ export default async function SeasonalBirdsPage() {
             <h2>Explore birds you may see through the year</h2>
             <div className="index-grid">
               {birds.map((bird) => (
-                <BirdProfileLink className="index-card" href={`/birds/${bird.slug}`} key={bird.slug}>
+                <BirdProfileLink className="index-card" href={`/birds/${bird.slug}`} birdName={bird.commonName} key={bird.slug}>
                   <small>{bird.scientificName}</small>
                   <h2>{bird.commonName}</h2>
                   <p>{bird.hook}</p>

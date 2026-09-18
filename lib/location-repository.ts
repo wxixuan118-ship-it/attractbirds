@@ -10,6 +10,9 @@
 import { US_STATES_DATA, BACKYARD_BIRDS_BY_STATE, BACKYARD_BIRDS_BY_REGION, STATE_BY_SLUG, CITIES, CITY_MAP, getCitiesForState, getFallbackCityData, type USState, type CityData } from "../data/us-states-data";
 import { birdWhitelist } from "../data/bird-whitelist";
 import { pilotBirds } from "../data/pilot-birds";
+import { birdCatalog } from "../data/bird-catalog";
+import { getSeasonalPattern, isEarlyMigrant, monthlyPresence, stateClimate, FREQ_PEAK, FREQ_SHOULDER, type Pattern } from "../data/bird-seasonality";
+import { getStateOccurrences, classifyPresence, buildCalendar, relativeByMonth, activeMonths, PRESENCE_LABEL, type OccurrenceBird, type StateOccurrences } from "./occurrence-data";
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -35,6 +38,12 @@ export type StateBirdEntry = {
   seasonalStatus?: string;
   frequencyScore?: number;
   bestMonths?: string[];
+  /** Where the card links. Defaults to the Bird×State page; catalog-only birds link to their profile; unlinked birds have no page yet. */
+  href?: string | null;
+  /** eBird records for this bird in the state (static occurrence data). */
+  observationCount?: number;
+  /** Rank by eBird records among all species in the state. */
+  reportRank?: number | null;
 };
 
 export type StatePageData = {
@@ -43,7 +52,15 @@ export type StatePageData = {
   backyardBirds: StateBirdEntry[];
   totalSpecies: number;
   // monthly data for calendar section
-  monthlyHighlights: { month: string; slug: string; birds: { slug: string; name: string }[] }[];
+  monthlyHighlights: MonthlyHighlight[];
+  /** Present when the page is backed by static eBird occurrence data. */
+  occurrences?: StateOccurrences;
+};
+
+export type MonthlyHighlight = {
+  month: string;
+  slug: string;
+  birds: { slug: string | null; name: string; note?: "arrives" | "departs" | "peak" | "year-round" }[];
 };
 
 // ─── Helpers ────────────────────────────────────────────────────
@@ -58,17 +75,19 @@ function birdFromWhitelist(slug: string): StateBirdEntry | undefined {
   const item = birdWhitelist.find((b) => b.slug === slug);
   if (!item) return undefined;
   const pilot = pilotBirds.find((p) => p.slug === slug);
+  const catalog = birdCatalog.find((b) => b.slug === slug);
   const initials = item.commonName.split(/\s+/).map((x) => x[0]).join("").slice(0, 2);
+  // Unknown attributes stay empty — pages skip empty fields rather than print a placeholder.
   return {
     slug: item.slug,
     commonName: item.commonName,
     scientificName: item.scientificName,
-    family: pilot?.family ?? "Taxonomy pending",
+    family: pilot?.family ?? catalog?.family ?? "",
     initials,
-    colors: pilot?.colors.join(", ") ?? "Varies",
-    size: pilot ? `${pilot.size[0]}–${pilot.size[1]} cm` : "See profile",
-    habitat: pilot?.habitats.join(", ") ?? "Varies",
-    residentStatus: pilot?.residentStatus ?? "Distribution varies",
+    colors: pilot?.colors.join(", ") ?? "",
+    size: pilot ? `${pilot.size[0]}–${pilot.size[1]} cm` : "",
+    habitat: pilot?.habitats.join(", ") ?? "",
+    residentStatus: pilot?.residentStatus ?? "",
     summary: pilot?.summary ?? `${item.commonName} is a North American backyard bird.`,
     qualityScore: pilot ? 85 : 0,
     sourceCount: pilot ? 1 : 0,
@@ -101,14 +120,28 @@ const fallbackWhitelistBirds = birdWhitelist.map((item) => {
   return reviewed ?? birdFromWhitelist(item.slug)!;
 });
 
+function seasonalStatusLabel(pattern: Pattern | undefined): string | undefined {
+  switch (pattern) {
+    case "resident": return "Year-round";
+    case "summer": return "Summer visitor";
+    case "winter": return "Winter visitor";
+    case "migrant": return "Migration";
+    default: return undefined;
+  }
+}
+
 /** Get the fallback bird list for a state, filtered by region/backyard overrides. */
 function getFallbackStateBirds(stateSlug: string): StateBirdEntry[] {
   // Return all birds, but put backyard/common ones first
   const backyardSlugs = BACKYARD_BIRDS_BY_STATE[stateSlug] ?? BACKYARD_BIRDS_BY_REGION[STATE_BY_SLUG[stateSlug].region] ?? [];
   const backyardSet = new Set(backyardSlugs);
   const backyard = backyardSlugs.map((slug) => birdFromWhitelist(slug)).filter(Boolean) as StateBirdEntry[];
-  const rest = fallbackWhitelistBirds.filter((b) => !backyardSet.has(b.slug));
-  return [...backyard, ...rest].slice(0, 24);
+  // Only list species the seasonality model places in this state — no juncos in Florida, no Blue Jays in California.
+  const rest = fallbackWhitelistBirds
+    .filter((b) => !backyardSet.has(b.slug))
+    .filter((b) => getSeasonalPattern(b.slug, stateSlug) !== "absent")
+    .map((b) => ({ ...b, seasonalStatus: seasonalStatusLabel(getSeasonalPattern(b.slug, stateSlug)) }));
+  return [...backyard.map((b) => ({ ...b, seasonalStatus: seasonalStatusLabel(getSeasonalPattern(b.slug, stateSlug)) })), ...rest].slice(0, 24);
 }
 
 function getFallbackBackyardBirds(stateSlug: string): StateBirdEntry[] {
@@ -116,15 +149,115 @@ function getFallbackBackyardBirds(stateSlug: string): StateBirdEntry[] {
   return slugs.map((slug) => birdFromWhitelist(slug)).filter(Boolean) as StateBirdEntry[];
 }
 
-function getFallbackMonthlyHighlights(_stateSlug: string): { month: string; slug: string; birds: { slug: string; name: string }[] }[] {
-  // Generic seasonal highlights
-  return [
-    { month: "January", slug: "january", birds: [{ slug: "northern-cardinal", name: "Northern Cardinal" }, { slug: "dark-eyed-junco", name: "Dark-eyed Junco" }] },
-    { month: "April", slug: "april", birds: [{ slug: "ruby-throated-hummingbird", name: "Ruby-throated Hummingbird" }, { slug: "american-robin", name: "American Robin" }] },
-    { month: "May", slug: "may", birds: [{ slug: "american-goldfinch", name: "American Goldfinch" }, { slug: "blue-jay", name: "Blue Jay" }] },
-    { month: "September", slug: "september", birds: [{ slug: "ruby-throated-hummingbird", name: "Ruby-throated Hummingbird" }, { slug: "american-robin", name: "American Robin" }] },
-    { month: "October", slug: "october", birds: [{ slug: "dark-eyed-junco", name: "Dark-eyed Junco" }, { slug: "white-throated-sparrow", name: "White-throated Sparrow" }] },
-  ];
+/**
+ * Build a 12-month calendar for a state from the static seasonality model.
+ * Each month lists up to three birds, preferring arrivals and departures so
+ * the calendar reads as a migration timeline rather than the same residents
+ * repeated twelve times.
+ */
+function getFallbackMonthlyHighlights(stateSlug: string): MonthlyHighlight[] {
+  const state = STATE_BY_SLUG[stateSlug];
+  if (!state) return [];
+  const climate = stateClimate(stateSlug);
+  const backyardSlugs = BACKYARD_BIRDS_BY_STATE[stateSlug] ?? BACKYARD_BIRDS_BY_REGION[state.region] ?? [];
+
+  const candidates = birdWhitelist
+    .map((item) => {
+      const pattern = getSeasonalPattern(item.slug, stateSlug);
+      if (!pattern || pattern === "absent") return null;
+      return { slug: item.slug, name: item.commonName, pattern, priority: item.priority, backyard: backyardSlugs.includes(item.slug), months: monthlyPresence(pattern, climate, isEarlyMigrant(item.slug)) };
+    })
+    .filter((c): c is NonNullable<typeof c> => c !== null);
+
+  const used = new Map<string, number>();
+  const highlights: MonthlyHighlight[] = [];
+  for (let month = 0; month < 12; month++) {
+    const scored = candidates
+      .map((c) => {
+        const m = c.months[month];
+        if (m.frequency < FREQ_SHOULDER) return null;
+        let score = c.pattern === "resident" ? 1 : c.pattern === "migrant" ? 3 : 2;
+        if (m.arrives) score += 4;
+        if (m.departs) score += 3;
+        if (c.backyard) score += 1.5;
+        score += (birdWhitelist.length - c.priority) / birdWhitelist.length;
+        score -= 1.5 * (used.get(c.slug) ?? 0);
+        const note = m.arrives ? "arrives" : m.departs ? "departs" : c.pattern === "resident" ? "year-round" : "peak";
+        return { slug: c.slug, name: c.name, note: note as MonthlyHighlight["birds"][number]["note"], score };
+      })
+      .filter((c): c is NonNullable<typeof c> => c !== null)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+    for (const bird of scored) used.set(bird.slug, (used.get(bird.slug) ?? 0) + 1);
+    if (scored.length > 0) highlights.push({ month: MONTHS[month], slug: MONTH_SLUGS[month], birds: scored.map(({ slug, name, note }) => ({ slug, name, note })) });
+  }
+  return highlights;
+}
+
+/** Static monthly profile for a bird in a state, derived from the seasonality model. */
+function getFallbackBirdMonths(birdSlug: string, stateSlug: string): { pattern: Pattern; monthlyData: BirdStateData["monthlyData"] } {
+  const climate = stateClimate(stateSlug);
+  const state = STATE_BY_SLUG[stateSlug];
+  const backyard = (BACKYARD_BIRDS_BY_STATE[stateSlug] ?? BACKYARD_BIRDS_BY_REGION[state.region] ?? []).includes(birdSlug);
+  // Birds outside the model: treat curated backyard birds as residents, everything else as passage migrants.
+  const pattern = getSeasonalPattern(birdSlug, stateSlug) ?? (backyard ? "resident" : "migrant");
+  const monthlyData = monthlyPresence(pattern, climate, isEarlyMigrant(birdSlug)).map((m, i) => ({
+    month: MONTHS[i],
+    slug: MONTH_SLUGS[i],
+    observationCount: 0,
+    frequencyScore: m.frequency,
+    seasonalStatus: m.status,
+  }));
+  return { pattern, monthlyData };
+}
+
+// ─── Static eBird occurrence data (per-state JSON) ─────────────
+
+/** Build a card entry from an occurrence record, reusing pilot/catalog attributes where we have them. */
+function birdFromOccurrence(stateSlug: string, occ: OccurrenceBird, totalRecords: number): StateBirdEntry {
+  const base = occ.slug ? birdFromWhitelist(occ.slug) : undefined;
+  const catalog = occ.slug ? birdCatalog.find((b) => b.slug === occ.slug) : undefined;
+  const initials = occ.commonName.split(/\s+/).map((x) => x[0]).join("").slice(0, 2);
+  const { presence } = classifyPresence(occ, totalRecords);
+  const href = !occ.slug ? null : occ.whitelisted ? `/birds-by-location/${stateSlug}/${occ.slug}` : catalog ? `/birds/${occ.slug}` : null;
+  return {
+    slug: occ.slug ?? `gbif-${occ.gbifTaxonKey}`,
+    commonName: occ.commonName,
+    scientificName: occ.scientificName,
+    family: base?.family ?? catalog?.family ?? "",
+    initials,
+    colors: base?.colors ?? "",
+    size: base?.size ?? "",
+    habitat: base?.habitat ?? "",
+    residentStatus: base?.residentStatus ?? "",
+    summary: base?.summary ?? `${occ.commonName} is among the most-reported birds in this state on eBird.`,
+    qualityScore: base?.qualityScore ?? 0,
+    sourceCount: 1,
+    seasonalStatus: PRESENCE_LABEL[presence],
+    frequencyScore: totalRecords > 0 ? occ.total / totalRecords : undefined,
+    bestMonths: presence === "resident" ? undefined : activeMonths(occ),
+    href,
+    observationCount: occ.total,
+    reportRank: occ.reportRank,
+  };
+}
+
+function statePageFromOccurrences(state: USState, data: StateOccurrences): StatePageData {
+  const backyardSlugs = BACKYARD_BIRDS_BY_STATE[state.slug] ?? BACKYARD_BIRDS_BY_REGION[state.region] ?? [];
+  const ranked = data.birds.filter((b) => b.reportRank !== null).sort((a, b) => (a.reportRank ?? 0) - (b.reportRank ?? 0));
+  const commonBirds = ranked.slice(0, 24).map((b) => birdFromOccurrence(state.slug, b, data.totalRecords));
+  const backyardBirds = backyardSlugs
+    .map((slug) => data.birds.find((b) => b.slug === slug))
+    .filter((b): b is OccurrenceBird => Boolean(b) && (b as OccurrenceBird).total > 0)
+    .map((b) => birdFromOccurrence(state.slug, b, data.totalRecords));
+  return {
+    state,
+    commonBirds,
+    backyardBirds,
+    totalSpecies: state.speciesCount,
+    monthlyHighlights: buildCalendar(data),
+    occurrences: data,
+  };
 }
 
 // ─── Public API ─────────────────────────────────────────────────
@@ -144,6 +277,9 @@ export function getStateBySlug(slug: string): USState | undefined {
 export async function getStatePageData(stateSlug: string): Promise<StatePageData | undefined> {
   const state = STATE_BY_SLUG[stateSlug];
   if (!state) return undefined;
+
+  const occurrences = getStateOccurrences(stateSlug);
+  if (occurrences) return statePageFromOccurrences(state, occurrences);
 
   if (!shouldUseDatabase()) {
     return {
@@ -194,7 +330,7 @@ async function hydrateStatePageData(state: USState): Promise<StatePageData> {
     .orderBy(orm.asc(schema.birds.commonName));
 
   let birds: StateBirdEntry[] = [];
-  let monthlyHighlights: { month: string; slug: string; birds: { slug: string; name: string }[] }[] = [];
+  let monthlyHighlights: MonthlyHighlight[] = [];
 
   if (locationId && birdRows.length > 0) {
     // Get monthly occurrence stats for this location
@@ -257,9 +393,9 @@ async function hydrateStatePageData(state: USState): Promise<StatePageData> {
         family: row.taxonomyFamily ?? "Aves",
         initials,
         colors: (row.colors ?? []).join(", "),
-        size: row.sizeMinCm && row.sizeMaxCm ? `${row.sizeMinCm}–${row.sizeMaxCm} cm` : "See profile",
+        size: row.sizeMinCm && row.sizeMaxCm ? `${row.sizeMinCm}–${row.sizeMaxCm} cm` : "",
         habitat: (row.habitats ?? []).join(", "),
-        residentStatus: row.residentStatus ?? "Distribution varies",
+        residentStatus: row.residentStatus ?? "",
         summary: row.summary,
         imageUrl: image?.thumbnailUrl ?? image?.imageUrl ?? null,
         imageAlt: image?.altText ?? null,
@@ -309,9 +445,9 @@ async function hydrateStatePageData(state: USState): Promise<StatePageData> {
         family: row.taxonomyFamily ?? "Aves",
         initials,
         colors: (row.colors ?? []).join(", "),
-        size: row.sizeMinCm && row.sizeMaxCm ? `${row.sizeMinCm}–${row.sizeMaxCm} cm` : "See profile",
+        size: row.sizeMinCm && row.sizeMaxCm ? `${row.sizeMinCm}–${row.sizeMaxCm} cm` : "",
         habitat: (row.habitats ?? []).join(", "),
-        residentStatus: row.residentStatus ?? "Distribution varies",
+        residentStatus: row.residentStatus ?? "",
         summary: row.summary,
         qualityScore: row.qualityScore,
         sourceCount: row.sourceCount,
@@ -540,48 +676,44 @@ export async function getBirdStateData(stateSlug: string, birdSlug: string): Pro
     }
   }
 
-  // Fallback monthly data
+  // Static eBird occurrence data for this state, when we have it.
+  const occurrences = getStateOccurrences(stateSlug);
+  const occ = occurrences?.birds.find((b) => b.slug === birdSlug);
+  if (monthlyData.length === 0 && occurrences && occ) {
+    const rel = relativeByMonth(occ);
+    const classified = classifyPresence(occ, occurrences.totalRecords);
+    presence = classified.presence;
+    abundance = classified.abundance;
+    totalObservations = occ.total;
+    avgFrequency = occ.share.reduce((a, b) => a + b, 0) / 12;
+    monthlyData = MONTHS.map((month, i) => ({
+      month,
+      slug: MONTH_SLUGS[i],
+      observationCount: occ.months[i],
+      frequencyScore: rel[i],
+      seasonalStatus: rel[i] >= 0.35 ? "regular" : rel[i] >= 0.1 ? "seasonal" : occ.months[i] > 0 ? "rare" : "not-detected",
+    }));
+    bestMonths = presence === "absent" ? [] : activeMonths(occ);
+    peakMonths = presence === "resident" || presence === "absent" ? [] : MONTHS.filter((_, i) => rel[i] >= 0.8);
+  }
+
+  // Fallback monthly data from the static seasonality model (per state, per climate band).
   if (monthlyData.length === 0) {
-    const pilot = pilotBirds.find((p) => p.slug === birdSlug);
-    if (pilot?.behavior.migratory) {
-      presence = pilot.behavior.migrationPattern === "long" ? "migrant" : "breeding";
-      if (pilot.behavior.migrationMonths?.length) {
-        peakMonths = pilot.behavior.migrationMonths;
-      }
-    }
-    // Generic monthly data based on backyard bird status
-    const isBackyard = (BACKYARD_BIRDS_BY_STATE[stateSlug] ?? BACKYARD_BIRDS_BY_REGION[state.region] ?? []).includes(birdSlug);
-    if (isBackyard) {
-      abundance = "common";
-      bestMonths = MONTHS; // year-round
-      monthlyData = MONTHS.map((month, i) => ({
-        month,
-        slug: MONTH_SLUGS[i],
-        observationCount: 0,
-        frequencyScore: 0.3,
-        seasonalStatus: "regular",
-      }));
-    } else {
-      abundance = "uncommon";
-      bestMonths = ["April", "May", "September", "October"];
-      monthlyData = MONTHS.map((month, i) => {
-        const isSpring = i >= 2 && i <= 5;
-        const isFall = i >= 8 && i <= 10;
-        return {
-          month,
-          slug: MONTH_SLUGS[i],
-          observationCount: 0,
-          frequencyScore: isSpring || isFall ? 0.15 : 0.05,
-          seasonalStatus: isSpring || isFall ? "seasonal" : "rare",
-        };
-      });
-    }
+    const fallback = getFallbackBirdMonths(birdSlug, stateSlug);
+    monthlyData = fallback.monthlyData;
+    presence = { resident: "resident", summer: "breeding", winter: "winter", migrant: "migrant", absent: "absent" }[fallback.pattern];
+    avgFrequency = monthlyData.reduce((sum, m) => sum + m.frequencyScore, 0) / monthlyData.length;
+    if (fallback.pattern === "absent") abundance = "rare";
+    else if (fallback.pattern === "migrant") abundance = "uncommon";
+    else abundance = "common";
+    bestMonths = fallback.pattern === "absent" ? [] : monthlyData.filter((m) => m.frequencyScore >= FREQ_SHOULDER).map((m) => m.month);
+    peakMonths = fallback.pattern === "resident" || fallback.pattern === "absent" ? [] : monthlyData.filter((m) => m.frequencyScore >= FREQ_PEAK).map((m) => m.month);
   }
 
   // Related birds: same family or same backyard list in this state
   const allBirds = [...stateData.commonBirds, ...stateData.backyardBirds];
   const relatedBirds = allBirds
-    .filter((b) => b.slug !== birdSlug && b.family === bird.family)
+    .filter((b) => b.slug !== birdSlug && Boolean(bird.family) && b.family === bird.family)
     .slice(0, 6);
   if (relatedBirds.length < 4) {
     // Fill with other backyard birds
@@ -593,16 +725,17 @@ export async function getBirdStateData(stateSlug: string, birdSlug: string): Pro
     }
   }
 
-  // Nearby states where this bird occurs
-  const nearbyStatesWithBird: { slug: string; name: string; abbr: string }[] = [];
-  for (const s of US_STATES_DATA) {
-    if (s.slug === stateSlug) continue;
-    const stateBirds = BACKYARD_BIRDS_BY_STATE[s.slug] ?? BACKYARD_BIRDS_BY_REGION[s.region] ?? [];
-    if (stateBirds.includes(birdSlug) || pilotBirds.some((p) => p.slug === birdSlug)) {
-      nearbyStatesWithBird.push({ slug: s.slug, name: s.name, abbr: s.abbr });
-    }
-    if (nearbyStatesWithBird.length >= 8) break;
-  }
+  // Nearby states where this bird occurs: same region first, then the rest of the country.
+  const occursIn = (s: USState) => {
+    const pattern = getSeasonalPattern(birdSlug, s.slug);
+    if (pattern) return pattern !== "absent";
+    return (BACKYARD_BIRDS_BY_STATE[s.slug] ?? BACKYARD_BIRDS_BY_REGION[s.region] ?? []).includes(birdSlug);
+  };
+  const otherStates = US_STATES_DATA.filter((s) => s.slug !== stateSlug && occursIn(s));
+  const nearbyStatesWithBird = [
+    ...otherStates.filter((s) => s.region === state.region),
+    ...otherStates.filter((s) => s.region !== state.region),
+  ].slice(0, 8).map((s) => ({ slug: s.slug, name: s.name, abbr: s.abbr }));
 
   return {
     bird,
