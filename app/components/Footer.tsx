@@ -178,6 +178,17 @@ export function Footer() {
                 loading="lazy"
               />
             </a>
+            {/* Markup kept identical to Uno Directory's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://uno.directory" target="_blank" rel="noopener">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://uno.directory/uno-directory.svg"
+                alt="Listed on Uno Directory"
+                width={120}
+                height={30}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
