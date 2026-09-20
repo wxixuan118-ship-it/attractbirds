@@ -167,6 +167,17 @@ export function Footer() {
                 style={{ width: "240px", height: "auto" }}
               />
             </a>
+            {/* Markup kept identical to Unite List's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a target="_blank" href="https://unitelist.com/product/attractbirds">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://unitelist.com/assets/images/badge.png"
+                alt="Unite List"
+                height={54}
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
