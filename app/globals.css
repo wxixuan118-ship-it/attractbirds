@@ -778,6 +778,15 @@ a.alphabet-link:hover { background: var(--green); color: white; }
 .footer-col h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7a9484; margin: 0 0 16px; }
 .footer-col a { display: block; font-size: 13px; color: #a8c4b0; margin-bottom: 10px; transition: color .15s; }
 .footer-col a:hover { color: white; }
+.footer-partners {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.footer-partners h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7a9484; margin: 0 0 14px; }
+.footer-partners-badges { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.footer-partners-badges a { display: inline-flex; line-height: 0; opacity: .9; transition: opacity .15s; }
+.footer-partners-badges a:hover { opacity: 1; }
+.footer-partners-badges img { display: block; height: 48px; width: auto; }
 .footer-bottom {
   display: flex;
   justify-content: space-between;

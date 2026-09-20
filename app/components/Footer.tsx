@@ -49,6 +49,22 @@ export function Footer() {
             </div>
           ))}
         </div>
+        <div className="footer-partners">
+          <h4>Partners</h4>
+          <div className="footer-partners-badges">
+            <a href="https://best-ai.org" target="_blank" rel="dofollow noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://best-ai.org/images/badge-best-ai-org.png"
+                srcSet="https://best-ai.org/images/badge-best-ai-org.png 1x, https://best-ai.org/images/badge-best-ai-org@2x.png 2x"
+                alt="Listed on Best-AI.org"
+                width={200}
+                height={48}
+                loading="lazy"
+              />
+            </a>
+          </div>
+        </div>
         <div className="footer-bottom">
           <span>© 2026 {SITE.brand}. All rights reserved.</span>
           <span>Built for birds. Backed by science.</span>
