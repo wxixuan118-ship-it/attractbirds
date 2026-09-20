@@ -103,6 +103,17 @@ export function Footer() {
                 height={58}
               />
             </a>
+            {/* Markup kept identical to DailyPings' snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://dailypings.com/p/attract-birds-to-your-backyard-plants-feeders-water" target="_blank" rel="noopener" title="Featured on DailyPings">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://dailypings.com/badge.svg"
+                alt="Featured on DailyPings"
+                width={179}
+                height={32}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
