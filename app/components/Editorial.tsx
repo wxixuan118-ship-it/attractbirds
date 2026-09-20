@@ -48,7 +48,7 @@ export function EditorialIntro({ content }: { content: EditorialContent }) {
 }
 
 /** Body sections, FAQ and source list. */
-export function EditorialBody({ content, children }: { content: EditorialContent; children?: ReactNode }) {
+export function EditorialBody({ content, children, faqHeading = "Frequently asked questions", sourcesHeading = "Sources" }: { content: EditorialContent; children?: ReactNode; /** Override the FAQ / Sources H2s (e.g. to keep them on the page's keyword). */ faqHeading?: string; sourcesHeading?: string }) {
   return (
     <>
       {content.sections.map((section) => (
@@ -64,7 +64,7 @@ export function EditorialBody({ content, children }: { content: EditorialContent
       {children}
       {content.faq.length > 0 && (
         <section className="loc-section loc-prose" style={{ background: "var(--card)" }}>
-          <div className="loc-section-header"><h2>Frequently asked questions</h2></div>
+          <div className="loc-section-header"><h2>{faqHeading}</h2></div>
           <div className="prose">
             {content.faq.map((f) => (
               <div key={f.question} className="faq-item">
@@ -76,7 +76,7 @@ export function EditorialBody({ content, children }: { content: EditorialContent
         </section>
       )}
       <section className="loc-section loc-prose" style={{ paddingBottom: "64px" }}>
-        <div className="loc-section-header"><h2>Sources</h2></div>
+        <div className="loc-section-header"><h2>{sourcesHeading}</h2></div>
         <div className="prose">
           <ol className="source-list">
             {content.sources.map((s) => (

@@ -13,7 +13,11 @@ test("renders the AttractBirds homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Bring more/);
+  assert.match(html, /<h1>How to attract birds/);
+  assert.match(html, /"@type":"HowTo"/);
+  assert.match(html, /href="\/birds"[^>]*class="module-card entry-card"/);
+  assert.match(html, /href="\/birds-by-location"[^>]*class="module-card entry-card"/);
+  assert.match(html, /href="\/tools\/bird-feeder-calculator"[^>]*class="module-card entry-card"/);
   assert.match(html, /AttractBirds\.app/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });
@@ -389,7 +393,7 @@ test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sour
     assert.equal(response.status, 200, path);
     const html = await response.text();
     assert.match(html, source, path);
-    assert.match(html, /<h2>Sources<\/h2>/, path);
+    assert.match(html, /<h2>Sources[^<]*<\/h2>/, path);
     assert.match(html, /<img src="\/images\/(birds|topics)\/[a-z-]+\.webp" alt="[^"]+" width="\d+" height="\d+"/, path);
     assert.match(html, /"@type":"FAQPage"/, path);
     assert.match(html, new RegExp(`rel="canonical" href="https://attractbirds\\.app${path === "/" ? "/?" : path.replaceAll("-", "\\-")}"`), path);

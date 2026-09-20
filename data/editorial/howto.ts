@@ -30,9 +30,9 @@ const SAFETY = {
   ],
 };
 
-type Spec = { path: string; keyword: string; title: string; description: string; image?: EditorialImage; intro: string[]; sections: { heading: string; paragraphs: string[] }[]; faq: { question: string; answer: string }[]; extraSources?: { id: number; label: string; url: string }[]; noSafety?: boolean };
+type Spec = { path: string; keyword: string; title: string; h1?: string; description: string; image?: EditorialImage; intro: string[]; sections: { heading: string; paragraphs: string[] }[]; faq: { question: string; answer: string }[]; extraSources?: { id: number; label: string; url: string }[]; noSafety?: boolean };
 const guide = (s: Spec): EditorialContent => ({
-  path: s.path, keyword: s.keyword, title: s.title, description: s.description, image: s.image, intro: s.intro,
+  path: s.path, keyword: s.keyword, title: s.title, h1: s.h1, description: s.description, image: s.image, intro: s.intro,
   sections: s.noSafety ? s.sections : [...s.sections, SAFETY],
   faq: s.faq,
   sources: [FW, AAB_WINDOWS, AUDUBON_YARD, ...(s.extraSources ?? [])],
@@ -40,28 +40,30 @@ const guide = (s: Spec): EditorialContent => ({
 
 export const howtoEditorial: Record<string, EditorialContent> = {
   "/how-to-attract": guide({
-    path: "/how-to-attract", keyword: "how to attract birds",
-    title: "How to Attract Birds: Food, Water, Plants & Shelter Guides",
-    description: "How to attract birds to a yard, balcony, feeder, bird bath or birdhouse — the four things birds need, with guides for goldfinches, cardinals.",
-    image: timg("platform-feeder", "Junco, chickadee and cardinal sharing a feeder — how to attract birds starts with food near cover"),
+    path: "/how-to-attract", keyword: "bird attraction guides",
+    title: "Bird Attraction Guides: Feeder, Bath, Balcony & Species",
+    h1: "Bird attraction guides, one situation at a time",
+    description: "Bird attraction guides for a feeder, new feeder, bird bath, balcony, birdhouse and winter, plus goldfinch, cardinal, chickadee, hummingbird and bluebird guides.",
+    image: timg("platform-feeder", "Junco, chickadee and cardinal sharing a feeder — every bird attraction guide starts with food near cover"),
     intro: [
-      "How to attract birds comes down to four things every species needs — food, water, cover and a place to nest — and the safety rules that keep the birds you attract alive.",
+      "These bird attraction guides each take one situation — a feeder that stays empty, a balcony with no yard, a winter garden, one species you want — and answer it with the four things every bird needs: food, water, cover and a place to nest. The complete beginner method is on the home page; this hub is the index of the guides.",
       "The guides below draw on Project FeederWatch for feeders, foods and water [1], All About Birds for window safety [2], and Audubon's yard-habitat guidance for plants and layers [3].",
     ],
     sections: [
-      { heading: "How to attract birds with food and water", paragraphs: [
+      { heading: "Guides for attracting birds with food and water", paragraphs: [
         "Black-oil sunflower is the preferred food item for a wide variety of birds and a favorite of cardinals, chickadees, finches and sparrows; nyjer draws goldfinches, siskins and redpolls; millet and cracked corn feed the ground birds; suet brings the insect-eaters [1]. Large hoppers attract most species, tubes with short perches keep to small birds, and trays near the ground draw juncos, doves and sparrows [1] — see the guide to attracting birds to a new feeder.",
         "Because birds need water for drinking and bathing, they are attracted to water just as they are to feeders; a dish or shallow pan works, birds seem to prefer baths at ground level, and dripping water is one of the best ways to make a bath more attractive [1]. The bird-bath guide covers depth, placement and the every-couple-of-days water change.",
       ]},
-      { heading: "Attract birds with cover, plants and nest sites", paragraphs: [
+      { heading: "Guides for attracting birds with cover, plants and nest sites", paragraphs: [
         "Nothing provides an easier or more dependable food supply than birdscaping the yard with native vegetation, and because habitat loss is the leading cause of decline for many species, planting natives is one of the best ways to support local birds [1]. Audubon's plan is habitat layers — canopy trees for nuts and cavities, shrubs for fruit and nests, herbaceous plants for seed, and leaf litter for the insects birds eat — with fruit staggered through the seasons: serviceberry and cherry in summer, dogwood and spicebush for fall migrants, cedar and holly for winter [3].",
         "A well-built nest box adds the fourth need for cavity nesters; the birdhouse guide follows NestWatch's checklist. And if you have no yard, the balcony guide shows what a container garden and a window feeder can do — Audubon notes even very small patches of habitat give tired, hungry birds what they need during migration [3].",
       ]},
-      { heading: "How to attract birds, species by species", paragraphs: [
+      { heading: "Species guides: attracting one bird at a time", paragraphs: [
         "Species guides on this site cover goldfinches, cardinals, chickadees, ruby-throated hummingbirds, Baltimore orioles and bluebirds, each built from the Cornell Lab's backyard tips for that species and the eBird records that show where it actually occurs. The links at the foot of this page reach every guide.",
       ]},
     ],
     faq: [
+      { question: "Which bird attraction guide should I start with?", answer: "If you have a yard, the yard guide; if you have a feeder nobody visits, the new-feeder guide; if you have only a balcony, the balcony guide — each is a complete method for that situation." },
       { question: "What is the fastest way to attract birds?", answer: "A feeder of black-oil sunflower placed about ten feet from cover, plus a shallow bird bath — the two resources FeederWatch says draw birds most reliably [1]." },
       { question: "What do birds need most in a yard?", answer: "Food, water, cover and nest sites, in that order of speed; native plants supply all four over time [1][3]." },
     ],

@@ -9,7 +9,7 @@ const nav = [
   { label: "Plants", href: "/plants" },
   { label: "Feeders", href: "/feeders" },
   { label: "Bird Food", href: "/bird-food" },
-  { label: "Beginner Guide", href: URL_REGISTRY.howTo.hub },
+  { label: "Attraction Guides", href: URL_REGISTRY.howTo.hub },
 ];
 
 export function Header() {

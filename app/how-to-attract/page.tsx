@@ -9,11 +9,12 @@ export const metadata: Metadata = editorialMetadata(content);
 
 export default function Guide() {
   return (
-    <EditorialPage content={content} eyebrow="Complete beginner guide" breadcrumbs={[{ name: "How to attract birds", path: "/how-to-attract" }]}>
+    <EditorialPage content={content} eyebrow="Guide index" breadcrumbs={[{ name: "Bird attraction guides", path: "/how-to-attract" }]}>
       <HowToLinks exclude={[content.path]} />
       <section className="loc-section">
         <div className="loc-section-header"><h2>Plan your next step</h2></div>
         <div className="chip-list">
+          <Link href="/">How to attract birds: the complete method →</Link>
           <Link href="/tools/bird-feeder-calculator">Feeder planner →</Link>
           <Link href="/plants">Bird-friendly plants →</Link>
           <Link href="/birds">Bird encyclopedia →</Link>

@@ -4,7 +4,8 @@
 
 | Keyword cluster | Canonical URL | Template | Status | Notes |
 |---|---|---|---|---|
-| how to attract birds | `/how-to-attract` | Pillar guide | Index | Primary educational hub linking Birds, Plants, Feeders, Food, Problems, and Tools |
+| how to attract birds | `/` | Pillar guide (home) | Index | The home page is the five-step pillar for the head term and links Birds, Birds by State, Feeder Tools, Plants, Food and Guides |
+| bird attraction guides | `/how-to-attract` | Guide index | Index | Index of situation and species guides; deliberately not titled "how to attract birds" so it does not compete with the home page |
 | how to attract birds to a feeder | `/how-to-attract/birds-to-a-feeder` | Intent guide | Index | All grammatical variants consolidate here |
 | how to attract birds to a new feeder | `/how-to-attract/birds-to-a-new-feeder` | Problem guide | Index | Separate new-feeder intent |
 | oriole bird | `/birds/oriole` | Bird collection | Index | Disambiguates the group and links species pages |

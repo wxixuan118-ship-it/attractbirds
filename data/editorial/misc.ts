@@ -18,31 +18,51 @@ const AOS = { id: 7, label: "American Ornithological Society — Checklist of No
 
 export const miscEditorial: Record<string, EditorialContent> = {
   "/": {
-    path: "/", keyword: "attract birds to your backyard",
-    title: "Attract Birds to Your Backyard: Plants, Feeders & Water",
-    description: "Attract birds to your backyard with sourced guides: native plants, FeederWatch feeder and food advice, window and cat safety, and eBird data by state.",
-    image: timg("platform-feeder", "Junco, chickadee and cardinal at a feeder — attract birds to your backyard with food near cover, water and native plants"),
+    path: "/", keyword: "how to attract birds",
+    title: "How to Attract Birds to Your Backyard: Food, Water & Plants",
+    h1: "How to attract birds to your backyard",
+    description: "How to attract birds in five steps: the right food and feeder, water, native plants, nest sites and safe glass — with FeederWatch, Audubon and eBird sources.",
+    image: timg("platform-feeder", "How to attract birds: a junco, chickadee and cardinal share a platform feeder placed near cover"),
+    schemaType: "HowTo",
+    steps: [
+      { name: "Offer the right food in the right feeder", text: "Start with black-oil sunflower, the seed most backyard birds prefer, in a hopper or tube placed near cover but about ten feet from branches squirrels can jump from [1]." },
+      { name: "Add water at ground level", text: "A shallow bath, ideally with dripping water, draws birds as reliably as a feeder; change the water daily [1]." },
+      { name: "Plant natives in layers", text: "Canopy trees, fruiting shrubs, seed-bearing perennials and leaf litter supply insects, fruit and seed through the year [4][5]." },
+      { name: "Give birds somewhere to nest", text: "Dense shrubs, dead wood left standing where safe, and a well-built nest box add the fourth thing birds need [4]." },
+      { name: "Remove the two hazards", text: "Make glass near feeders visible with markings no more than two inches apart, and keep cats indoors [1][3]." },
+    ],
     intro: [
-      "To attract birds to your backyard you need to supply four things — food, water, cover and nest sites — and remove two hazards, glass and cats. Everything on this site is built from that list and from sources you can check.",
+      "How to attract birds comes down to supplying the four things every species needs — food, water, cover and a place to nest — and removing the two hazards that kill the birds you attract: glass and cats. Everything on this site is built from that list and from sources you can check.",
       "Feeding and water advice comes from Project FeederWatch [1][2], window safety from All About Birds [3], planting from Audubon [4][5], and the state-by-state bird lists from eBird records retrieved through GBIF [6].",
     ],
     sections: [
-      { heading: "Attract birds to your backyard with the right food and feeder", paragraphs: [
-        "Black-oil sunflower is the preferred food item for a wide variety of birds and a favorite of cardinals, chickadees, finches and sparrows; nyjer draws goldfinches, siskins and redpolls; millet and cracked corn feed the ground birds; suet brings woodpeckers, nuthatches and chickadees [1]. Large hoppers attract most species, tubes with short perches keep to small birds and keep seed dry, and trays near the ground draw juncos, doves and sparrows [1]. Place the feeder near cover such as trees or shrubs but about ten feet from branches squirrels can jump from, and clean it every week or two [1].",
-        "Water works as well as seed: birds are attracted to water just as they are to feeders, prefer baths at ground level, and come fastest to dripping water; change it daily [1].",
+      { heading: "Step 1 — Food that attracts birds", paragraphs: [
+        "The fastest way to attract birds is food they already prefer. Black-oil sunflower is the preferred food item for a wide variety of birds and a favorite of cardinals, chickadees, finches and sparrows; nyjer draws goldfinches, siskins and redpolls; millet and cracked corn feed the ground birds; suet brings woodpeckers, nuthatches and chickadees [1]. Large hoppers attract most species, tubes with short perches keep to small birds and keep seed dry, and trays near the ground draw juncos, doves and sparrows [1].",
+        "Placement matters as much as seed. Put the feeder near cover such as trees or shrubs but about ten feet from branches squirrels can jump from, keep the seed dry, and clean the feeder every week or two — more often in wet weather — because leftover seed and hulls harbor pathogens [1][2]. A new feeder can sit unvisited for days while birds find it by sight and by watching each other, so give it time before changing anything [1].",
       ]},
-      { heading: "Plants, cover and the two hazards", paragraphs: [
+      { heading: "Step 2 — Water that attracts birds", paragraphs: [
+        "Water works as well as seed, and it attracts species that never visit a feeder. Birds are attracted to water just as they are to feeders, prefer baths at ground level, and come fastest to dripping or moving water; keep the bath shallow — an inch or two — add a stone or branch so small birds can drink without getting wet, and change the water daily [1].",
+      ]},
+      { heading: "Step 3 — Native plants that attract birds", paragraphs: [
         "Nothing provides an easier or more dependable food supply than birdscaping with native vegetation [1]. Audubon's method is habitat in layers — canopy trees, fruiting shrubs, seed-bearing perennials, and leaf litter for insects — with fruit staggered from serviceberry in summer to cedar and holly in winter [4]; a native oak supports over 500 caterpillar species against five for a ginkgo, and a chickadee brood needs more than 6,000 caterpillars [5].",
-        "Window collisions kill perhaps a billion or more birds a year in North America; make glass near feeders visible with markings no more than 2 inches apart, screens or cords rather than relying on distance [3]. Cats kill hundreds of millions of birds a year — keep them indoors [1].",
+        "Cover is what turns a visit into a habit. Feeder birds want evergreens or dense shrubs within a short flight of the food, ground birds want a brush pile to dive into, and fledglings need thickets to hide in — so leave some of the yard untidy, and lay off pesticides that remove the insects nestlings are fed [1][4].",
       ]},
-      { heading: "Which birds you can attract: eBird data by state", paragraphs: [
+      { heading: "Step 4 — Nest sites for the birds you attract", paragraphs: [
+        "Food and water bring birds through; nest sites keep them. Shrubs and small trees hold songbird nests, dead trees and limbs left standing where they are safe give woodpeckers and chickadees cavities, and a nest box built to the right dimensions — with ventilation, drainage, no perch and a guard against predators — adds the fourth thing cavity nesters need [4]. Which birds nest in your area, and when, is in the state pages below.",
+      ]},
+      { heading: "Step 5 — Keep attracted birds safe", paragraphs: [
+        "Window collisions kill perhaps a billion or more birds a year in North America, and older rules about safe feeder-to-window distances are no longer thought valid; make glass near feeders visible with markings no more than 2 inches apart, exterior screens or hanging cords [3]. Cats kill hundreds of millions of birds a year — keep them indoors [1]. If birds with swollen eyes or fluffed, lethargic postures appear, take feeders down for a couple of weeks and disinfect them [2].",
+      ]},
+      { heading: "Birds you can attract in your state", paragraphs: [
         "Which birds you can attract depends on where you live, so this site's state pages are built from eBird checklists reported 2020–2024 and retrieved through GBIF [6]: for each of nine states so far — Florida, Arizona, California, Colorado, Oregon, Tennessee, Texas, Michigan and Rhode Island — the most-reported backyard species, their month-by-month presence, and pages for hummingbirds, woodpeckers, owls, hawks, warblers, sparrows, wrens, finches, doves, ducks, herons, jays, chickadees, orioles, magpies and eagles. Bird profiles draw on the Cornell Lab's All About Birds, and the species catalog follows the American Ornithological Society checklist [7].",
       ]},
     ],
     faq: [
       { question: "What is the fastest way to attract birds to a backyard?", answer: "A feeder of black-oil sunflower near cover plus a shallow bird bath with dripping water — the two resources FeederWatch says draw birds most reliably [1]." },
+      { question: "How long does it take to attract birds to a new feeder?", answer: "Anywhere from a day to a few weeks. Birds find feeders by sight and by watching other birds, so a feeder near cover in a yard that already has birds fills fastest; keep the seed fresh and dry while you wait [1]." },
       { question: "Do I need a feeder to attract birds?", answer: "No. FeederWatch says feeders are not the only way, or even the best way, to feed birds; native plants supply insects, fruit and seed more dependably [1][4]." },
-      { question: "How far should a feeder be from a window?", answer: "Distance rules are no longer considered valid; instead make the glass visible with 2-inch-spaced markings, screens or cords [3]." },
+      { question: "How do I keep the birds I attract from hitting windows?", answer: "Distance rules are no longer considered valid; instead make the glass visible with 2-inch-spaced markings, screens or cords [3]." },
+      { question: "How do I attract birds to a balcony or small yard?", answer: "A window or railing feeder, a shallow dish of water and a few native plants in containers; Audubon notes even very small patches of habitat help migrating birds [4]." },
     ],
     sources: [FW, FW_SICK, AAB_WINDOWS, AUDUBON_YARD, AUDUBON_NATIVE, EBIRD, AOS],
   },
