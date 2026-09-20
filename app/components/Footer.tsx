@@ -92,14 +92,15 @@ export function Footer() {
                 loading="lazy"
               />
             </a>
-            <a href="https://auraplusplus.com/projects/attractbirds-backyard-planning" target="_blank" rel="noopener noreferrer" title="View this project on Aura++">
+            {/* Markup kept identical to Aura++'s snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://auraplusplus.com/projects/attractbirds-backyard-planning" target="_blank" rel="noopener" title="View this project on Aura++">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="https://auraplusplus.com/images/badges/featured-on-light.svg"
                 alt="Featured on Aura++"
                 width={265}
                 height={58}
-                loading="lazy"
               />
             </a>
           </div>
