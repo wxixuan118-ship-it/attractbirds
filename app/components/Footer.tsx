@@ -63,6 +63,16 @@ export function Footer() {
                 loading="lazy"
               />
             </a>
+            <a href="https://www.indietools.app/products/attract-birds-to-your-backyard-plants-feeders-water" target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.indietools.app/badges/listed-on-indietools-light.png"
+                alt="Listed on IndieTools"
+                width={176}
+                height={56}
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
