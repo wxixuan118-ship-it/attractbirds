@@ -157,6 +157,16 @@ export function Footer() {
                 style={{ height: "48px", width: "auto" }}
               />
             </a>
+            {/* Markup kept identical to Pro Launch's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://prolaunch.net" target="_blank" title="Pro Launch Featured Badge">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://prolaunch.net/images/badges/featured-light.svg"
+                alt="Pro Launch Featured Badge"
+                style={{ width: "240px", height: "auto" }}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
