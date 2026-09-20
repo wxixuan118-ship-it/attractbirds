@@ -83,6 +83,15 @@ export function Footer() {
                 loading="lazy"
               />
             </a>
+            <a href="https://acidtools.com/ai/attractbirds" target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://acidtools.com/assets/images/badge.png"
+                alt="Acid Tools"
+                height={54}
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
