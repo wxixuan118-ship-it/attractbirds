@@ -125,6 +125,17 @@ export function Footer() {
                 height={54}
               />
             </a>
+            {/* Markup kept identical to FoundrList's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://www.foundrlist.com/product/attractbirds?utm_source=badge&utm_medium=embed" target="_blank" rel="noopener">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.foundrlist.com/api/badge/attractbirds"
+                alt="Featured on FoundrList"
+                width={150}
+                height={48}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
