@@ -73,6 +73,16 @@ export function Footer() {
                 loading="lazy"
               />
             </a>
+            <a href="https://awesomeindie.com/?ref=badge" target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://awesomeindie.com/images/badges/awesome-indie-launching-soon-light.svg"
+                alt="AttractBirds.app — Launching soon on Awesome Indie"
+                width={184}
+                height={54}
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
