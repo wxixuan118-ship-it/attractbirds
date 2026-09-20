@@ -114,6 +114,17 @@ export function Footer() {
                 height={32}
               />
             </a>
+            {/* Markup kept identical to DodoDirectory's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://dododirectory.com" target="_blank" rel="dofollow">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://dododirectory.com/badge-light.png"
+                alt="Featured on DodoDirectory"
+                width={200}
+                height={54}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
