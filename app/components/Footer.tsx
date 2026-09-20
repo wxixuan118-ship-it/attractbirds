@@ -147,6 +147,16 @@ export function Footer() {
                 height={58}
               />
             </a>
+            {/* Markup kept identical to NxGn Tools' snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://www.nxgntools.com/tools/attractbirds-app?utm_source=attractbirds-app" target="_blank" rel="noopener" style={{ display: "inline-block", width: "auto" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.nxgntools.com/api/embed/attractbirds-app?type=LAUNCHING_SOON_ON"
+                alt="Launching soon on NxGn Tools"
+                style={{ height: "48px", width: "auto" }}
+              />
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
