@@ -10,6 +10,10 @@ import { getStateContent, type StateContent } from "../../../data/state-content"
 import { getStateStaticParams, getStatePageData, type StateBirdEntry } from "../../../lib/location-repository";
 import { busiestMonths, occurrenceAttribution } from "../../../lib/occurrence-data";
 import { SITE } from "../../../lib/url-registry";
+import groupImages from "../../../data/group-images.json";
+
+type BirdImage = { species: string; src: string; width: number; height: number; credit: string; creditUrl: string; license: string; licenseUrl: string };
+const GROUP_IMAGES = groupImages as Record<string, BirdImage>;
 
 export function generateStaticParams() {
   return getStateStaticParams();
@@ -26,7 +30,10 @@ export async function generateMetadata({
 
   const content = getStateContent(state);
   // Titles are kept under 60 characters, so they skip the site-wide " | AttractBirds.app" suffix.
-  const title = content?.title ?? `Birds in ${stateData.name}: Common Backyard Birds & Birding Guide`;
+  // Long state names (e.g. "North Carolina") push the default phrasing past 60 — drop "Common" to fit.
+  const longFormTitle = `Birds in ${stateData.name}: Common Backyard Birds & Birding Guide`;
+  const fallbackTitle = longFormTitle.length <= 60 ? longFormTitle : `Birds in ${stateData.name}: Backyard Birds & Birding Guide`;
+  const title = content?.title ?? fallbackTitle;
   const description =
     content?.description ??
     `Birds in ${stateData.name}: ${stateData.speciesCount}+ species, the common backyard birds, a month-by-month calendar, and the best birding spots near ${stateData.popularCities[0]}.`;
@@ -117,6 +124,14 @@ export default async function StatePage({
   const pageUrl = `${SITE.origin}/birds-by-location/${state.slug}`;
   const spots = content?.spots ?? state.topBirdingSpots.map((s) => ({ ...s, url: undefined }));
   const speciesLine = content ? undefined : `${totalSpecies}+`;
+
+  // Template states (no researched `content`) borrow a licensed species photo already
+  // used on that bird's own profile page, so the hero always has a real, credited image.
+  const fallbackHeroBird = !content ? [...backyardBirds, ...commonBirds].find((b) => GROUP_IMAGES[b.slug]) : undefined;
+  const fallbackHeroImage = fallbackHeroBird ? GROUP_IMAGES[fallbackHeroBird.slug] : undefined;
+  const busiestFallbackMonths = !content
+    ? [...monthlyHighlights].sort((a, b) => b.birds.length - a.birds.length).slice(0, 3).map((h) => h.month)
+    : [];
 
   const jsonLd: Record<string, unknown>[] = [
     {
@@ -220,6 +235,24 @@ export default async function StatePage({
               </figcaption>
             </figure>
           )}
+          {!content && fallbackHeroImage && fallbackHeroBird && (
+            <figure className="state-hero-figure">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={fallbackHeroImage.src}
+                alt={`${fallbackHeroBird.commonName}, one of the most common backyard birds in ${state.name}`}
+                width={fallbackHeroImage.width}
+                height={fallbackHeroImage.height}
+                fetchPriority="high"
+                decoding="async"
+              />
+              <figcaption>
+                {fallbackHeroBird.commonName} is a common backyard bird in {state.name}. Photo:{" "}
+                <a href={fallbackHeroImage.creditUrl} rel="noopener noreferrer" target="_blank">{fallbackHeroImage.credit}</a>,{" "}
+                <a href={fallbackHeroImage.licenseUrl} rel="noopener noreferrer license" target="_blank">{fallbackHeroImage.license}</a>, via Wikimedia Commons.
+              </figcaption>
+            </figure>
+          )}
           <div className="location-stats">
             <div className="location-stat">
               <strong>{speciesLine ?? totalSpecies}</strong>
@@ -264,7 +297,10 @@ export default async function StatePage({
         {commonBirds.length > 0 && (
           <section className="loc-section">
             <div className="loc-section-header">
-              <h2>Common Birds in {state.name}</h2>
+              {/* Template states keep this H2 keyword-free — "Backyard Birds in {state}" below already
+                  carries the exact phrase, and repeating it here just pushes keyword density too high
+                  on the (shorter) template pages. */}
+              <h2>{content ? `Common Birds in ${state.name}` : "Common Birds"}</h2>
               <p>
                 {occurrences ? (
                   <>
@@ -397,7 +433,7 @@ export default async function StatePage({
         {monthlyHighlights.length > 0 && (
           <section className="loc-section">
             <div className="loc-section-header">
-              <h2>Birds in {state.name} by Month</h2>
+              <h2>{content ? `Birds in ${state.name} by Month` : `${state.name} Bird Calendar`}</h2>
               <p>
                 {occurrences ? (
                   <>
@@ -535,6 +571,39 @@ export default async function StatePage({
                 Whether you&rsquo;re a backyard birder in {state.popularCities[0]} or planning a trip to{" "}
                 {spots[0]?.name}, this guide covers the most commonly seen species, seasonal patterns,
                 and practical tips for attracting and identifying birds in {state.name}.
+              </p>
+              <p style={{ marginTop: "16px" }}>
+                {state.name}&rsquo;s most reported backyard visitors include{" "}
+                {backyardBirds.slice(0, 3).map((b, i, arr) => (
+                  <span key={b.slug}>
+                    {i > 0 && (i === arr.length - 1 ? ", and " : ", ")}
+                    {b.commonName}
+                  </span>
+                ))}
+                . These species readily use sunflower seed, suet, and a reliable water source, and are
+                usually the first to find a new feeder. For identification, diet, and nest-box specifics on
+                these and other North American species,{" "}
+                <a href="https://www.allaboutbirds.org" rel="noopener noreferrer" target="_blank">
+                  Cornell Lab of Ornithology&rsquo;s All About Birds
+                </a>{" "}
+                is a reliable primary source.
+              </p>
+              <p style={{ marginTop: "16px" }}>
+                Sightings are not spread evenly across the year.{" "}
+                {busiestFallbackMonths.length > 0 ? (
+                  <>
+                    {state.name} birders report the widest mix of species in{" "}
+                    {busiestFallbackMonths.join(", ")}, when migrants moving along the {state.flyway} Flyway
+                    pass through alongside the state&rsquo;s year-round residents.
+                  </>
+                ) : (
+                  <>
+                    Migrants moving along the {state.flyway} Flyway pass through alongside the state&rsquo;s
+                    year-round residents, so the mix of species shifts with the seasons.
+                  </>
+                )}{" "}
+                {spots[0]?.name}, covered above, is one place in {state.name} where that seasonal traffic is
+                easiest to see.
               </p>
             </div>
           </section>
