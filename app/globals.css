@@ -481,6 +481,7 @@ h1, h2, h3, p { margin-top: 0; }
 
 .planner-card {
   background: white;
+  color: var(--text);
   border-radius: var(--radius);
   padding: 32px;
   box-shadow: 0 24px 60px rgba(0,0,0,.18);
@@ -800,7 +801,8 @@ a.alphabet-link:hover { background: var(--green); color: white; }
 .footer-partners-badges::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
 .footer-partners-badges a { display: inline-flex; flex: 0 0 auto; line-height: 0; opacity: .9; transition: opacity .15s; }
 .footer-partners-badges a:hover { opacity: 1; }
-.footer-partners-badges img { display: block; height: 32px; width: auto; }
+/* !important beats the inline sizes some directories' badge snippets ship with; their markup must stay verbatim for verification. */
+.footer-partners-badges img { display: block; height: 32px !important; width: auto !important; max-width: none !important; }
 .footer-bottom {
   display: flex;
   justify-content: space-between;
