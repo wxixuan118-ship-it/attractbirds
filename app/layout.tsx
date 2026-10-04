@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/logo.png" },
   openGraph: { type: "website", siteName: SITE.brand, title: "Bring more birds to your backyard", description: "Local, practical guidance for building a backyard birds will return to.", images: [{ url: "/og.png", width: 1200, height: 630, alt: `${SITE.brand} — Bring more birds to your backyard` }] },
   twitter: { card: "summary_large_image", title: "Bring more birds to your backyard", description: "Local, practical guidance for building a backyard birds will return to.", images: ["/og.png"] },
+  other: { "saashub-verification": "w9f33jre8m5l" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
