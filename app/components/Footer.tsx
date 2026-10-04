@@ -191,6 +191,17 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 height={30}
               />
             </a>
+            {/* Markup kept identical to Twelve Tools' snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://twelve.tools" target="_blank">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://twelve.tools/badge1-light.svg"
+                alt="Featured on Twelve Tools"
+                width={148}
+                height={40}
+              />
+            </a>
           </div>
         </div>
         )}
