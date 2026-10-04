@@ -202,6 +202,26 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 height={40}
               />
             </a>
+            {/* Markup kept identical to Startup Fame's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://startupfa.me/s/attractbirds?utm_source=attractbirds.app" target="_blank">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://startupfa.me/badges/featured-badge-small.webp"
+                alt="AttractBirds - Featured on Startup Fame"
+                width={224}
+                height={36}
+              />
+            </a>
+            {/* Markup kept identical to TinyLaunch's snippet so their badge verifier can match it. */}
+            <a href="https://tinylaunch.com" target="_blank" rel="noopener">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://tinylaunch.com/tinylaunch_badge_launching_soon.svg"
+                alt="TinyLaunch Badge"
+                style={{ width: "202px", height: "auto" }}
+              />
+            </a>
           </div>
         </div>
         )}
