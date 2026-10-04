@@ -402,3 +402,23 @@ test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sour
     assert.match(html, /<sup class="cite"><a href="https?:\/\/[^"]+" rel="noopener noreferrer"/, path);
   }
 });
+
+test("feeder calculator is embeddable: noindex widget page, snippet with credit link on the tool page", async () => {
+  const embed = await render("/embed/bird-feeder-calculator");
+  assert.equal(embed.status, 200);
+  const embedHtml = await embed.text();
+  assert.match(embedHtml, /class="calculator"/);
+  assert.match(embedHtml, /name="robots" content="noindex, follow"/);
+  assert.match(embedHtml, /rel="canonical" href="https:\/\/attractbirds\.app\/tools\/bird-feeder-calculator"/);
+  assert.match(embedHtml, /<a href="https:\/\/attractbirds\.app\/tools\/bird-feeder-calculator"[^>]*>AttractBirds\.app<\/a>/);
+  assert.doesNotMatch(embedHtml, /class="site-header"|class="site-footer"/);
+
+  const tool = await render("/tools/bird-feeder-calculator");
+  const toolHtml = await tool.text();
+  assert.match(toolHtml, /Add this bird feeder calculator to your site/);
+  // The credit link must sit outside the iframe in the copied snippet.
+  assert.match(toolHtml, /&lt;\/iframe&gt;\n&lt;p [^\n]*?&gt;Bird feeder calculator by &lt;a href=&quot;https:\/\/attractbirds\.app\/tools\/bird-feeder-calculator&quot;&gt;AttractBirds\.app/);
+
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /\/embed\//);
+});

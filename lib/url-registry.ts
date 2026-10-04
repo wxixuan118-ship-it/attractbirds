@@ -10,6 +10,7 @@ export const URL_REGISTRY = {
   birdFood: "/bird-food",
   birdProblems: { noBirdsAtFeeder: "/bird-problems/no-birds-at-feeder" },
   tools: { feederCalculator: "/tools/bird-feeder-calculator" },
+  embed: { feederCalculator: "/embed/bird-feeder-calculator" },
   howTo: { hub: "/how-to-attract", guide: (slug: string) => `/how-to-attract/${slug}`, species: (birdSlug: string) => `/how-to-attract/${birdSlug}` },
 } as const;
 
