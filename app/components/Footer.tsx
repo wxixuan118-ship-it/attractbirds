@@ -232,6 +232,17 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </a>
+            {/* Markup kept identical to LaunchIgniter's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://launchigniter.com/product/attractbirds?ref=badge-attractbirds" target="_blank">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://launchigniter.com/api/badge/attractbirds?theme=light"
+                alt="Featured on LaunchIgniter"
+                width={212}
+                height={55}
+              />
+            </a>
           </div>
         </div>
         )}
