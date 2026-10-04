@@ -20,7 +20,7 @@ export function HowToLinks({ exclude = [] }: { exclude?: string[] }) {
       <div className="chip-list">
         {HOW_TO_URLS.filter(({ slug }) => !exclude.includes(`/how-to-attract/${slug}`)).map(({ slug }) => <Link href={`/how-to-attract/${slug}`} key={slug}>{GUIDE_LABELS[slug] ?? slug} →</Link>)}
         {SPECIES.filter(([slug]) => !exclude.includes(`/how-to-attract/${slug}`)).map(([slug, label]) => <Link href={`/how-to-attract/${slug}`} key={slug}>How to attract {label.toLowerCase()} →</Link>)}
-        {!exclude.includes("/how-to-attract") && <Link href="/how-to-attract">All guides →</Link>}
+        {!exclude.includes("/how-to-attract") && <Link href="/how-to-attract">All bird attraction guides →</Link>}
       </div>
     </section>
   );

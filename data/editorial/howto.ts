@@ -19,6 +19,8 @@ const AUDUBON_YARD = { id: 3, label: "National Audubon Society — How to Make Y
 const AUDUBON_NATIVE = (id: number) => ({ id, label: "National Audubon Society — Why Native Plants Matter", url: "https://www.audubon.org/content/why-native-plants-matter" });
 const NESTWATCH = (id: number) => ({ id, label: "NestWatch (Cornell Lab of Ornithology) — Features of a Good Birdhouse", url: "https://nestwatch.org/learn/all-about-birdhouses/features-of-a-good-birdhouse/" });
 const ABA = (id: number) => ({ id, label: "American Birding Association — ABA Code of Birding Ethics", url: "https://www.aba.org/aba-code-of-birding-ethics/" });
+const FW_SICK = (id: number) => ({ id, label: "Project FeederWatch — Sick Birds and Bird Diseases", url: "https://feederwatch.org/learn/sick-birds-and-bird-diseases/" });
+const AUDUBON_WINTER = (id: number) => ({ id, label: "Audubon Great Lakes (National Audubon Society) — Winter Bird Feeding 101", url: "https://www.audubon.org/great-lakes/news/winter-bird-feeding-101" });
 const aab = (id: number, slug: string, name: string) => ({ id, label: `All About Birds (Cornell Lab of Ornithology) — ${name}: Overview and Life History`, url: `https://www.allaboutbirds.org/guide/${slug}/overview` });
 
 /** Shared closing section: the three safety rules every guide ends with. */
@@ -92,6 +94,73 @@ export const howtoEditorial: Record<string, EditorialContent> = {
       { question: "What attracts birds to a yard the most?", answer: "Native plants that supply insects, fruit, seed and nectar in layers, plus water and cover; feeders speed things up but habitat keeps birds [1][3]." },
       { question: "Should I rake leaves if I want birds?", answer: "No — Audubon advises leaving fallen leaves and woody debris as a habitat layer that holds the insects and moth pupae baby birds eat [3]." },
     ],
+  }),
+
+  "/how-to-attract/birds-to-a-feeder": guide({
+    path: "/how-to-attract/birds-to-a-feeder", keyword: "how to attract birds to a bird feeder",
+    title: "How to Attract Birds to a Bird Feeder: Food, Spot & Cover",
+    description: "How to attract birds to a bird feeder: match the seed to the birds near you, place it near cover, keep it clean and dry, and change one thing at a time.",
+    image: timg("platform-feeder", "Junco, chickadee and cardinal sharing a feeder — how to attract birds to a bird feeder starts with food the local birds eat"),
+    intro: [
+      "How to attract birds to a bird feeder comes down to four things birds check before they land: food they eat, a feeder they can stand on, cover close enough to escape to, and seed that is clean and dry [1].",
+      "This guide is for a feeder birds ignore or rarely visit; if yours went up in the last week or two, the new-feeder guide covers the first visits. Foods, feeders, placement and cleaning are from Project FeederWatch [1][4]; habitat from Audubon [3]; windows from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract birds to a bird feeder: match the food to the birds", paragraphs: [
+        "Black-oil sunflower is the preferred food item for a wide variety of birds and among the favorite feeder foods of cardinals, chickadees, finches and sparrows, so it is the safest first fill [1]. Then add a food for the birds you are missing: safflower for cardinals and other big-billed birds, though most birds still prefer sunflower; nyjer for American Goldfinch, Pine Siskin and Common Redpoll; millet for smaller ground-foraging birds; cracked corn for doves, quail and sparrows; suet for insect-eating birds [1]. Skip mixes heavy in milo, which most birds leave to waste [1].",
+        "Only birds that live near you in the current season can come, so check which species are reported in your state this month before buying food for a bird that is not there.",
+      ]},
+      { heading: "Choose a feeder the birds can use", paragraphs: [
+        "Large hoppers attract most species and let larger birds such as doves and grackles feed; tube feeders with short perches suit small birds such as finches but exclude grackles and jays; trays attract most species and, placed near the ground, draw juncos, doves and sparrows [1]. If cardinals, jays or doves are the birds you want, a tube on its own will not bring them; add a hopper or tray.",
+      ]},
+      { heading: "Where to put a bird feeder so birds come", paragraphs: [
+        "Place feeders close to natural cover such as trees or shrubs, which offer birds refuge as they wait their turn to feed, but not so close to strong branches that squirrels and cats have a jump-off point — about 10 feet is a good compromise [1]. A loosely stacked brush pile nearby gives ground birds resting and escape cover [1]. Pick a quiet spot that birds can see from that cover and that you can reach easily to refill and clean.",
+        "If the feeder is near a window, do not move it by a rule of thumb: older rules about safe feeder-to-window distances are no longer thought valid, and the fix is to make the glass visible from outside [2].",
+      ]},
+      { heading: "Keep the food clean, dry and safe", paragraphs: [
+        "Clean seed and suet feeders every week or two, and more often during heavy use or wet weather; leftover bits of seed and hulls can harbor pathogens that make birds sick [1]. Throw out wet or clumped seed, and dispose of any fruit that becomes moldy, because some molds create toxins harmful to birds [1]. If you see a sick bird, clean feeders and baths more often, consider disinfecting them, and consider taking the feeders down for a while [1][4].",
+      ]},
+      { heading: "Still no birds at the feeder? Change one thing at a time", paragraphs: [
+        "Work through the likely causes in order, giving each change a week or two before the next: replace the food with fresh black-oil sunflower [1]; move the feeder nearer cover, about 10 feet from jump-off branches [1]; watch for a cat or hawk using the yard; clean the feeder [1]; and check the calendar, because birds use feeders less when wild seed and fruit are plentiful. The no-birds-at-feeder page goes through each cause in more depth, including disease.",
+      ]},
+    ],
+    faq: [
+      { question: "How do I get birds to come to my feeder?", answer: "Fill it with fresh black-oil sunflower, place it about 10 feet from cover, keep it clean and dry, and give birds time to find it [1]." },
+      { question: "What attracts birds to a feeder the most?", answer: "Food they prefer — black-oil sunflower is a favorite of the widest range of feeder birds — in a feeder they can perch on, near cover [1]." },
+      { question: "How long should I wait before changing something?", answer: "A week or two per change is a fair trial; changing several things at once makes it hard to tell what worked." },
+    ],
+    extraSources: [FW_SICK(4)],
+  }),
+
+  "/how-to-attract/birds-in-winter": guide({
+    path: "/how-to-attract/birds-in-winter", keyword: "how to attract birds in winter",
+    title: "How to Attract Birds in Winter: Water, Suet & Shelter",
+    description: "How to attract birds in winter: open water in a sunny spot, suet and sunflower, seed heads and winter berries left standing, and shelter from storms.",
+    image: timg("winterberry", "Red winterberry holly berries — native winter fruit is part of how to attract birds in winter"),
+    intro: [
+      "How to attract birds in winter is about supplying what cold weather takes away: open water, high-energy food and shelter from wind and storms. Audubon's winter guidance pairs native plants with feeders and seed for the stretches when natural food is scarce or under snow and ice [4].",
+      "Which birds you can attract depends on where you live, because many summer birds migrate; check the winter birds reported in your state before planning for a species. Water and shelter advice is from Audubon [3][4]; foods, heaters and cleaning from Project FeederWatch [1]; windows from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract birds in winter with open water", paragraphs: [
+        "Provide water through the winter, especially when there is no snow: use a sturdy bird bath that can withstand freezing and place it in a sunny spot, where it stays visible to birds and stands a better chance of remaining liquid [4]. In freezing climates a bird-bath heater keeps ice from forming; never add antifreeze, which is poisonous to all animals, including birds [1].",
+        "If the bath sits on the ground, arrange a few branches or stones in the water so birds can stand and drink without getting wet — particularly important in winter — and change the water every day to keep it fresh [1].",
+      ]},
+      { heading: "Winter food: suet, sunflower and plants left standing", paragraphs: [
+        "Suet is a good choice for insect-eating birds [1]; in winter a suet feeder can bring Downy and other woodpeckers, titmice, nuthatches, chickadees and the occasional wren, creeper or warbler [4]. Cold weather is also the easiest time to offer it, since FeederWatch warns that suet which has not been specially processed can turn rancid in hot weather [1]. Black-oil sunflower remains the best general seed, a favorite of cardinals, chickadees, finches and sparrows, and millet on a low tray or the ground serves smaller ground-foraging birds [1].",
+        "The garden feeds birds too. Do not deadhead every flower after it blooms, since seed heads are an important source of food during fall and winter [3]. Audubon's fruit plan ends with cedar and holly to sustain birds through cold winter days and nights [3], and leaving fallen leaves and woody debris in place keeps habitat for insects and moth pupae [3].",
+      ]},
+      { heading: "Shelter from winter weather, and feeders that stay dry", paragraphs: [
+        "Provide shelter from winter storms with brush piles or nest boxes, which can double as winter roosting boxes [4]. Place feeders close to natural cover such as trees or shrubs, about 10 feet from branches that squirrels and cats can jump from [1].",
+        "Wet seed is the winter feeder problem. Clean seed and suet feeders more often during wet weather, because leftover seed and hulls can harbor pathogens [1]; brush snow off trays and throw out seed that is wet or clumped. Smaller fills that birds finish in a day or two keep food from sitting in snow, and a roofed hopper or a tube keeps seed drier than an open tray.",
+      ]},
+    ],
+    faq: [
+      { question: "Should I feed birds in winter?", answer: "It helps most when natural food is scarce or under snow and ice; Audubon recommends native plants plus feeders and seed for those periods [4]." },
+      { question: "What is the best food for birds in winter?", answer: "Suet for woodpeckers, nuthatches, chickadees and titmice, and black-oil sunflower for the widest range of seed-eaters [1][4]." },
+      { question: "How do I keep a bird bath from freezing?", answer: "Put a sturdy bath in a sunny spot and use a bird-bath heater or heated bath in freezing weather; never add antifreeze [1][4]." },
+    ],
+    extraSources: [AUDUBON_WINTER(4)],
   }),
 
   "/how-to-attract/birds-to-a-new-feeder": guide({
@@ -198,6 +267,7 @@ export const howtoEditorial: Record<string, EditorialContent> = {
   "/how-to-attract/birds-to-a-balcony": guide({
     path: "/how-to-attract/birds-to-a-balcony", keyword: "balcony birding",
     title: "Balcony Birding: Attracting Birds to an Apartment Balcony",
+    h1: "How to Attract Birds to a Balcony",
     description: "Balcony birding: a window feeder or small tube with hulled seed, a shallow water dish, native plants in containers and safe glass.",
     image: timg("balcony-feeder", "Male house finch at a small feeder — the most reliable bird in balcony birding"),
     intro: [

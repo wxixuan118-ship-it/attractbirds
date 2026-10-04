@@ -11,6 +11,31 @@ import { speciesAttractionBySlug, speciesAttractionGuides } from "../../../data/
 import { getBirdBySlug } from "../../../lib/bird-repository";
 import { SITE, URL_REGISTRY } from "../../../lib/url-registry";
 
+/** Contextual next steps for situation guides: the bird, feeder, plant and season pages each one depends on. */
+const GUIDE_RELATED: Record<string, { label: string; href: string }[]> = {
+  "birds-to-a-feeder": [
+    { label: "Feeder types and the birds they attract", href: URL_REGISTRY.feeders.hub }, { label: "What to feed birds", href: URL_REGISTRY.birdFood },
+    { label: "Attract birds to a new feeder", href: URL_REGISTRY.howTo.guide("birds-to-a-new-feeder") }, { label: "Why no birds are coming to a feeder", href: URL_REGISTRY.birdProblems.noBirdsAtFeeder },
+    { label: "Birds reported in your state", href: URL_REGISTRY.locations.hub },
+  ],
+  "birds-to-a-new-feeder": [
+    { label: "Why no birds are coming to a feeder", href: URL_REGISTRY.birdProblems.noBirdsAtFeeder }, { label: "Attract birds to an established feeder", href: URL_REGISTRY.howTo.guide("birds-to-a-feeder") },
+    { label: "Feeder types and the birds they attract", href: URL_REGISTRY.feeders.hub },
+  ],
+  "birds-in-winter": [
+    { label: "Winter birds by state", href: URL_REGISTRY.seasonal.season("winter") }, { label: "Weather-resistant bird feeders", href: URL_REGISTRY.feeders.detail("weather-resistant") },
+    { label: "Suet feeders and the birds they attract", href: URL_REGISTRY.feeders.forTarget("suet") }, { label: "Bird bath guide", href: URL_REGISTRY.howTo.guide("birds-to-a-bird-bath") },
+  ],
+  "birds-to-a-balcony": [
+    { label: "Window feeders", href: URL_REGISTRY.feeders.detail("window-feeder") }, { label: "Feeders for a small balcony", href: URL_REGISTRY.feeders.detail("for-small-balcony") },
+    { label: "Native plants for birds", href: "/plants/native-plants" },
+  ],
+  "birds-without-a-feeder": [
+    { label: "Plants that attract birds", href: URL_REGISTRY.plants.hub }, { label: "Native plants for birds", href: "/plants/native-plants" },
+    { label: "Bird bath guide", href: URL_REGISTRY.howTo.guide("birds-to-a-bird-bath") },
+  ],
+};
+
 export function generateStaticParams() {
   return [...Object.values(attractionCanonicalSlugByLegacy), ...speciesAttractionGuides.map(({ slug }) => slug)].map((slug) => ({ slug }));
 }
@@ -61,7 +86,7 @@ async function SpeciesGuide({ slug }: { slug: string }) {
     { title: "Add clean water and shelter", body: `Use shallow clean water with open sight lines and nearby escape cover. Nesting: ${bird.nestType}; typical locations include ${(bird.nestLocations ?? []).join(", ")}. Never disturb an active nest.` },
     { title: "Measure without forcing a visit", body: "Keep a simple weekly log of sightings, food condition, water cleaning, and hazards. Change one factor at a time; never use call playback, baiting, or nest disturbance." },
   ];
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "HowTo", name: `How to attract ${guide.name} to your yard`, description: guide.priority, mainEntityOfPage: `${SITE.origin}${canonicalPath}`, step: steps.map((step) => ({ "@type": "HowToStep", name: step.title, text: step.body })) }) }}/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })) }) }}/><div className="breadcrumb"><Link href={URL_REGISTRY.home}>Home</Link> / <Link href={URL_REGISTRY.howTo.hub}>How to attract birds</Link> / {guide.name}</div><section className="content-hero"><div><p className="eyebrow"><span/> Species attraction guide</p><h1>How to attract<br/><em>{guide.name}.</em></h1><p className="lede">{guide.priority}. This plan combines natural habitat, species-appropriate resources, and backyard safety without promising or forcing a visit.</p></div><aside className="fact-panel"><div><small>Species</small><strong>{bird.commonName}</strong></div><div><small>Natural diet</small><strong>{bird.diet}</strong></div><div><small>Best first move</small><strong>{guide.priority}</strong></div></aside></section><div className="content-grid">{steps.map((step, index) => <section className="info-block" key={step.title}><small className="step-number">0{index + 1}</small><h2>{step.title}</h2><p>{step.body}</p></section>)}<section className="info-block wide safety-note"><h2>Important species-specific caution</h2><p>{guide.caution}</p><p>Also keep cats indoors, treat collision-prone windows from the outside, reduce pesticides, and pause feeding if multiple sick birds appear.</p></section><section className="info-block wide"><h2>Continue planning for {bird.commonName}</h2><div className="chip-list"><Link href={URL_REGISTRY.birds.detail(slug)}>Identification and natural history</Link><Link href={URL_REGISTRY.locations.hub}>Check birds by location</Link><Link href={URL_REGISTRY.plants.hub}>Explore bird-friendly plants</Link><Link href={URL_REGISTRY.howTo.hub}>All attraction guides</Link></div></section><section className="info-block wide"><h2>Frequently asked questions</h2>{faq.map((item) => <div key={item.q}><h3>{item.q}</h3><p>{item.a}</p></div>)}</section></div></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "HowTo", name: `How to attract ${guide.name} to your yard`, description: guide.priority, mainEntityOfPage: `${SITE.origin}${canonicalPath}`, step: steps.map((step) => ({ "@type": "HowToStep", name: step.title, text: step.body })) }) }}/><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((item) => ({ "@type": "Question", name: item.q, acceptedAnswer: { "@type": "Answer", text: item.a } })) }) }}/><div className="breadcrumb"><Link href={URL_REGISTRY.home}>Home</Link> / <Link href={URL_REGISTRY.howTo.hub}>How to attract birds</Link> / {guide.name}</div><section className="content-hero"><div><p className="eyebrow"><span/> Species attraction guide</p><h1>How to attract <br/><em>{guide.name}.</em></h1><p className="lede">{guide.priority}. This plan combines natural habitat, species-appropriate resources, and backyard safety without promising or forcing a visit.</p></div><aside className="fact-panel"><div><small>Species</small><strong>{bird.commonName}</strong></div><div><small>Natural diet</small><strong>{bird.diet}</strong></div><div><small>Best first move</small><strong>{guide.priority}</strong></div></aside></section><div className="content-grid">{steps.map((step, index) => <section className="info-block" key={step.title}><small className="step-number">0{index + 1}</small><h2>{step.title}</h2><p>{step.body}</p></section>)}<section className="info-block wide safety-note"><h2>Important species-specific caution</h2><p>{guide.caution}</p><p>Also keep cats indoors, treat collision-prone windows from the outside, reduce pesticides, and pause feeding if multiple sick birds appear.</p></section><section className="info-block wide"><h2>Continue planning for {bird.commonName}</h2><div className="chip-list"><Link href={URL_REGISTRY.birds.detail(slug)}>Identification and natural history</Link><Link href={URL_REGISTRY.locations.hub}>Check birds by location</Link><Link href={URL_REGISTRY.plants.hub}>Explore bird-friendly plants</Link><Link href={URL_REGISTRY.howTo.hub}>All attraction guides</Link></div></section><section className="info-block wide"><h2>Frequently asked questions</h2>{faq.map((item) => <div key={item.q}><h3>{item.q}</h3><p>{item.a}</p></div>)}</section></div></>;
 }
 
 export default async function AttractionGuidePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -73,6 +98,7 @@ export default async function AttractionGuidePage({ params }: { params: Promise<
     return (
       <EditorialPage content={ed} eyebrow={bird ? "How to attract · species guide" : "How to attract · guide"} breadcrumbs={[{ name: "How to attract", path: "/how-to-attract" }, { name: ed.title.split(":")[0].replace(/^How to Attract /, ""), path: ed.path }]}>
         {bird && <section className="loc-section"><div className="loc-section-header"><h2>Related guides for this bird</h2></div><div className="chip-list"><a href={`/birds/${bird}`}>Species profile →</a><a href={`/feeders/for/${bird}`}>Feeder guide →</a><a href={`/plants/for/${bird}`}>Plant guide →</a></div></section>}
+        {GUIDE_RELATED[slug] && <section className="loc-section"><div className="loc-section-header"><h2>Next steps for this guide</h2></div><div className="chip-list">{GUIDE_RELATED[slug].map((item) => <Link href={item.href} key={item.href}>{item.label} →</Link>)}</div></section>}
         <HowToLinks exclude={[ed.path]} />
       </EditorialPage>
     );

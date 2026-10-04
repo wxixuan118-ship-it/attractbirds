@@ -72,7 +72,7 @@ export default async function Home() {
             <span className="hero-badge-dot" />
             Complete beginner guide, with sources
           </div>
-          <h1>How to attract birds<br /><em>to your backyard</em></h1>
+          <h1>How to attract birds <br /><em>to your backyard</em></h1>
           <p className="hero-sub">
             How to attract birds in five steps — food, water, native plants, nest sites and safety — built from Project FeederWatch, Audubon and eBird, with every claim linked to its source.
           </p>
@@ -226,7 +226,7 @@ export default async function Home() {
           <div className="planner-section" id="planner">
             <div className="planner-intro">
               <div className="section-tag" style={{ background: "rgba(126,216,160,.15)", color: "#7ed8a0" }}>AI Yard Planner</div>
-              <h2>Plan a yard<br />that <em>attracts birds</em></h2>
+              <h2>Plan a yard <br />that <em>attracts birds</em></h2>
               <p>Tell us where you live and which birds you want to attract. We&apos;ll generate a tailored plan — native plants, feeder types, water sources, and a seasonal checklist.</p>
               <ul className="planner-checklist">
                 <li><span className="check-dot">✓</span> Local bird recommendations</li>

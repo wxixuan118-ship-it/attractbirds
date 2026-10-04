@@ -705,6 +705,45 @@ export const feederEditorial: Record<string, EditorialContent> = {
     extraSources: [aabSpecies(4, "Black-capped_Chickadee", "Black-capped Chickadee")],
   }),
 
+  "/feeders/for/northern-cardinal": build({
+    path: "/feeders/for/northern-cardinal",
+    keyword: "best bird feeder for cardinals",
+    title: "Best Bird Feeder for Cardinals: Hopper, Tray & Sunflower",
+    description: "The best bird feeder for cardinals is a hopper or tray they can stand on, filled with black-oil sunflower or safflower, plus placement, cover and cleaning.",
+    image: bimg("northern-cardinal", "Male northern cardinal — the best bird feeder for cardinals is a hopper or tray with sunflower"),
+    intro: [
+      "The best bird feeder for cardinals is one a heavy-bodied bird can stand on: nearly any feeder within their range ought to attract Northern Cardinals, and they particularly use sunflower seed [4], but a hopper or tray suits them better than a small-perch tube [1].",
+      "Food preferences are from Audubon [5] and All About Birds [4]; feeder types, placement and cleaning from Project FeederWatch [1][2]; windows from All About Birds [3]. These are feeder types, not product endorsements.",
+    ],
+    sections: [
+      {
+        heading: "Which feeder type works for cardinals",
+        paragraphs: [
+          "Hopper feeder: large hoppers attract most species of feeder birds and allow larger species to feed [1], so a cardinal has room to perch and crack seed. A hopper holds more seed than a tray, which means fewer refills but more seed to keep dry and clean.",
+          "Platform or tray feeder: trays attract most species [1] and give cardinals open, flat footing. The trade-off is that seed sits exposed to rain and droppings, so put out only what is eaten in a day or two and clean the tray often [1].",
+          "Tube feeder: tubes with short perches accommodate small birds such as finches and exclude larger birds such as grackles and jays [1]. On its own a small-perch tube is a poor first choice for cardinals; keep it for finches and add a hopper or tray.",
+        ],
+      },
+      {
+        heading: "What to put in a cardinal feeder",
+        paragraphs: [
+          "Black-oil sunflower first: Audubon calls it your best bet, with striped sunflower and then sunflower chips as cardinals' next favorites, and notes they will also eat safflower, peanuts, cracked corn and suet [5]. FeederWatch lists black-oil sunflower among cardinals' favorite feeder foods, and safflower as a seed that attracts cardinals and other big-billed birds, though most birds prefer sunflower [1].",
+        ],
+      },
+      {
+        heading: "Cover and water near a cardinal feeder",
+        paragraphs: [
+          "Cardinals live in dense shrubby areas such as forest edges, hedgerows, thickets and ornamental landscaping [4], so a feeder with that kind of cover nearby gets used. Audubon also recommends a water source such as a fountain or bird bath, a heated bath where winters freeze, and brush piles for shelter [5].",
+        ],
+      },
+    ],
+    faq: [
+      { question: "What is the best bird feeder for cardinals?", answer: "A hopper or tray feeder filled with black-oil sunflower; small-perch tubes suit finches rather than cardinals [1][5]." },
+      { question: "Do cardinals eat safflower?", answer: "Yes. Safflower attracts cardinals and other big-billed birds, though most birds prefer sunflower [1][5]." },
+    ],
+    extraSources: [aabSpecies(4, "Northern_Cardinal", "Northern Cardinal"), { id: 5, label: "National Audubon Society — How to Attract Northern Cardinals to Your Home", url: "https://www.audubon.org/magazine/how-attract-northern-cardinals-your-home" }],
+  }),
+
   "/feeders/for/blue-jay": build({
     path: "/feeders/for/blue-jay",
     keyword: "blue jay feeder",

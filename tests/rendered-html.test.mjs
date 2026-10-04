@@ -14,6 +14,8 @@ test("renders the AttractBirds homepage", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /<h1>How to attract birds/);
+  // The visual line break must not glue "birds" and "to" together in extracted text.
+  assert.match(html, /<h1>How to attract birds <br\/?>/);
   assert.match(html, /"@type":"HowTo"/);
   assert.match(html, /href="\/birds"[^>]*class="module-card entry-card"/);
   assert.match(html, /href="\/birds-by-location"[^>]*class="module-card entry-card"/);
@@ -97,7 +99,10 @@ test("renders quality-gated seasonal SEO routes", async () => {
 test("renders quality-gated plant SEO routes", async () => {
   const hub = await render("/plants");
   assert.equal(hub.status, 200);
-  assert.match(await hub.text(), /Grow habitat/);
+  const hubHtml = await hub.text();
+  assert.match(hubHtml, /<h1>Plants That Attract Birds<\/h1>/);
+  assert.match(hubHtml, /Grow habitat/);
+  assert.match(hubHtml, /"@type":"BreadcrumbList"/);
 
   const plant = await render("/plants/cardinal-flower");
   assert.equal(plant.status, 200);
@@ -127,7 +132,9 @@ test("renders quality-gated feeder routes and calculator", async () => {
 
   const bird = await render("/feeders/for/northern-cardinal");
   assert.equal(bird.status, 200);
-  assert.match(await bird.text(), /Feeder types for Northern Cardinals/);
+  const birdHtml = await bird.text();
+  assert.match(birdHtml, /<h1>Best Bird Feeder for Cardinals<\/h1>/);
+  assert.match(birdHtml, /"@type":"BreadcrumbList"/);
 
   const food = await render("/feeders/for/nectar");
   assert.equal(food.status, 200);
@@ -159,7 +166,7 @@ test("renders keyword-mapped pillar, food, bird, and plant pages", async () => {
 
   const food = await render("/bird-food");
   assert.equal(food.status, 200);
-  assert.match(await food.text(), /Bird Feed Guide/);
+  assert.match(await food.text(), /<h1>What to Feed Birds: A Bird Feed Guide<\/h1>/);
 
   const oriole = await render("/birds/oriole");
   assert.equal(oriole.status, 200);
@@ -384,6 +391,9 @@ test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sour
     ["/seasonal-birds/summer/ruby-throated-hummingbird", /eBird records by state/],
     ["/bird-problems/no-birds-at-feeder", /feederwatch\.org\/learn\/sick-birds/],
     ["/bird-food", /feederwatch\.org/],
+    ["/how-to-attract/birds-to-a-feeder", /feederwatch\.org\/learn\/sick-birds/],
+    ["/how-to-attract/birds-in-winter", /audubon\.org\/great-lakes\/news\/winter-bird-feeding-101/],
+    ["/feeders/for/northern-cardinal", /audubon\.org\/magazine\/how-attract-northern-cardinals/],
     ["/tools/bird-feeder-calculator", /feederwatch\.org/],
     ["/birds", /checklist\.americanornithology\.org/],
     ["/", /feederwatch\.org/],

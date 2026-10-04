@@ -95,6 +95,7 @@ export const miscEditorial: Record<string, EditorialContent> = {
   "/bird-food": {
     path: "/bird-food", keyword: "bird feed",
     title: "Bird Feed Guide: Which Seed, Suet & Nectar Attracts What",
+    h1: "What to Feed Birds: A Bird Feed Guide",
     description: "Bird feed explained with Project FeederWatch: black-oil sunflower, safflower, nyjer, millet, cracked corn, peanuts, suet and sugar water.",
     image: timg("black-oil-sunflower", "Black-capped chickadee taking a sunflower seed — black-oil sunflower is the bird feed most species prefer"),
     intro: [
