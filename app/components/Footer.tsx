@@ -222,6 +222,16 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 style={{ width: "202px", height: "auto" }}
               />
             </a>
+            {/* Markup kept identical to Whatsthebigdata's snippet so their badge verifier can match it. */}
+            <a href="https://whatsthebigdata.com/ai-tools/" target="_blank" rel="noopener" title="Whatsthebigdata AI Tools Directory">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://whatsthebigdata.com/badges/featured-on-whatsthebigdata-color.png"
+                alt="Featured on Whatsthebigdata"
+                width={240}
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+            </a>
           </div>
         </div>
         )}
