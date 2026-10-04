@@ -255,6 +255,27 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 style={{ height: "54px", width: "auto" }}
               />
             </a>
+            {/* Markup kept identical to Fazier's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://fazier.com/launches/attractbirds.app" target="_blank">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=light"
+                width={120}
+                alt="Fazier badge"
+              />
+            </a>
+            {/* Markup kept identical to Launch Streak's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://launchstreak.dev/education/attractbirds" target="_blank" rel="noopener">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://launchstreak.dev/badge/launch-streak-badge-light.svg"
+                alt="Launched on Launch Streak"
+                width={248}
+                height={68}
+              />
+            </a>
           </div>
         </div>
         )}
