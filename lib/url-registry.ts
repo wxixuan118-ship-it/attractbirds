@@ -9,7 +9,7 @@ export const URL_REGISTRY = {
   feeders: { hub: "/feeders", detail: (slug: string) => `/feeders/${slug}`, forTarget: (target: string) => `/feeders/for/${target}`, comparison: (slug: string) => `/feeders/compare/${slug}` },
   birdFood: "/bird-food",
   birdProblems: { noBirdsAtFeeder: "/bird-problems/no-birds-at-feeder" },
-  tools: { feederCalculator: "/tools/bird-feeder-calculator" },
+  tools: { hub: "/tools", feederCalculator: "/tools/bird-feeder-calculator", nectarCalculator: "/tools/hummingbird-nectar-calculator", birdFinder: "/tools/backyard-bird-finder" },
   embed: { feederCalculator: "/embed/bird-feeder-calculator" },
   howTo: { hub: "/how-to-attract", guide: (slug: string) => `/how-to-attract/${slug}`, species: (birdSlug: string) => `/how-to-attract/${birdSlug}` },
 } as const;

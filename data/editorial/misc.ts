@@ -170,4 +170,87 @@ export const miscEditorial: Record<string, EditorialContent> = {
     ],
     sources: [FW, FW_SICK, AAB_WINDOWS],
   },
+
+  "/tools": {
+    path: "/tools", keyword: "bird feeding tools",
+    title: "Bird Feeding Tools: Feeder, Nectar & Backyard Bird Planners",
+    h1: "Bird feeding tools",
+    description: "Free bird feeding tools: plan a feeder station, mix hummingbird nectar for any feeder size, and see which backyard birds are in your state this month.",
+    image: timg("hummingbird-feeder", "Hummingbird at a nectar feeder — one of the bird feeding tools here mixes nectar for any feeder size"),
+    intro: [
+      "These bird feeding tools turn the rules on this site into quick answers: how many feeders to start with, how much sugar goes into a hummingbird feeder, and which birds to expect in your state this month.",
+      "Every tool applies published guidance — Project FeederWatch on feeders, foods and cleaning [1][2] — and the bird finder uses the same state-by-state seasonality behind the Birds by Location pages, which are checked against eBird records [6].",
+    ],
+    sections: [
+      { heading: "How to use these bird feeding tools", paragraphs: [
+        "Start with the backyard bird finder to see who is actually around, then match food to those birds: black-oil sunflower for cardinals, chickadees, finches and sparrows, nyjer for goldfinches, suet for woodpeckers, and nectar for hummingbirds and orioles [1]. The feeder calculator then sizes the station, and the nectar calculator gets the sugar-to-water ratio right. Whatever you set up, keep it clean: seed feeders every week or two, hummingbird feeders every couple of days [1].",
+      ]},
+    ],
+    faq: [
+      { question: "Are these bird feeding tools free?", answer: "Yes — they run in your browser, need no account and store nothing." },
+      { question: "Where does the advice in the tools come from?", answer: "Feeding, nectar and cleaning rules are Project FeederWatch's [1][2]; state bird lists follow the site's seasonality model, which the state pages check against eBird records [6]." },
+    ],
+    sources: [FW, FW_SICK, EBIRD],
+  },
+
+  "/tools/hummingbird-nectar-calculator": {
+    path: "/tools/hummingbird-nectar-calculator", keyword: "hummingbird nectar calculator",
+    title: "Hummingbird Nectar Calculator: Sugar to Water Ratio for Any Feeder",
+    h1: "Hummingbird nectar calculator",
+    description: "Hummingbird nectar calculator: enter your feeder size and get exact sugar and water for the 1:4 hummingbird mix or 1:6 oriole mix — no red dye.",
+    image: timg("hummingbird-feeder", "Hummingbird feeding at a nectar feeder filled with clear 1:4 sugar water"),
+    schemaType: "HowTo",
+    steps: [
+      { name: "Measure the water", text: "Use the calculator to scale the recipe to your feeder: one part white sugar to four parts water for hummingbirds [1]." },
+      { name: "Dissolve the sugar", text: "Stir the sugar into boiling water until it dissolves completely [1]." },
+      { name: "Cool before filling", text: "Let the nectar cool to room temperature before it goes in the feeder; never add red food coloring, which is harmful [1]." },
+      { name: "Clean and refill often", text: "Empty, clean and refill hummingbird feeders every couple of days, sooner if the nectar turns cloudy [1]." },
+    ],
+    intro: [
+      "This hummingbird nectar calculator scales the standard recipe — one part sugar to four parts water — to the size of your feeder, so you make only what will be used before it needs changing [1].",
+      "The ratio, the boiling-water method and the no-dye rule are Project FeederWatch's [1]; switch the calculator to the oriole mix for the more dilute one-to-six recipe orioles take [1].",
+    ],
+    sections: [
+      { heading: "The hummingbird nectar ratio, explained", paragraphs: [
+        "One part sugar to four parts boiling water, cooled, is the recipe FeederWatch gives for hummingbirds, and it should contain no red food coloring, which is harmful [1]. Orioles take a more dilute one-to-six mix [1]. Measure by volume — a cup of sugar to four cups of water — and use plain white sugar.",
+        "Make less than you think. A feeder that is drained within a couple of days stays fresh; one that sits half-full ferments and grows mold. FeederWatch's guidance is to clean hummingbird feeders every couple of days [1], so size each batch to what your birds drink in that time and store any extra in the refrigerator.",
+      ]},
+      { heading: "Keeping nectar feeders safe", paragraphs: [
+        "Take the feeder apart and wash it with hot water at every refill; if mold appears, scrub it out and disinfect before refilling [1]. If several sick birds appear around your feeders, take them down for a couple of weeks and disinfect them [2].",
+      ]},
+    ],
+    faq: [
+      { question: "What is the sugar to water ratio for hummingbird nectar?", answer: "One part sugar to four parts water — for example ¼ cup of sugar in 1 cup of water [1]." },
+      { question: "Do I need to boil the water?", answer: "FeederWatch's recipe uses boiling water, cooled before filling [1]; it also makes the sugar dissolve fully." },
+      { question: "Should hummingbird nectar be red?", answer: "No. Red food coloring is harmful [1]; clear sugar water in a feeder with red parts is all you need." },
+      { question: "What ratio do orioles need?", answer: "A more dilute one part sugar to six parts water [1]." },
+    ],
+    sources: [FW, FW_SICK],
+  },
+
+  "/tools/backyard-bird-finder": {
+    path: "/tools/backyard-bird-finder", keyword: "what birds are in my area",
+    title: "What Birds Are in My Area? Backyard Bird Finder by State & Month",
+    h1: "Backyard bird finder: what birds are in my area?",
+    description: "What birds are in my area? Pick your state and month to see year-round backyard birds, seasonal visitors and migrants — with arrivals and departures.",
+    image: bimg("northern-cardinal", "Northern cardinal — a year-round backyard bird in most eastern states"),
+    intro: [
+      "What birds are in my area right now? Pick your state and a month and this backyard bird finder sorts about a hundred common backyard species into year-round residents, seasonal visitors, and birds just passing through on migration.",
+      "It uses the same state-by-state seasonality model as the Birds by Location pages, which are checked against eBird records reported 2020–2024 [6]; species accounts link to the profiles built from the Cornell Lab's All About Birds [8].",
+    ],
+    sections: [
+      { heading: "How the backyard bird finder decides who is in your area", paragraphs: [
+        "Each state is assigned a region (East, Central, Mountain, Southwest, Pacific, Alaska, Hawaii) and a winter-climate band, and each bird has a pattern in each region: resident, summer visitor, winter visitor, migrant, or absent, with state-level exceptions at range edges. Summer visitors arrive earlier and leave later in warm states, and early-spring migrants such as robins, bluebirds and blackbirds arrive a month or two ahead of the rest.",
+        "The result is a planning list, not a guarantee: local habitat, elevation and weather decide what visits your yard. For ranked, month-by-month eBird data, open your state's page in Birds by Location [6].",
+      ]},
+      { heading: "Turn the list into visits", paragraphs: [
+        "Once you know which birds are around, feed for them: black-oil sunflower for cardinals, chickadees, finches and sparrows; nyjer for goldfinches and siskins; suet for woodpeckers and nuthatches; millet on a low tray for juncos and sparrows; nectar for hummingbirds and orioles [1]. A shallow bath with moving water draws species that never visit a feeder [1].",
+      ]},
+    ],
+    faq: [
+      { question: "How do I find out what birds are in my area?", answer: "Pick your state and month above for a quick list; for counts from real checklists, see your state's Birds by Location page, built from eBird records [6]." },
+      { question: "Why is a bird I see not on the list?", answer: "The finder covers about a hundred common backyard species and uses statewide patterns, so local specialties, rarities and range-edge birds may be missing." },
+    ],
+    sources: [FW, EBIRD, { id: 8, label: "All About Birds (Cornell Lab of Ornithology) — Bird Guide species accounts", url: "https://www.allaboutbirds.org/guide/" }],
+  },
 };

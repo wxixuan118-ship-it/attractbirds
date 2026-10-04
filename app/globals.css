@@ -632,6 +632,17 @@ body:has(.embed-shell) { background: transparent; }
 .embed-shell .calculator { margin: 0; max-width: none; box-shadow: none; padding: 20px; }
 .embed-credit { margin: 10px 2px 0; font-size: 12px; color: var(--text-muted); }
 .embed-credit a { color: var(--green); font-weight: 700; }
+.calculator input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); background: white; font: inherit; }
+.calculator.finder { grid-template-columns: repeat(2,1fr); }
+.finder-group { margin-top: 22px; }
+.finder-group h3 { font-size: 16px; font-weight: 800; margin: 0 0 4px; }
+.finder-group h3 span { color: var(--green); font-weight: 800; margin-left: 4px; }
+.finder-group > p { color: var(--text-muted); font-size: 13px; margin: 0 0 10px; }
+.finder-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.finder-list li { background: white; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 14px; font-weight: 700; }
+.finder-list a { color: var(--text); }
+.finder-list a:hover { color: var(--green); }
+.finder-list small { color: var(--text-muted); font-size: 11px; font-weight: 600; }
 .info-block {
   background: white;
   border: 1.5px solid var(--border);
@@ -880,7 +891,7 @@ a.alphabet-link:hover { background: var(--green); color: white; }
   .content-hero { grid-template-columns: 1fr; }
   .fact-strip { grid-template-columns: 1fr 1fr; }
   .content-grid { grid-template-columns: 1fr; }
-  .calculator { grid-template-columns: 1fr; }
+  .calculator, .calculator.finder { grid-template-columns: 1fr; }
   .comparison-table > div { grid-template-columns: 1fr; gap: 7px; }
   .info-block.wide { grid-column: auto; }
   .notes-grid { grid-template-columns: 1fr; }

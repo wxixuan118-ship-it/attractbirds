@@ -34,7 +34,10 @@ export async function GET() {
     "/birds/oriole",
     "/plants/bird-of-paradise",
     "/feeders",
-    "/tools/bird-feeder-calculator",
+    URL_REGISTRY.tools.hub,
+    URL_REGISTRY.tools.feederCalculator,
+    URL_REGISTRY.tools.nectarCalculator,
+    URL_REGISTRY.tools.birdFinder,
     "/plants",
   ]);
 
