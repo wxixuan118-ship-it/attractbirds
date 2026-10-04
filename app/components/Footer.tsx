@@ -26,7 +26,8 @@ const links = {
   ],
 };
 
-export function Footer() {
+// Partner badges render on the homepage only, so directory backlinks are not repeated site-wide.
+export function Footer({ showPartners = false }: { showPartners?: boolean }) {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
@@ -49,6 +50,7 @@ export function Footer() {
             </div>
           ))}
         </div>
+        {showPartners && (
         <div className="footer-partners">
           <h4>Partners</h4>
           <div className="footer-partners-badges">
@@ -191,6 +193,7 @@ export function Footer() {
             </a>
           </div>
         </div>
+        )}
         <div className="footer-bottom">
           <span>© 2026 {SITE.brand}. All rights reserved.</span>
           <span>Built for birds. Backed by science.</span>

@@ -240,7 +240,7 @@ export default async function Home() {
 
         </EditorialBody>
       </main>
-      <Footer />
+      <Footer showPartners />
     </div>
   );
 }
