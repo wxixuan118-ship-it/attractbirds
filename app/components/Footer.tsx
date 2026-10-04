@@ -243,6 +243,15 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
                 height={55}
               />
             </a>
+            {/* Markup kept identical to Turbo0's snippet so their badge verifier can match it. */}
+            <a href="https://turbo0.com/item/attractbirdsapp" target="_blank" rel="noopener noreferrer">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://img.turbo0.com/badge-listed-light.svg"
+                alt="Listed on Turbo0"
+                style={{ height: "54px", width: "auto" }}
+              />
+            </a>
           </div>
         </div>
         )}
