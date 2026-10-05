@@ -7,6 +7,7 @@ import { STATE_BY_SLUG } from "../../../data/us-states-data";
 import { SITE } from "../../../lib/url-registry";
 import { getGroupPageData, type GroupPageData, type GroupSpecies } from "../../../lib/group-data";
 import { getStateOccurrences, classifyPresence, PRESENCE_LABEL } from "../../../lib/occurrence-data";
+import { birdInStateHref } from "../../../lib/indexing";
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const list = (items: string[]) => (items.length <= 1 ? items.join("") : `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`);
@@ -87,7 +88,7 @@ function AbsentGroupView({ data }: { data: GroupPageData }) {
   const nearest = data.otherStates.slice(0, 8);
   const occ = getStateOccurrences(state);
   const stateTop = (occ?.birds ?? []).filter((b) => b.reportRank !== null && b.slug).sort((a, b) => (a.reportRank ?? 0) - (b.reportRank ?? 0)).slice(0, 6)
-    .map((b) => ({ slug: b.slug as string, commonName: b.commonName, scientificName: b.scientificName, total: b.total, rank: b.reportRank as number, status: PRESENCE_LABEL[classifyPresence(b, occ?.totalRecords ?? 1).presence], href: b.whitelisted ? `/birds-by-location/${state}/${b.slug}` : `/birds/${b.slug}` }));
+    .map((b) => ({ slug: b.slug as string, commonName: b.commonName, scientificName: b.scientificName, total: b.total, rank: b.reportRank as number, status: PRESENCE_LABEL[classifyPresence(b, occ?.totalRecords ?? 1).presence], href: birdInStateHref(state, b.slug as string) }));
   const image = data.image;
   const faq = [
     {
@@ -176,8 +177,8 @@ function AbsentGroupView({ data }: { data: GroupPageData }) {
               <p>The species that dominate {stateName} eBird records over the same {data.yearsLabel} period, for a sense of scale.</p>
             </div>
             <div className="loc-bird-grid">
-              {stateTop.map((b) => (
-                <BirdProfileLink key={b.slug} href={b.href} className="loc-bird-card" birdName={b.commonName}>
+              {stateTop.filter((b) => b.href).map((b) => (
+                <BirdProfileLink key={b.slug} href={b.href!} className="loc-bird-card" birdName={b.commonName}>
                   <div className="loc-bird-initials">{b.commonName.split(/\s+/).map((x) => x[0]).join("").slice(0, 2)}</div>
                   <span className="loc-bird-name">{b.commonName}</span>
                   <span className="loc-bird-sci">{b.scientificName}</span>
@@ -448,7 +449,7 @@ function PresentGroupView({ data }: { data: GroupPageData }) {
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginTop: "8px" }}>
               <Link href={`/birds-by-location/${state}`} className="header-cta" style={{ display: "inline-block" }}>All birds in {stateName} →</Link>
               <Link href="/feeders" className="region-pill" style={{ display: "inline-block" }}>Feeder guides →</Link>
-              <Link href={`/plants/${state}/native-plants`} className="region-pill" style={{ display: "inline-block" }}>{stateName} native plants →</Link>
+              <Link href="/plants/native-plants" className="region-pill" style={{ display: "inline-block" }}>Native plants for birds →</Link>
             </div>
           </div>
         </section>

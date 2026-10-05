@@ -1,5 +1,4 @@
 import { pilotBirds } from "../data/pilot-birds";
-import { STATE_BY_SLUG, US_STATES_DATA } from "../data/us-states-data";
 
 export const SEASONS = {
   spring: { name: "Spring", months: "March–May", activity: "migration and nesting", focus: "native insects, fresh water, and undisturbed nesting cover", watching: "Early morning is usually most productive. Watch woodland edges, flowering gardens, wetlands, and migration stopovers." },
@@ -15,18 +14,14 @@ export function isSeason(value:string):value is SeasonSlug{return value in SEASO
 export const indexedSeasonalBirds = pilotBirds;
 
 export function resolveSeasonalSlug(slug:string){
-  const state=STATE_BY_SLUG[slug];
-  if(state)return {type:"state" as const,state};
   const bird=indexedSeasonalBirds.find(item=>item.slug===slug);
   if(bird)return {type:"bird" as const,bird};
   return null;
 }
 
 export function getSeasonalStaticParams(){
-  return seasonSlugs.flatMap(season=>[
-    ...US_STATES_DATA.map(state=>({season,slug:state.slug})),
-    ...indexedSeasonalBirds.map(bird=>({season,slug:bird.slug})),
-  ]);
+  // State × season previews are not generated until they have their own data (see lib/indexing.ts).
+  return seasonSlugs.flatMap(season=>indexedSeasonalBirds.map(bird=>({season,slug:bird.slug})));
 }
 
 export function getBirdSeasonCopy(season:SeasonSlug,bird:(typeof pilotBirds)[number]){

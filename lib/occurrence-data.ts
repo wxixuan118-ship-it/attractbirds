@@ -15,6 +15,16 @@ import oregon from "../data/occurrences/oregon.json";
 import rhodeIsland from "../data/occurrences/rhode-island.json";
 import tennessee from "../data/occurrences/tennessee.json";
 import texas from "../data/occurrences/texas.json";
+import georgia from "../data/occurrences/georgia.json";
+import hawaii from "../data/occurrences/hawaii.json";
+import illinois from "../data/occurrences/illinois.json";
+import iowa from "../data/occurrences/iowa.json";
+import kansas from "../data/occurrences/kansas.json";
+import missouri from "../data/occurrences/missouri.json";
+import nebraska from "../data/occurrences/nebraska.json";
+import southDakota from "../data/occurrences/south-dakota.json";
+import virginia from "../data/occurrences/virginia.json";
+import wyoming from "../data/occurrences/wyoming.json";
 
 export type OccurrenceBird = {
   slug: string | null;
@@ -52,7 +62,20 @@ const STATE_OCCURRENCES: Record<string, StateOccurrences> = {
   "rhode-island": rhodeIsland as StateOccurrences,
   tennessee: tennessee as StateOccurrences,
   texas: texas as StateOccurrences,
+  georgia: georgia as StateOccurrences,
+  hawaii: hawaii as StateOccurrences,
+  illinois: illinois as StateOccurrences,
+  iowa: iowa as StateOccurrences,
+  kansas: kansas as StateOccurrences,
+  missouri: missouri as StateOccurrences,
+  nebraska: nebraska as StateOccurrences,
+  "south-dakota": southDakota as StateOccurrences,
+  virginia: virginia as StateOccurrences,
+  wyoming: wyoming as StateOccurrences,
 };
+
+/** States with committed eBird occurrence data. */
+export const OCCURRENCE_STATES = Object.keys(STATE_OCCURRENCES);
 
 export function getStateOccurrences(stateSlug: string): StateOccurrences | undefined {
   return STATE_OCCURRENCES[stateSlug];

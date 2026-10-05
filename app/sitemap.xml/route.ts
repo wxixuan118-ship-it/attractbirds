@@ -5,13 +5,15 @@ import { plantPurposes } from "../../data/pilot-plants";
 import { feederComparisons, feederFoods, feederGuides, feederProblems } from "../../data/pilot-feeders";
 import { pilotBirds } from "../../data/pilot-birds";
 import { attractionGuides, attractionGuidePath } from "../../data/attraction-guides";
-import { getIndexEligibleBirds } from "../../lib/bird-repository";
+import { birdEditorial } from "../../data/editorial/birds";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 import { speciesAttractionGuides } from "../../data/species-attraction-guides";
-import { getGroupStaticParams } from "../../lib/group-data";
+import { getGroupStaticParams, isGroupSlug } from "../../lib/group-data";
+import { getPublishedBirdSlugs, getPublishedCityParams, getPublishedComboParams } from "../../lib/indexing";
+import LASTMOD from "../../data/lastmod.json";
 
 const ORIGIN = SITE.origin;
-const LAST_MODIFIED = "2026-08-11";
+const FILE_DATES = LASTMOD as Record<string, string>;
 
 function escapeXml(value: string) {
   return value.replace(/[<>&'\"]/g, (character) => ({
@@ -19,13 +21,55 @@ function escapeXml(value: string) {
   })[character] ?? character);
 }
 
+/**
+ * The files a URL is rendered from. <lastmod> is the newest git date among
+ * them (data/lastmod.json, written by scripts/generate-lastmod.mjs). Shared
+ * chrome (header, footer, layout) is deliberately not a source.
+ */
+function sourcesFor(path: string): string[] {
+  const [, a = "", b = "", c = ""] = path.split("/");
+  switch (a) {
+    case "":
+      return ["app/page.tsx", "data/editorial/misc.ts"];
+    case "birds-by-location":
+      if (!b) return ["app/birds-by-location/page.tsx"];
+      if (!c) return ["app/birds-by-location/[state]/page.tsx", "lib/location-repository.ts", `data/occurrences/${b}.json`, `data/state-content/${b}.ts`];
+      if (isGroupSlug(c)) return ["app/birds-by-location/[state]/GroupView.tsx", "lib/group-data.ts", `data/occurrences/groups/${b}.json`];
+      return ["app/birds-by-location/[state]/[slug]/page.tsx", "lib/location-repository.ts", `data/occurrences/${b}.json`];
+    case "birds":
+      if (!b) return ["app/birds/page.tsx", "data/editorial/misc.ts"];
+      if (b === "oriole") return ["app/birds/oriole/page.tsx"];
+      return ["app/birds/[slug]/page.tsx", ...(birdEditorial[b] ? ["data/editorial/birds.ts"] : ["lib/bird-repository.ts"])];
+    case "seasonal-birds":
+      return [b ? (c ? "app/seasonal-birds/[season]/[slug]/page.tsx" : "app/seasonal-birds/[season]/page.tsx") : "app/seasonal-birds/page.tsx", "data/editorial/seasonal.ts"];
+    case "feeders":
+      return [b === "compare" ? "app/feeders/compare/[comparison]/page.tsx" : b === "for" ? "app/feeders/for/[target]/page.tsx" : b ? "app/feeders/[slug]/page.tsx" : "app/feeders/page.tsx", "data/editorial/feeders.ts", "data/pilot-feeders.ts"];
+    case "plants":
+      if (b === "bird-of-paradise") return ["app/plants/bird-of-paradise/page.tsx"];
+      return [b === "for" ? "app/plants/for/[bird]/page.tsx" : b ? "app/plants/[slug]/page.tsx" : "app/plants/page.tsx", "data/editorial/plants.ts", "data/pilot-plants.ts"];
+    case "how-to-attract":
+      return [b === "species" || b === "bluebirds" ? `app/how-to-attract/${b}/page.tsx` : b ? "app/how-to-attract/[slug]/page.tsx" : "app/how-to-attract/page.tsx", "data/editorial/howto.ts", "data/attraction-guides.ts", "data/species-attraction-guides.ts"];
+    case "tools":
+      return [b ? `app/tools/${b}/page.tsx` : "app/tools/page.tsx"];
+    case "bird-food":
+      return ["app/bird-food/page.tsx", "data/editorial/misc.ts"];
+    case "bird-problems":
+      return [`app/bird-problems/${b}/page.tsx`, "data/editorial/misc.ts"];
+    default:
+      return [];
+  }
+}
+
+function lastModified(path: string): string | undefined {
+  return sourcesFor(path).map((file) => FILE_DATES[file]).filter(Boolean).sort().pop();
+}
+
 export async function GET() {
+  // Every URL here renders with `index, follow`; non-indexable routes are not generated at all (lib/indexing.ts).
   const paths = new Set<string>([
     "/",
     "/birds",
-    "/birds/seasonal",
     "/seasonal-birds",
-    "/birds/california",
     "/birds-by-location",
     "/bird-problems/no-birds-at-feeder",
     URL_REGISTRY.howTo.hub,
@@ -33,6 +77,7 @@ export async function GET() {
     "/bird-food",
     "/birds/oriole",
     "/plants/bird-of-paradise",
+    "/plants/native-plants",
     "/feeders",
     URL_REGISTRY.tools.hub,
     URL_REGISTRY.tools.feederCalculator,
@@ -41,7 +86,7 @@ export async function GET() {
     "/plants",
   ]);
 
-  for (const bird of await getIndexEligibleBirds()) paths.add(`/birds/${bird.slug}`);
+  for (const slug of getPublishedBirdSlugs()) paths.add(`/birds/${slug}`);
   for (const guide of attractionGuides) paths.add(attractionGuidePath(guide));
   for (const guide of speciesAttractionGuides) paths.add(URL_REGISTRY.howTo.species(guide.slug));
   for (const feeder of feederGuides) paths.add(`/feeders/${feeder.slug}`);
@@ -59,10 +104,15 @@ export async function GET() {
   }
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
   for (const { state, slug } of getGroupStaticParams()) paths.add(`/birds-by-location/${state}/${slug}`);
+  for (const { state, slug } of getPublishedComboParams()) paths.add(`/birds-by-location/${state}/${slug}`);
+  for (const { state, slug } of getPublishedCityParams()) paths.add(`/birds-by-location/${state}/${slug}`);
 
   const body = [...paths]
     .sort()
-    .map((path) => `  <url><loc>${escapeXml(`${ORIGIN}${path}`)}</loc><lastmod>${LAST_MODIFIED}</lastmod></url>`)
+    .map((path) => {
+      const lastmod = lastModified(path);
+      return `  <url><loc>${escapeXml(`${ORIGIN}${path}`)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+    })
     .join("\n");
 
   return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`, {

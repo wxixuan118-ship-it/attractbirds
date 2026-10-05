@@ -10,6 +10,7 @@ import { getStateContent, type StateContent } from "../../../data/state-content"
 import { getStateStaticParams, getStatePageData, type StateBirdEntry } from "../../../lib/location-repository";
 import { busiestMonths, occurrenceAttribution } from "../../../lib/occurrence-data";
 import { SITE } from "../../../lib/url-registry";
+import { birdInStateHref, getPublishedCityParams } from "../../../lib/indexing";
 
 export function generateStaticParams() {
   return getStateStaticParams();
@@ -85,7 +86,7 @@ function Cited({ text, sources }: { text: string; sources: StateContent["sources
 }
 
 function BirdCard({ bird, stateSlug, meta }: { bird: StateBirdEntry; stateSlug: string; meta?: ReactNode }) {
-  const href = bird.href === undefined ? `/birds-by-location/${stateSlug}/${bird.slug}` : bird.href;
+  const href = bird.href === undefined ? birdInStateHref(stateSlug, bird.slug) : bird.href;
   const body = (
     <>
       <div className="loc-bird-initials">{bird.initials}</div>
@@ -117,6 +118,7 @@ export default async function StatePage({
   const pageUrl = `${SITE.origin}/birds-by-location/${state.slug}`;
   const spots = content?.spots ?? state.topBirdingSpots.map((s) => ({ ...s, url: undefined }));
   const speciesLine = content ? undefined : `${totalSpecies}+`;
+  const publishedCities = new Set(getPublishedCityParams().filter((c) => c.state === state.slug).map((c) => c.slug));
 
   const jsonLd: Record<string, unknown>[] = [
     {
@@ -141,7 +143,7 @@ export default async function StatePage({
         "@type": "ListItem",
         position: i + 1,
         name: bird.commonName,
-        ...(bird.href ? { url: `${SITE.origin}${bird.href}` } : bird.href === undefined ? { url: `${SITE.origin}/birds-by-location/${state.slug}/${bird.slug}` } : {}),
+        ...((() => { const href = bird.href === undefined ? birdInStateHref(state.slug, bird.slug) : bird.href; return href ? { url: `${SITE.origin}${href}` } : {}; })()),
       })),
     },
   ];
@@ -246,7 +248,8 @@ export default async function StatePage({
           <div className="city-pills">
             {state.popularCities.map((city) => {
               const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-              return (
+              // Only cities with a published page are links; the rest are plain labels.
+              return publishedCities.has(citySlug) ? (
                 <Link
                   key={city}
                   href={`/birds-by-location/${state.slug}/${citySlug}`}
@@ -255,6 +258,8 @@ export default async function StatePage({
                 >
                   Birds in {city}
                 </Link>
+              ) : (
+                <span key={city} className="city-pill">{city}</span>
               );
             })}
           </div>
@@ -328,7 +333,7 @@ export default async function StatePage({
               <Link href="/feeders/platform-feeder" className="header-cta" style={{ display: "inline-block" }}>
                 Find the right feeder →
               </Link>
-              <Link href={`/plants/${state.slug}/native-plants`} className="region-pill" style={{ display: "inline-block" }}>
+              <Link href="/plants/native-plants" className="region-pill" style={{ display: "inline-block" }}>
                 Bird-friendly plants →
               </Link>
             </div>
@@ -422,8 +427,9 @@ export default async function StatePage({
                           {bird.note && <em className="month-bird-note">{MONTH_NOTE_LABELS[bird.note]}</em>}
                         </span>
                       );
-                      return bird.slug ? (
-                        <Link key={bird.name} href={`/birds-by-location/${state.slug}/${bird.slug}`} style={{ display: "block" }}>
+                      const href = bird.slug ? birdInStateHref(state.slug, bird.slug) : null;
+                      return href ? (
+                        <Link key={bird.name} href={href} style={{ display: "block" }}>
                           {label}
                         </Link>
                       ) : (

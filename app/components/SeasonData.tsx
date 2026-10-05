@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getStateOccurrences, MONTH_NAMES } from "../../lib/occurrence-data";
+import { isComboPublished } from "../../lib/indexing";
 import { US_STATES_DATA } from "../../data/us-states-data";
 import { SEASON_MONTHS } from "../../data/editorial/seasonal";
 
+// The nine states the seasonal editorial copy is written against.
 const DATA_STATES = ["florida", "arizona", "california", "colorado", "oregon", "tennessee", "texas", "michigan", "rhode-island"];
 const stateName = (slug: string) => US_STATES_DATA.find((s) => s.slug === slug)?.name ?? slug;
 const monthLabel = (season: string) => { const m = SEASON_MONTHS[season]; return `${MONTH_NAMES[m[0]]}–${MONTH_NAMES[m[m.length - 1]]}`; };
@@ -34,13 +36,20 @@ export function SeasonSpeciesData({ season, birdSlug, birdName }: { season: stri
           {" "}Records are eBird checklists reported 2020–2024 and retrieved through GBIF.
         </p>
         <div className="loc-bird-grid">
-          {rows.map((r) => (
-            <Link key={r.state} href={`/birds-by-location/${r.state}/${birdSlug}`} className="loc-bird-card" style={{ textDecoration: "none" }}>
-              <span className="loc-bird-name">{r.name}</span>
-              <span className="loc-bird-status">{pct(r.seasonShare)} of {season} records</span>
-              <span className="loc-bird-meta">{r.seasonRecords.toLocaleString("en-US")} records · {pct(r.yearShare)} year-round</span>
-            </Link>
-          ))}
+          {rows.map((r) => {
+            const body = (
+              <>
+                <span className="loc-bird-name">{r.name}</span>
+                <span className="loc-bird-status">{pct(r.seasonShare)} of {season} records</span>
+                <span className="loc-bird-meta">{r.seasonRecords.toLocaleString("en-US")} records · {pct(r.yearShare)} year-round</span>
+              </>
+            );
+            return isComboPublished(r.state, birdSlug) ? (
+              <Link key={r.state} href={`/birds-by-location/${r.state}/${birdSlug}`} className="loc-bird-card" style={{ textDecoration: "none" }}>{body}</Link>
+            ) : (
+              <div key={r.state} className="loc-bird-card loc-bird-card-static">{body}</div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -68,7 +77,7 @@ export function SeasonTopBirds({ season }: { season: string }) {
           <p key={s.state}>
             <strong>{s.name}:</strong>{" "}
             {s.rows.map((r, i) => (
-              <span key={r.slug}>{i > 0 && ", "}<Link href={`/birds-by-location/${s.state}/${r.slug}`}>{r.name}</Link> ({r.ratio.toFixed(1)}× its annual share)</span>
+              <span key={r.slug}>{i > 0 && ", "}{isComboPublished(s.state, r.slug) ? <Link href={`/birds-by-location/${s.state}/${r.slug}`}>{r.name}</Link> : r.name} ({r.ratio.toFixed(1)}× its annual share)</span>
             ))}
           </p>
         ))}

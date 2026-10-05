@@ -4,6 +4,7 @@ import { Footer } from "./components/Footer";
 import { PlannerForm } from "./components/PlannerForm";
 import { BirdProfileLink } from "./components/BirdProfileLink";
 import { getPublishedBirds } from "../lib/bird-repository";
+import { isBirdProfilePublished } from "../lib/indexing";
 import { Cited, EditorialBody, EditorialHero, EditorialIntro, JsonLd, editorialJsonLd, editorialMetadata } from "./components/Editorial";
 import { miscEditorial } from "../data/editorial/misc";
 import { birdEditorial } from "../data/editorial/birds";
@@ -16,7 +17,7 @@ export const metadata: Metadata = editorialMetadata(content);
 
 /** The three entry points into the site's data, requested for the top of the page. */
 const entries = [
-  { icon: "🦜", title: "Bird encyclopedia", copy: "Sourced profiles of the commonest backyard birds — cardinal, chickadee, goldfinch, robin, jay — plus the 1,000-species AOS checklist A–Z.", href: URL_REGISTRY.birds.hub, cta: "Browse the birds" },
+  { icon: "🦜", title: "Bird encyclopedia", copy: "Sourced profiles of the commonest backyard birds — cardinal, chickadee, goldfinch, robin, jay — plus an A–Z of U.S. backyard and feeder species.", href: URL_REGISTRY.birds.hub, cta: "Browse the birds" },
   { icon: "📍", title: "Birds by state", copy: "A page for every state, with eBird records for nine so far: which birds are reported near you, in which months, and how often — so you attract what actually lives there.", href: URL_REGISTRY.locations.hub, cta: "Pick your state" },
   { icon: "🧮", title: "Bird feeder tools", copy: "A feeder calculator, guides to every feeder type, and side-by-side comparisons that match feeder and food to the birds you want.", href: URL_REGISTRY.tools.feederCalculator, cta: "Open the feeder tools" },
 ];
@@ -55,7 +56,7 @@ const feederTools = [
 ];
 
 export default async function Home() {
-  const published = await getPublishedBirds();
+  const published = (await getPublishedBirds()).filter((b) => isBirdProfilePublished(b.slug));
   const featuredBirds = published.slice(0, 4);
   const reviewedCount = published.filter((b) => birdEditorial[b.slug]).length;
   const catalogCount = published.length;
@@ -85,7 +86,7 @@ export default async function Home() {
         {/* TRUST BAR */}
         <div className="trust-bar">
           <div className="trust-item"><strong>{reviewedCount}</strong><span>Sourced bird profiles</span></div>
-          <div className="trust-item"><strong>{catalogCount.toLocaleString("en-US")}</strong><span>Species in the A–Z checklist</span></div>
+          <div className="trust-item"><strong>{catalogCount.toLocaleString("en-US")}</strong><span>Backyard species in the A–Z</span></div>
           <div className="trust-item"><strong>9</strong><span>States with eBird data</span></div>
           <div className="trust-item"><strong>{pilotPlants.length}</strong><span>Native plant profiles</span></div>
         </div>

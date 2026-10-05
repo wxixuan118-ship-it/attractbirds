@@ -30,13 +30,14 @@ const commonFaq = [
   { question: "How far should a feeder be from a window?", answer: "Distance rules are no longer considered valid; instead make any nearby window bird-safe with markings spaced no more than 2 inches apart, exterior screens, or hanging cords [3]." },
 ];
 
-type FeederSpec = { path: string; keyword: string; title: string; description: string; image?: EditorialImage; intro: string[]; sections: { heading: string; paragraphs: string[] }[]; faq: { question: string; answer: string }[]; extraSources?: { id: number; label: string; url: string }[] };
+type FeederSpec = { path: string; keyword: string; title: string; h1?: string; description: string; image?: EditorialImage; intro: string[]; sections: { heading: string; paragraphs: string[] }[]; faq: { question: string; answer: string }[]; extraSources?: { id: number; label: string; url: string }[] };
 
 function build(spec: FeederSpec): EditorialContent {
   return {
     path: spec.path,
     keyword: spec.keyword,
     title: spec.title,
+    h1: spec.h1,
     description: spec.description,
     image: spec.image,
     intro: spec.intro,
@@ -643,11 +644,12 @@ export const feederEditorial: Record<string, EditorialContent> = {
   "/feeders/for/mourning-dove": build({
     path: "/feeders/for/mourning-dove",
     keyword: "mourning dove feeder",
-    title: "Mourning Dove Feeder: What to Feed Doves & Feeders They Use",
-    description: "The right mourning dove feeder is a platform or the ground: what mourning doves eat (millet, cracked corn, sunflower), how much they eat, and safe feeding.",
+    title: "What to Feed Mourning Doves & the Best Feeder",
+    h1: "What to Feed Mourning Doves & the Best Mourning Dove Feeder",
+    description: "What to feed mourning doves: millet, cracked corn and sunflower, scattered on the ground or a platform — the best mourning dove feeder, how much they eat, and safe feeding.",
     image: bimg("mourning-dove", "Mourning dove on the ground — the best mourning dove feeder is a platform or scattered seed"),
     intro: [
-      "The best mourning dove feeder is not a hanging one: doves feed on the ground and in the open, and All About Birds' advice is to scatter seed, particularly millet, on the ground or on platform feeders [4].",
+      "Feed mourning doves millet, cracked corn or black-oil sunflower — and serve it low. The best mourning dove feeder is not a hanging one: doves feed on the ground and in the open, and All About Birds' advice is to scatter seed, particularly millet, on the ground or on platform feeders [4].",
       "Everything below about feeder design, foods, placement and cleaning is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
     ],
     sections: [

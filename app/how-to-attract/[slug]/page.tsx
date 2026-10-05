@@ -10,6 +10,9 @@ import { attractionGuideByCanonicalSlug, attractionCanonicalSlugByLegacy, canoni
 import { speciesAttractionBySlug, speciesAttractionGuides } from "../../../data/species-attraction-guides";
 import { getBirdBySlug } from "../../../lib/bird-repository";
 import { SITE, URL_REGISTRY } from "../../../lib/url-registry";
+import { isBirdProfilePublished } from "../../../lib/indexing";
+import { resolveFeederFor } from "../../../lib/feeder-repository";
+import { getBirdPlantGuide } from "../../../lib/plant-repository";
 
 /** Contextual next steps for situation guides: the bird, feeder, plant and season pages each one depends on. */
 const GUIDE_RELATED: Record<string, { label: string; href: string }[]> = {
@@ -97,7 +100,7 @@ export default async function AttractionGuidePage({ params }: { params: Promise<
     const bird = speciesAttractionBySlug[slug] ? slug : null;
     return (
       <EditorialPage content={ed} eyebrow={bird ? "How to attract · species guide" : "How to attract · guide"} breadcrumbs={[{ name: "How to attract", path: "/how-to-attract" }, { name: ed.title.split(":")[0].replace(/^How to Attract /, ""), path: ed.path }]}>
-        {bird && <section className="loc-section"><div className="loc-section-header"><h2>Related guides for this bird</h2></div><div className="chip-list"><a href={`/birds/${bird}`}>Species profile →</a><a href={`/feeders/for/${bird}`}>Feeder guide →</a><a href={`/plants/for/${bird}`}>Plant guide →</a></div></section>}
+        {bird && <section className="loc-section"><div className="loc-section-header"><h2>Related guides for this bird</h2></div><div className="chip-list">{isBirdProfilePublished(bird) && <a href={`/birds/${bird}`}>Species profile →</a>}{resolveFeederFor(bird) && <a href={`/feeders/for/${bird}`}>Feeder guide →</a>}{getBirdPlantGuide(bird) && <a href={`/plants/for/${bird}`}>Plant guide →</a>}</div></section>}
         {GUIDE_RELATED[slug] && <section className="loc-section"><div className="loc-section-header"><h2>Next steps for this guide</h2></div><div className="chip-list">{GUIDE_RELATED[slug].map((item) => <Link href={item.href} key={item.href}>{item.label} →</Link>)}</div></section>}
         <HowToLinks exclude={[ed.path]} />
       </EditorialPage>

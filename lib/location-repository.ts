@@ -7,12 +7,13 @@
  * renders with useful content.
  */
 
-import { US_STATES_DATA, BACKYARD_BIRDS_BY_STATE, BACKYARD_BIRDS_BY_REGION, STATE_BY_SLUG, CITIES, CITY_MAP, getCitiesForState, getFallbackCityData, type USState, type CityData } from "../data/us-states-data";
+import { US_STATES_DATA, BACKYARD_BIRDS_BY_STATE, BACKYARD_BIRDS_BY_REGION, STATE_BY_SLUG, CITY_MAP, getFallbackCityData, type USState, type CityData } from "../data/us-states-data";
 import { birdWhitelist } from "../data/bird-whitelist";
 import { pilotBirds } from "../data/pilot-birds";
 import { birdCatalog } from "../data/bird-catalog";
 import { getSeasonalPattern, isEarlyMigrant, monthlyPresence, stateClimate, FREQ_PEAK, FREQ_SHOULDER, type Pattern } from "../data/bird-seasonality";
 import { getStateOccurrences, classifyPresence, buildCalendar, relativeByMonth, activeMonths, PRESENCE_LABEL, type OccurrenceBird, type StateOccurrences } from "./occurrence-data";
+import { birdInStateHref, getPublishedCityParams, getPublishedComboParams, isCityPublished, isComboPublished } from "./indexing";
 
 // ─── Types ──────────────────────────────────────────────────────
 
@@ -219,7 +220,7 @@ function birdFromOccurrence(stateSlug: string, occ: OccurrenceBird, totalRecords
   const catalog = occ.slug ? birdCatalog.find((b) => b.slug === occ.slug) : undefined;
   const initials = occ.commonName.split(/\s+/).map((x) => x[0]).join("").slice(0, 2);
   const { presence } = classifyPresence(occ, totalRecords);
-  const href = !occ.slug ? null : occ.whitelisted ? `/birds-by-location/${stateSlug}/${occ.slug}` : catalog ? `/birds/${occ.slug}` : null;
+  const href = occ.slug ? birdInStateHref(stateSlug, occ.slug) : null;
   return {
     slug: occ.slug ?? `gbif-${occ.gbifTaxonKey}`,
     commonName: occ.commonName,
@@ -491,83 +492,44 @@ export type BirdStateData = {
   totalObservations: number;
   avgFrequency: number;
   relatedBirds: StateBirdEntry[];
+  /** Other states with a published page for this bird, nearest first. */
   nearbyStatesWithBird: { slug: string; name: string; abbr: string }[];
+  /** Nearest states where the bird occurs regularly, with distance between state centres. */
+  nearestRegularStates: { slug: string; name: string; abbr: string; miles: number; href: string | null }[];
+  /** Birds in this state that are commonly mistaken for this one. */
+  lookalikes: { slug: string; commonName: string; href: string | null }[];
 };
 
 /**
- * Generate static params for Bird×State combo pages.
- * In static mode: pilot birds × all states + backyard birds × their states.
- * In DB mode: actual bird_occurrence_stats data.
+ * Static params for published Bird×State and city pages (see lib/indexing.ts).
+ * Combinations without eBird evidence or Search Console impressions are not generated.
  */
 export function getComboStaticParams(): { state: string; slug: string }[] {
-  const params: { state: string; slug: string }[] = [];
-  const birdSlugs = new Set<string>();
-
-  // Add pilot birds for all states
-  for (const bird of pilotBirds) {
-    birdSlugs.add(bird.slug);
-  }
-
-  // Add whitelist birds
-  for (const item of birdWhitelist) {
-    birdSlugs.add(item.slug);
-  }
-
-  // Generate combos: each bird × each state
-  for (const state of US_STATES_DATA) {
-    for (const slug of birdSlugs) {
-      params.push({ state: state.slug, slug });
-    }
-  }
-
-  // Add city slugs
-  for (const city of CITIES) {
-    params.push({ state: city.stateSlug, slug: city.slug });
-  }
-
-  // Add fallback cities from state.popularCities
-  for (const state of US_STATES_DATA) {
-    for (const cityName of state.popularCities) {
-      const citySlug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-      // Skip if already in CITIES
-      if (!CITIES.some((c) => c.stateSlug === state.slug && c.slug === citySlug)) {
-        params.push({ state: state.slug, slug: citySlug });
-      }
-    }
-  }
-
-  return params;
+  return [...getPublishedComboParams(), ...getPublishedCityParams()];
 }
 
 /**
  * Resolve a sub-slug under a state page — is it a bird or a city?
  */
 export function resolveSubSlug(stateSlug: string, slug: string): { type: "bird"; birdSlug: string } | { type: "city"; city: CityData } | null {
-  // Check if it's a city first
-  const cityKey = `${stateSlug}:${slug}`;
-  const city = CITY_MAP.get(cityKey);
-  if (city) return { type: "city", city };
-
-  // Check fallback cities (from state.popularCities)
   const state = STATE_BY_SLUG[stateSlug];
-  if (state) {
-    for (const cityName of state.popularCities) {
-      const citySlug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-      if (citySlug === slug) {
-        const fallback = getFallbackCityData(stateSlug, cityName);
-        if (fallback) return { type: "city", city: fallback };
-      }
-    }
+  if (!state) return null;
+
+  if (isCityPublished(stateSlug, slug)) {
+    const city = CITY_MAP.get(`${stateSlug}:${slug}`);
+    if (city) return { type: "city", city };
+    const cityName = state.popularCities.find((name) => citySlugOf(name) === slug);
+    const fallback = cityName ? getFallbackCityData(stateSlug, cityName) : undefined;
+    if (fallback) return { type: "city", city: fallback };
   }
 
-  // Check if it's a bird slug
-  const pilotMatch = pilotBirds.find((b) => b.slug === slug);
-  if (pilotMatch) return { type: "bird", birdSlug: slug };
-
-  const whitelistMatch = birdWhitelist.find((b) => b.slug === slug);
-  if (whitelistMatch) return { type: "bird", birdSlug: slug };
+  if (isComboPublished(stateSlug, slug)) return { type: "bird", birdSlug: slug };
 
   return null;
+}
+
+function citySlugOf(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 }
 
 /**
@@ -725,17 +687,27 @@ export async function getBirdStateData(stateSlug: string, birdSlug: string): Pro
     }
   }
 
-  // Nearby states where this bird occurs: same region first, then the rest of the country.
-  const occursIn = (s: USState) => {
-    const pattern = getSeasonalPattern(birdSlug, s.slug);
-    if (pattern) return pattern !== "absent";
-    return (BACKYARD_BIRDS_BY_STATE[s.slug] ?? BACKYARD_BIRDS_BY_REGION[s.region] ?? []).includes(birdSlug);
-  };
-  const otherStates = US_STATES_DATA.filter((s) => s.slug !== stateSlug && occursIn(s));
-  const nearbyStatesWithBird = [
-    ...otherStates.filter((s) => s.region === state.region),
-    ...otherStates.filter((s) => s.region !== state.region),
-  ].slice(0, 8).map((s) => ({ slug: s.slug, name: s.name, abbr: s.abbr }));
+  const otherStates = US_STATES_DATA
+    .filter((s) => s.slug !== stateSlug)
+    .map((s) => ({ s, miles: milesBetween(state, s) }))
+    .sort((a, b) => a.miles - b.miles);
+  const nearbyStatesWithBird = otherStates
+    .filter(({ s }) => isComboPublished(s.slug, birdSlug))
+    .slice(0, 8)
+    .map(({ s }) => ({ slug: s.slug, name: s.name, abbr: s.abbr }));
+  const nearestRegularStates = otherStates
+    .filter(({ s }) => birdOccursInState(s.slug, birdSlug))
+    .slice(0, 3)
+    .map(({ s, miles }) => ({ slug: s.slug, name: s.name, abbr: s.abbr, miles: Math.round(miles / 10) * 10, href: isComboPublished(s.slug, birdSlug) ? `/birds-by-location/${s.slug}/${birdSlug}` : null }));
+
+  const lookalikeSlugs = [
+    ...(LOOKALIKES[birdSlug] ?? []),
+    ...birdWhitelist.filter((b) => b.slug !== birdSlug && Boolean(bird.family) && birdFromWhitelist(b.slug)?.family === bird.family).map((b) => b.slug),
+  ];
+  const lookalikes = [...new Set(lookalikeSlugs)]
+    .filter((slug) => birdOccursInState(stateSlug, slug))
+    .slice(0, 4)
+    .map((slug) => ({ slug, commonName: birdFromWhitelist(slug)?.commonName ?? slug, href: birdInStateHref(stateSlug, slug) }));
 
   return {
     bird,
@@ -749,8 +721,107 @@ export async function getBirdStateData(stateSlug: string, birdSlug: string): Pro
     avgFrequency,
     relatedBirds,
     nearbyStatesWithBird,
+    nearestRegularStates,
+    lookalikes,
   };
 }
+
+/** Whether the bird is a regular part of the state's avifauna: eBird data when we have it, else the seasonality model. */
+export function birdOccursInState(stateSlug: string, birdSlug: string): boolean {
+  const data = getStateOccurrences(stateSlug);
+  if (data) {
+    const occ = data.birds.find((b) => b.slug === birdSlug);
+    if (!occ || occ.total === 0) return false;
+    const { presence, abundance } = classifyPresence(occ, data.totalRecords);
+    return presence !== "absent" && abundance !== "rare";
+  }
+  const pattern = getSeasonalPattern(birdSlug, stateSlug);
+  if (pattern) return pattern !== "absent";
+  const state = STATE_BY_SLUG[stateSlug];
+  return (BACKYARD_BIRDS_BY_STATE[stateSlug] ?? BACKYARD_BIRDS_BY_REGION[state.region] ?? []).includes(birdSlug);
+}
+
+/** Great-circle distance between two state centroids, in miles. */
+function milesBetween(a: USState, b: USState): number {
+  const rad = Math.PI / 180;
+  const dLat = (b.lat - a.lat) * rad;
+  const dLng = (b.lng - a.lng) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * rad) * Math.cos(b.lat * rad) * Math.sin(dLng / 2) ** 2;
+  return 3959 * 2 * Math.asin(Math.sqrt(h));
+}
+
+/** Backyard birds people commonly confuse with each other; filtered per state to species that actually occur there. */
+const LOOKALIKES: Record<string, string[]> = {
+  "black-billed-magpie": ["northern-mockingbird", "blue-jay", "common-grackle", "american-crow"],
+  "black-chinned-hummingbird": ["ruby-throated-hummingbird", "annas-hummingbird", "costas-hummingbird", "rufous-hummingbird"],
+  "ruby-throated-hummingbird": ["black-chinned-hummingbird", "annas-hummingbird", "rufous-hummingbird"],
+  "annas-hummingbird": ["ruby-throated-hummingbird", "costas-hummingbird", "black-chinned-hummingbird", "rufous-hummingbird"],
+  "costas-hummingbird": ["annas-hummingbird", "black-chinned-hummingbird", "ruby-throated-hummingbird"],
+  "broad-tailed-hummingbird": ["ruby-throated-hummingbird", "rufous-hummingbird", "calliope-hummingbird", "black-chinned-hummingbird"],
+  "rufous-hummingbird": ["ruby-throated-hummingbird", "broad-tailed-hummingbird", "calliope-hummingbird"],
+  "calliope-hummingbird": ["rufous-hummingbird", "broad-tailed-hummingbird", "ruby-throated-hummingbird"],
+  "black-headed-grosbeak": ["rose-breasted-grosbeak", "baltimore-oriole", "orchard-oriole", "eastern-towhee", "spotted-towhee"],
+  "rose-breasted-grosbeak": ["black-headed-grosbeak", "purple-finch", "eastern-towhee"],
+  "black-capped-chickadee": ["carolina-chickadee", "mountain-chickadee", "chestnut-backed-chickadee", "black-and-white-warbler"],
+  "carolina-chickadee": ["black-capped-chickadee", "mountain-chickadee", "tufted-titmouse"],
+  "mountain-chickadee": ["black-capped-chickadee", "carolina-chickadee"],
+  "chestnut-backed-chickadee": ["black-capped-chickadee", "mountain-chickadee"],
+  "stellers-jay": ["blue-jay", "california-scrub-jay", "woodhouses-scrub-jay"],
+  "blue-jay": ["stellers-jay", "california-scrub-jay", "woodhouses-scrub-jay", "eastern-bluebird"],
+  "california-scrub-jay": ["woodhouses-scrub-jay", "blue-jay", "stellers-jay"],
+  "woodhouses-scrub-jay": ["california-scrub-jay", "blue-jay", "stellers-jay"],
+  "canada-jay": ["northern-mockingbird", "clarks-nutcracker", "blue-jay"],
+  "clarks-nutcracker": ["canada-jay", "northern-mockingbird"],
+  "mountain-bluebird": ["eastern-bluebird", "western-bluebird", "indigo-bunting"],
+  "western-bluebird": ["eastern-bluebird", "mountain-bluebird", "lazuli-bunting"],
+  "eastern-bluebird": ["western-bluebird", "mountain-bluebird", "indigo-bunting"],
+  "lazuli-bunting": ["indigo-bunting", "eastern-bluebird", "western-bluebird"],
+  "painted-bunting": ["indigo-bunting", "american-goldfinch"],
+  "indigo-bunting": ["eastern-bluebird", "lazuli-bunting"],
+  "oak-titmouse": ["tufted-titmouse", "bushtit"],
+  "tufted-titmouse": ["oak-titmouse", "carolina-chickadee"],
+  "winter-wren": ["house-wren", "carolina-wren", "bewicks-wren"],
+  "house-wren": ["carolina-wren", "bewicks-wren", "winter-wren"],
+  "bewicks-wren": ["carolina-wren", "house-wren"],
+  "carolina-wren": ["house-wren", "bewicks-wren"],
+  "rock-wren": ["house-wren", "bewicks-wren"],
+  "spotted-towhee": ["eastern-towhee", "black-headed-grosbeak", "dark-eyed-junco"],
+  "eastern-towhee": ["spotted-towhee", "dark-eyed-junco"],
+  "western-tanager": ["scarlet-tanager", "summer-tanager", "baltimore-oriole"],
+  "summer-tanager": ["northern-cardinal", "scarlet-tanager"],
+  "scarlet-tanager": ["summer-tanager", "northern-cardinal"],
+  "acorn-woodpecker": ["red-headed-woodpecker", "downy-woodpecker"],
+  "lewiss-woodpecker": ["red-headed-woodpecker", "northern-flicker"],
+  "red-headed-woodpecker": ["red-bellied-woodpecker", "downy-woodpecker"],
+  "red-bellied-woodpecker": ["red-headed-woodpecker", "northern-flicker"],
+  "yellow-bellied-sapsucker": ["downy-woodpecker", "hairy-woodpecker"],
+  "american-redstart": ["baltimore-oriole", "orchard-oriole"],
+  "black-and-white-warbler": ["white-breasted-nuthatch", "brown-creeper", "black-capped-chickadee"],
+  "nashville-warbler": ["common-yellowthroat", "yellow-warbler", "orange-crowned-warbler"],
+  "palm-warbler": ["pine-warbler", "yellow-rumped-warbler"],
+  "pine-warbler": ["palm-warbler", "yellow-warbler"],
+  "pine-siskin": ["american-goldfinch", "house-finch", "purple-finch"],
+  "evening-grosbeak": ["american-goldfinch", "pine-siskin"],
+  "fish-crow": ["american-crow", "common-grackle"],
+  "common-ground-dove": ["mourning-dove", "white-winged-dove"],
+  "white-winged-dove": ["mourning-dove", "band-tailed-pigeon"],
+  "band-tailed-pigeon": ["mourning-dove", "white-winged-dove"],
+  "orchard-oriole": ["baltimore-oriole", "american-robin"],
+  "baltimore-oriole": ["orchard-oriole", "american-robin"],
+  "american-tree-sparrow": ["chipping-sparrow", "field-sparrow"],
+  "golden-crowned-kinglet": ["ruby-crowned-kinglet"],
+  "ruby-crowned-kinglet": ["golden-crowned-kinglet"],
+  "gray-catbird": ["northern-mockingbird"],
+  "coopers-hawk": ["red-tailed-hawk", "american-kestrel"],
+  "dark-eyed-junco": ["eastern-towhee", "spotted-towhee"],
+  "european-starling": ["common-grackle", "red-winged-blackbird"],
+  "house-sparrow": ["song-sparrow", "house-finch"],
+  "mourning-dove": ["white-winged-dove", "common-ground-dove"],
+  "american-goldfinch": ["pine-siskin", "yellow-warbler"],
+  "white-breasted-nuthatch": ["red-breasted-nuthatch", "black-capped-chickadee"],
+  "red-breasted-nuthatch": ["white-breasted-nuthatch"],
+  "yellow-rumped-warbler": ["palm-warbler", "pine-warbler"],
+};
 
 // ─── City pages ────────────────────────────────────────────────
 
@@ -799,21 +870,13 @@ export async function getCityPageData(stateSlug: string, citySlug: string): Prom
     .map((slug) => birdBySlug.get(slug) ?? birdFromWhitelist(slug))
     .filter(Boolean) as StateBirdEntry[];
 
-  // Nearby cities in the same state
-  const nearbyCities = getCitiesForState(stateSlug)
-    .filter((c) => c.slug !== citySlug)
-    .map((c) => ({ slug: c.slug, name: c.name, stateSlug: c.stateSlug }));
-
-  // If not enough nearby curated cities, add other popular cities
-  if (nearbyCities.length < 3) {
-    for (const cityName of state.popularCities) {
-      const slug = cityName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-      if (slug !== citySlug && !nearbyCities.some((c) => c.slug === slug)) {
-        nearbyCities.push({ slug, name: cityName, stateSlug });
-      }
-      if (nearbyCities.length >= 5) break;
-    }
-  }
+  // Other published city pages in the same state (unpublished cities are not linked).
+  const nearbyCities = getPublishedCityParams()
+    .filter((c) => c.state === stateSlug && c.slug !== citySlug)
+    .map((c) => {
+      const name = CITY_MAP.get(`${stateSlug}:${c.slug}`)?.name ?? state.popularCities.find((n) => citySlugOf(n) === c.slug) ?? c.slug;
+      return { slug: c.slug, name, stateSlug };
+    });
 
   return {
     city,

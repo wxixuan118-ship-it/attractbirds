@@ -2,10 +2,10 @@ export const SITE = { brand: "AttractBirds.app", origin: "https://attractbirds.a
 
 export const URL_REGISTRY = {
   home: "/",
-  birds: { hub: "/birds", detail: (slug: string) => `/birds/${slug}`, seasonal: "/birds/seasonal", california: "/birds/california", oriole: "/birds/oriole" },
+  birds: { hub: "/birds", detail: (slug: string) => `/birds/${slug}`, oriole: "/birds/oriole" },
   locations: { hub: "/birds-by-location", state: (state: string) => `/birds-by-location/${state}`, detail: (state: string, slug: string) => `/birds-by-location/${state}/${slug}` },
   seasonal: { hub: "/seasonal-birds", season: (season: string) => `/seasonal-birds/${season}`, detail: (season: string, slug: string) => `/seasonal-birds/${season}/${slug}` },
-  plants: { hub: "/plants", detail: (slug: string) => `/plants/${slug}`, forBird: (slug: string) => `/plants/for/${slug}`, nativeByState: (state: string) => `/plants/${state}/native-plants` },
+  plants: { hub: "/plants", detail: (slug: string) => `/plants/${slug}`, forBird: (slug: string) => `/plants/for/${slug}` },
   feeders: { hub: "/feeders", detail: (slug: string) => `/feeders/${slug}`, forTarget: (target: string) => `/feeders/for/${target}`, comparison: (slug: string) => `/feeders/compare/${slug}` },
   birdFood: "/bird-food",
   birdProblems: { noBirdsAtFeeder: "/bird-problems/no-birds-at-feeder" },

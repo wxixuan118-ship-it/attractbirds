@@ -10,8 +10,11 @@ import {
   resolveSubSlug,
   getBirdStateData,
   getCityPageData,
+  type BirdStateData,
 } from "../../../../lib/location-repository";
 import { getGroupPageData, getGroupStaticParams, isGroupSlug } from "../../../../lib/group-data";
+import { birdInStateHref, isBirdProfilePublished } from "../../../../lib/indexing";
+import { pluralizeBird } from "../../../../lib/bird-names";
 import { GroupView, groupMetadata } from "../GroupView";
 
 export function generateStaticParams() {
@@ -37,25 +40,23 @@ export async function generateMetadata({
     if (!data) return { title: "Birds by Location" };
 
     const birdName = data.bird.commonName;
-    const birdPlural = pluralizeBird(birdName);
     const isLowAbundance = data.abundance === "rare" || data.abundance === "accidental" || data.abundance === "uncommon";
-    // Index only pages backed by real occurrence data for a bird that is actually part of the
-    // state's avifauna; "Are there X in Y?" pages for rare/absent birds stay noindex.
-    const indexEligible = data.totalObservations > 0 && (data.abundance === "abundant" || data.abundance === "common" || data.abundance === "uncommon");
+    const { title, description } = isLowAbundance
+      ? {
+          title: `Are There ${searchPlural(birdSlugOf(data), birdName)} in ${stateData.name}? ${data.abundance === "uncommon" ? "Range & Best Months" : "Range & Look-alikes"}`,
+          description: `${directAnswer(data, stateData.name)} ${data.nearestRegularStates.length > 0 ? `Nearest regular range: ${data.nearestRegularStates.map((s) => s.name).join(", ")}.` : ""}`.trim(),
+        }
+      : {
+          title: `${birdName} in ${stateData.name}: ${PRESENCE_TITLES[data.presence] ?? "Seasonal Guide"}${data.presence !== "resident" && data.bestMonths.length > 1 ? `, ${data.bestMonths[0]}–${data.bestMonths[data.bestMonths.length - 1]}` : ""}`,
+          description: `${directAnswer(data, stateData.name)} Monthly eBird activity, identification, and tips for attracting them to your backyard.`,
+        };
 
-    const title = isLowAbundance
-      ? `Are There ${birdPlural} in ${stateData.name}? Range & ${data.abundance === "uncommon" ? "Status" : "Rarity"} Guide`
-      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "Abundant" : "Common"} — Seasonal Guide & Tips`;
-
-    const description = isLowAbundance
-      ? `${birdName} in ${stateData.name}: find out if this species occurs here, where sightings have been reported, and how to identify them. Range, status, and similar species.`
-      : `${birdName} in ${stateData.name}: ${data.abundance === "abundant" ? "abundant" : "common"} ${data.presence === "resident" ? "year-round resident" : "seasonal visitor"}${data.presence !== "resident" && data.bestMonths.length > 0 ? `, best seen in ${data.bestMonths.slice(0, 3).join(", ")}` : ""}. Identification, habitat, and tips for attracting them to your backyard.`;
-
+    // Only published pages resolve here (lib/indexing.ts), and every published page is indexable.
     return {
       title,
-      description,
+      description: description.length > 160 ? description.slice(0, 157) + "…" : description,
       alternates: { canonical: `/birds-by-location/${stateSlug}/${slug}` },
-      robots: { index: indexEligible, follow: true },
+      robots: { index: true, follow: true },
       openGraph: { title, description, type: "article" },
     };
   }
@@ -69,18 +70,45 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: `/birds-by-location/${stateSlug}/${slug}` },
-    robots: { index: false, follow: true },
+    robots: { index: true, follow: true },
     openGraph: { title, description, type: "website" },
   };
 }
 
-function pluralizeBird(name: string): string {
-  const lower = name.toLowerCase();
-  if (lower.endsWith("goose")) return name.slice(0, -5) + "geese";
-  if (lower.endsWith("mouse")) return name.slice(0, -5) + "mice"; // Titmouse → Titmice
-  if (lower.endsWith("finch") || lower.endsWith("thrush")) return name + "es";
-  return name + "s";
+const birdSlugOf = (data: BirdStateData) => data.bird.slug;
+
+/** How people search for some species ("are there magpies in florida"). */
+const SEARCH_NAMES: Record<string, string> = {
+  "black-billed-magpie": "Magpies",
+};
+
+function searchPlural(slug: string, name: string): string {
+  return SEARCH_NAMES[slug] ?? pluralizeBird(name);
 }
+
+const PRESENCE_TITLES: Record<string, string> = {
+  resident: "Year-Round Resident",
+  breeding: "Summer Visitor",
+  winter: "Winter Visitor",
+  migrant: "Spring & Fall Migrant",
+};
+
+/** One-sentence yes/no answer to "Are there X in Y?" / "X in Y", used as the page's first line and meta description. */
+function directAnswer(data: BirdStateData, stateName: string): string {
+  const plural = pluralizeBird(data.bird.commonName);
+  const months = data.bestMonths.length > 1 ? `${data.bestMonths[0]} to ${data.bestMonths[data.bestMonths.length - 1]}` : data.bestMonths[0];
+  if (data.presence === "absent" || data.abundance === "rare" || data.abundance === "accidental") {
+    return `No — ${plural} are not regularly found in ${stateName}; any sighting there is a rare stray.`;
+  }
+  if (data.abundance === "uncommon") {
+    return `Yes, but uncommon — ${plural} occur in ${stateName}${data.presence === "resident" ? " year-round in small numbers" : months ? ` mainly from ${months}` : ""}.`;
+  }
+  const how = data.abundance === "abundant" ? "very common" : "common";
+  if (data.presence === "resident") return `Yes — ${plural} are ${how} in ${stateName} all year.`;
+  const role = data.presence === "breeding" ? "summer breeders" : data.presence === "winter" ? "winter visitors" : "migrants";
+  return `Yes — ${plural} are ${how} ${role} in ${stateName}${months ? `, present from ${months}` : ""}${data.peakMonths.length > 0 ? ` and peaking in ${data.peakMonths[0]}` : ""}.`;
+}
+
 
 const ABUNDANCE_LABELS: Record<string, { label: string; color: string }> = {
   abundant: { label: "Abundant", color: "var(--green-accent)" },
@@ -128,7 +156,8 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
   const data = await getBirdStateData(stateSlug, birdSlug);
   if (!data) notFound();
 
-  const { bird, state, monthlyData, abundance, presence, bestMonths, peakMonths, totalObservations, avgFrequency, relatedBirds, nearbyStatesWithBird } = data;
+  const { bird, state, monthlyData, abundance, presence, bestMonths, peakMonths, totalObservations, relatedBirds, nearbyStatesWithBird, nearestRegularStates, lookalikes } = data;
+  const isAbsent = presence === "absent" || abundance === "rare" || abundance === "accidental";
   const abundanceInfo = ABUNDANCE_LABELS[abundance] ?? ABUNDANCE_LABELS.common;
   const isLowAbundance = abundance === "rare" || abundance === "accidental" || abundance === "uncommon";
   const birdPlural = pluralizeBird(bird.commonName);
@@ -159,7 +188,8 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
             )}
           </h1>
           <p className="lede">
-            {bird.scientificName}{bird.family && ` — ${bird.family}`}
+            <strong>{directAnswer(data, state.name)}</strong>{" "}
+            <span style={{ whiteSpace: "nowrap" }}>{bird.scientificName}{bird.family && ` · ${bird.family}`}</span>
           </p>
 
           {/* Quick stats */}
@@ -199,9 +229,32 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
           <div style={{ fontSize: "15px", lineHeight: 1.7, color: "var(--text-muted)", maxWidth: "760px" }}>
             {isLowAbundance && (
               <p style={{ marginBottom: "12px" }}>
-                {abundance === "accidental" || abundance === "rare"
-                  ? `${birdPlural} are not regularly found in ${state.name}. This species is considered ${abundanceInfo.label.toLowerCase()} here — sightings are exceptional and may represent individuals outside the typical North American range for this species.`
+                {isAbsent
+                  ? `${birdPlural} are not regularly found in ${state.name}.${totalObservations > 0 ? ` eBird holds only ${totalObservations.toLocaleString()} ${state.name} records of this species for 2020–2024, a tiny fraction of the state's checklists — the pattern of occasional strays, not a local population.` : ""} If you think you saw one, check the look-alikes below first, then report it to eBird with a photo.`
                   : `${birdPlural} do occur in ${state.name}, but they are considered ${abundanceInfo.label.toLowerCase()}. Encountering one requires patience and the right habitat${presence === "migrant" ? " during migration windows" : presence === "winter" ? " in winter" : presence === "breeding" ? " during the breeding season" : ""}.`}
+              </p>
+            )}
+            {isLowAbundance && nearestRegularStates.length > 0 && (
+              <p style={{ marginBottom: "12px" }}>
+                <strong>Where to see them instead:</strong> the nearest states where {birdPlural} occur regularly are{" "}
+                {nearestRegularStates.map((s, i) => (
+                  <span key={s.slug}>
+                    {i > 0 && (i === nearestRegularStates.length - 1 ? " and " : ", ")}
+                    {s.href ? <Link href={s.href}>{s.name}</Link> : s.name} (about {s.miles.toLocaleString()} miles away)
+                  </span>
+                ))}.
+              </p>
+            )}
+            {isLowAbundance && lookalikes.length > 0 && (
+              <p style={{ marginBottom: "12px" }}>
+                <strong>Often mistaken for {birdPlural} in {state.name}:</strong>{" "}
+                {lookalikes.map((l, i) => (
+                  <span key={l.slug}>
+                    {i > 0 && (i === lookalikes.length - 1 ? " and " : ", ")}
+                    {l.href ? <Link href={l.href}>{l.commonName}</Link> : l.commonName}
+                  </span>
+                ))}{" "}
+                — these occur regularly in {state.name}, so compare them carefully before concluding you saw a {bird.commonName}.
               </p>
             )}
             <p>{bird.summary}</p>
@@ -272,6 +325,7 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
                 </div>
               ))}
           </div>
+          {isBirdProfilePublished(bird.slug) && (
           <div style={{ marginTop: "20px" }}>
             <BirdProfileLink
               href={`/birds/${bird.slug}`}
@@ -281,6 +335,7 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
               View full {bird.commonName} profile →
             </BirdProfileLink>
           </div>
+          )}
         </section>
 
         {/* Best time to see */}
@@ -324,10 +379,10 @@ async function BirdStateView({ stateSlug, birdSlug }: { stateSlug: string; birdS
               <p>Birds you might also encounter in {state.name}.</p>
             </div>
             <div className="loc-bird-grid">
-              {relatedBirds.map((b) => (
+              {relatedBirds.filter((b) => birdInStateHref(state.slug, b.slug)).map((b) => (
                 <BirdProfileLink
                   key={b.slug}
-                  href={`/birds-by-location/${state.slug}/${b.slug}`}
+                  href={birdInStateHref(state.slug, b.slug)!}
                   className="loc-bird-card"
                   birdName={b.commonName}
                 >
@@ -451,10 +506,10 @@ async function CityView({ stateSlug, citySlug }: { stateSlug: string; citySlug: 
               </p>
             </div>
             <div className="loc-bird-grid">
-              {birds.map((bird) => (
+              {birds.filter((bird) => birdInStateHref(state.slug, bird.slug)).map((bird) => (
                 <BirdProfileLink
                   key={bird.slug}
-                  href={`/birds-by-location/${state.slug}/${bird.slug}`}
+                  href={birdInStateHref(state.slug, bird.slug)!}
                   className="loc-bird-card"
                   birdName={bird.commonName}
                 >
@@ -481,10 +536,10 @@ async function CityView({ stateSlug, citySlug }: { stateSlug: string; citySlug: 
               </p>
             </div>
             <div className="loc-bird-grid">
-              {backyardBirds.map((bird) => (
+              {backyardBirds.filter((bird) => birdInStateHref(state.slug, bird.slug)).map((bird) => (
                 <BirdProfileLink
                   key={bird.slug}
-                  href={`/birds-by-location/${state.slug}/${bird.slug}`}
+                  href={birdInStateHref(state.slug, bird.slug)!}
                   className="loc-bird-card"
                   birdName={bird.commonName}
                 >

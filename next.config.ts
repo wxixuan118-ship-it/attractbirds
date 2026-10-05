@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         destination: "https://attractbirds.app/:path*",
         permanent: true,
       },
+      // Duplicate noindex hub retired in favour of the indexed seasonal hub.
+      { source: "/birds/seasonal", destination: "/seasonal-birds", permanent: true },
+      // Was a temporary (307) redirect from a page component.
+      { source: "/birds/california", destination: "/birds-by-location/california", permanent: true },
     ];
   },
 };

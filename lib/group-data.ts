@@ -15,6 +15,7 @@ import rhodeIsland from "../data/occurrences/groups/rhode-island.json";
 import tennessee from "../data/occurrences/groups/tennessee.json";
 import texas from "../data/occurrences/groups/texas.json";
 import groupImages from "../data/group-images.json";
+import { birdInStateHref } from "./indexing";
 import { BIRD_GROUPS, BIRD_GROUP_BY_SLUG, speciesInGroup, type BirdGroup } from "../data/bird-groups";
 import { birdWhitelist } from "../data/bird-whitelist";
 import { classifyPresence, relativeByMonth, activeMonths, MONTH_NAMES, PRESENCE_LABEL, type OccurrenceBird, type Presence } from "./occurrence-data";
@@ -118,7 +119,7 @@ function toGroupSpecies(stateSlug: string, s: FamilySpecies, totalRecords: numbe
       if (rel[m] >= 0.3 && rel[next] < 0.3) departs = MONTH_NAMES[m];
     }
   }
-  const href = !s.slug ? null : bird.whitelisted ? `/birds-by-location/${stateSlug}/${s.slug}` : `/birds/${s.slug}`;
+  const href = s.slug ? birdInStateHref(stateSlug, s.slug) : null;
   return { ...bird, presence, abundance, statusLabel: PRESENCE_LABEL[presence], activeMonths: active, peakMonth, arrives, departs, sharePct: (100 * s.total / totalRecords).toFixed(s.total / totalRecords >= 0.001 ? 1 : 2), href };
 }
 

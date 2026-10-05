@@ -69,12 +69,12 @@ export const miscEditorial: Record<string, EditorialContent> = {
 
   "/birds": {
     path: "/birds", keyword: "backyard birds",
-    title: "Backyard Birds A–Z: Reviewed Profiles & 1,000-Species List",
+    title: "Backyard Birds A–Z: Reviewed Profiles & U.S. Feeder Species",
     description: "Backyard birds A–Z: eleven sourced profiles of the commonest feeder birds — cardinal, chickadee, goldfinch, robin, jay, hummingbird — plus the AOS checklist.",
     image: bimg("northern-cardinal", "Male northern cardinal — among the most familiar backyard birds in eastern North America"),
     intro: [
       "The backyard birds most people meet are a short list — cardinal, chickadee, titmouse, goldfinch, house finch, robin, blue jay, mourning dove, downy woodpecker, hummingbird, oriole — and each has a reviewed profile here built from the Cornell Lab's All About Birds accounts and eBird records [6][8].",
-      "Below them is the full A–Z catalog: the first 1,000 living species of the American Ornithological Society's North and Middle American checklist [7], most of which are not backyard birds at all, kept for identification and completeness.",
+      "Below them is an A–Z of the U.S. backyard and feeder species covered on this site — the hundred species people report most at feeders and in yards, plus yard regulars such as screech-owls, quail and cuckoos — named and ordered by the American Ornithological Society's checklist [7]. Seabirds, rarities and tropical species are left out because they do not visit backyards.",
     ],
     sections: [
       { heading: "How to identify backyard birds", paragraphs: [
@@ -87,7 +87,7 @@ export const miscEditorial: Record<string, EditorialContent> = {
     ],
     faq: [
       { question: "What are the most common backyard birds?", answer: "In much of the East: Northern Cardinal, Black-capped or Carolina Chickadee, Tufted Titmouse, American Goldfinch, House Finch, American Robin, Blue Jay, Mourning Dove and Downy Woodpecker — all profiled here; the state pages show local rankings from eBird [6]." },
-      { question: "Are all 1,000 birds in the A–Z list backyard birds?", answer: "No — the A–Z follows the AOS checklist, which includes seabirds, tropical species and rarities; the reviewed profiles at the top are the backyard species [7]." },
+      { question: "Why aren't seabirds and rare species listed?", answer: "This is a backyard guide: the A–Z covers species that visit U.S. yards and feeders. Names and order follow the AOS checklist [7], but seabirds, tropical species and rarities that never come to a backyard are not included." },
     ],
     sources: [FW, FW_SICK, AAB_WINDOWS, AUDUBON_YARD, AUDUBON_NATIVE, EBIRD, AOS, { id: 8, label: "All About Birds (Cornell Lab of Ornithology) — Bird Guide species accounts (cited on each profile)", url: "https://www.allaboutbirds.org/guide/" }],
   },
@@ -121,11 +121,12 @@ export const miscEditorial: Record<string, EditorialContent> = {
 
   "/bird-problems/no-birds-at-feeder": {
     path: "/bird-problems/no-birds-at-feeder", keyword: "no birds at feeder",
-    title: "No Birds at Feeder? Seven Causes & Fixes From FeederWatch",
-    description: "No birds at feeder: the seven usual causes — stale seed, natural food in season, no cover, a hawk or cat, a dirty feeder, a new feeder, disease — and the fixes.",
+    title: "Why Are No Birds Coming to My Feeder? 7 Causes & Fixes",
+    h1: "Why Are No Birds Coming to My Feeder?",
+    description: "No birds at feeder? Answer seven quick questions to find the cause — stale seed, season, no cover, a hawk or cat, a dirty or new feeder, disease — and the fix.",
     image: timg("tube-feeder", "American goldfinch on a tube feeder — when there are no birds at feeder, seed, placement and cleanliness are the first checks"),
     intro: [
-      "No birds at feeder is usually one of seven problems, and most are fixed in a day: the seed, the spot, the cover, a predator, the dirt, the calendar, or a feeder that is simply new.",
+      "When no birds are coming to your feeder, it is usually one of seven problems, and most are fixed in a day: the seed, the spot, the cover, a predator, the dirt, the calendar, or a feeder that is simply new. The troubleshooter below narrows it down.",
       "The checks below follow Project FeederWatch's guidance on foods, placement, cleaning and sick birds [1][2] and All About Birds on windows [3].",
     ],
     sections: [

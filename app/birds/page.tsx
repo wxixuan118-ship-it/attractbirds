@@ -5,6 +5,7 @@ import { BirdProfileLink } from "../components/BirdProfileLink";
 import { miscEditorial } from "../../data/editorial/misc";
 import { birdEditorial } from "../../data/editorial/birds";
 import { getPublishedBirds } from "../../lib/bird-repository";
+import { isBirdProfilePublished } from "../../lib/indexing";
 
 const content = miscEditorial["/birds"];
 export const metadata: Metadata = editorialMetadata(content);
@@ -13,7 +14,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 export default async function BirdsPage() {
   // Copy before sorting: the static fallback is a shared module-level array and the homepage relies on its curated order.
-  const birds = [...(await getPublishedBirds())].sort((a, b) => a.commonName.localeCompare(b.commonName));
+  const birds = (await getPublishedBirds()).filter((b) => isBirdProfilePublished(b.slug)).sort((a, b) => a.commonName.localeCompare(b.commonName));
   const reviewed = birds.filter((b) => birdEditorial[b.slug]);
   const groups = alphabet
     .map((letter) => ({ letter, birds: birds.filter((bird) => bird.commonName.toUpperCase().startsWith(letter)) }))

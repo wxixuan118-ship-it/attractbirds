@@ -58,6 +58,9 @@ const shouldUseDatabase=()=>Boolean(process.env.DATABASE_URL)&&process.env.ATTRA
 
 export function getBirdStaticParams(){return birdCatalog.map(({slug})=>({slug}))}
 
+/** Static build snapshot of a profile (no database), for synchronous publish/index decisions in lib/indexing.ts. */
+export function getBirdSnapshot(slug:string){return candidateFallback.find(item=>item.slug===slug)}
+
 export async function getPublishedBirds():Promise<BirdPageData[]>{
   if(!shouldUseDatabase())return candidateFallback;
   try{
