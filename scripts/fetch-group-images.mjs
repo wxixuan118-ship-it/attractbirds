@@ -70,6 +70,7 @@ const EXTRA_SPECIES = [
   { slug: "northern-cardinal", commonName: "Northern Cardinal", scientificName: "Cardinalis cardinalis" },
   { slug: "american-robin", commonName: "American Robin", scientificName: "Turdus migratorius" },
   { slug: "tufted-titmouse", commonName: "Tufted Titmouse", scientificName: "Baeolophus bicolor" },
+  { slug: "killdeer", commonName: "Killdeer", scientificName: "Charadrius vociferus" },
 ];
 async function exact(title) {
   const d = await api({ titles: title, prop: "imageinfo", iiprop: "url|extmetadata|size", iiurlwidth: 1280 });

@@ -372,5 +372,16 @@
   "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
   "title": "File:Mourning Dove eating seeds off ground.jpg",
   "desc": "A Mourning Dove seen eating seeds off of ground"
+ },
+ "bird-of-paradise": {
+  "src": "/images/topics/bird-of-paradise.webp",
+  "width": 1280,
+  "height": 903,
+  "credit": "Alvesgaspar",
+  "creditUrl": "https://commons.wikimedia.org/wiki/File:Strelitzia_April_2015-1.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "title": "File:Strelitzia April 2015-1.jpg",
+  "desc": "Bird of Paradise, flower"
  }
 }

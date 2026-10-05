@@ -19,6 +19,7 @@ const OK = new Set(["CC BY 4.0", "CC BY 3.0", "CC BY 2.0", "CC BY-SA 4.0", "CC B
 const BAD = /drawing|illustration|diagram|logo|icon|clipart|map|\.svg|patent|catalog|advert|packaging|label|screenshot/i;
 
 export const TOPICS = [
+  { key: "bird-of-paradise", query: "Strelitzia reginae flower", must: /strelitzia/i },
   { key: "tube-feeder", query: "x", exact: "File:American Goldfinch 3630 (5063387286).jpg" },
   { key: "hopper-feeder", query: "x", exact: "File:20250514 northern cardinal casa PD200398.jpg" },
   { key: "platform-feeder", query: "x", exact: "File:A dark-eyed junco, black-capped chickadee and northern cardinal visiting a feeder at Minnesota Valley National Wildlife Refuge (32021162008).jpg" },

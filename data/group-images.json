@@ -263,6 +263,17 @@
   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "title": "File:House Sparrow – wróbel zwyczajny – Passer domesticus.jpg"
  },
+ "killdeer": {
+  "species": "Killdeer",
+  "src": "/images/birds/killdeer.webp",
+  "width": 1280,
+  "height": 720,
+  "credit": "Paul Danese",
+  "creditUrl": "https://commons.wikimedia.org/wiki/File:20250321_killdeer_hammonasset_beach_sp_PD202793.jpg",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "title": "File:20250321 killdeer hammonasset beach sp PD202793.jpg"
+ },
  "mallard": {
   "species": "Mallard",
   "src": "/images/birds/mallard.webp",

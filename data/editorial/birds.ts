@@ -16,6 +16,46 @@ const aab = (slug: string, name: string) => [
 ];
 
 export const birdEditorial: Record<string, EditorialContent> = {
+  killdeer: {
+    path: "/birds/killdeer",
+    keyword: "killdeer",
+    title: "Killdeer: Identification, Calls, Nesting & Behavior",
+    description: "Killdeer facts from Cornell's All About Birds and eBird: how to identify this plover, its call, why it nests on gravel, the broken-wing display, and its range.",
+    image: img("killdeer", "Killdeer on a gravel beach, showing the two black breast bands"),
+    intro: [
+      "The killdeer (Charadrius vociferus) is a shorebird that lives far from the shore: a long-legged plover of lawns, fields, gravel lots and mudflats, named for its loud, repeated kill-deer call [1].",
+      "This profile draws on the Cornell Lab of Ornithology's All About Birds accounts [1][2] and on eBird records from the states covered on this site [3].",
+    ],
+    sections: [
+      {
+        heading: "Killdeer identification and call",
+        paragraphs: [
+          "Look for a slender, round-headed plover about 20–28 cm long, brown above and white below, with two black breast bands — the double band separates it from other North American plovers, which have one or none. In flight it shows a bright orange-buff rump and a white wing stripe [1].",
+          "The call is the easiest clue: a shrill, far-carrying kill-deer or dee-dee-dee, given from the ground and in flight, often at night during migration. On the ground the bird runs a few steps, stops abruptly, and runs again, the same run-and-pause hunting style used by other plovers [2].",
+        ],
+      },
+      {
+        heading: "Habitat, range and diet",
+        paragraphs: [
+          "Killdeer use open ground with short or no vegetation: lawns, golf courses, athletic fields, pastures, plowed fields, parking lots, sandbars and mudflats [2]. They breed across most of North America; birds from the north move south in fall to the southern United States, Mexico and Central America, and they are among the earliest spring migrants back north [1].",
+          "The diet is mostly invertebrates — earthworms, snails, crayfish, beetles, grasshoppers and fly larvae — with some seeds [2]. They do not visit feeders; open, pesticide-free ground is what supports them.",
+        ],
+      },
+      {
+        heading: "Killdeer nesting and the broken-wing display",
+        paragraphs: [
+          "The nest is a shallow scrape on bare ground, often on gravel — driveways, roadsides, parking lots and flat gravel roofs — sometimes lined with pebbles or shell fragments. Typically four buff eggs with dark blotches are laid, and both parents incubate for roughly three to four weeks [2]. The chicks are precocial: they leave the nest within hours of hatching and feed themselves while the parents guard them [2].",
+          "When a predator or person comes near, an adult performs a broken-wing display, calling loudly, spreading its tail to show the orange rump and dragging a wing as if injured to lead the intruder away; near large animals such as cattle it may instead run at them with feathers fluffed [1]. If you find a nest, mark it a few feet away and give it room until the chicks leave.",
+        ],
+      },
+    ],
+    faq: [
+      { question: "Why is it called a killdeer?", answer: "The name imitates its loud, repeated kill-deer call [1]." },
+      { question: "Why do killdeer nest in gravel?", answer: "They nest in shallow scrapes on open, bare ground, and gravel driveways, lots and roofs look like that natural habitat [2]." },
+      { question: "Is a killdeer dragging its wing hurt?", answer: "Usually not — it is a broken-wing display to lure you away from its eggs or chicks [1]." },
+    ],
+    sources: aab("Killdeer", "Killdeer"),
+  },
   "black-capped-chickadee": {
     path: "/birds/black-capped-chickadee",
     keyword: "black-capped chickadee",
@@ -519,7 +559,7 @@ export const birdEditorial: Record<string, EditorialContent> = {
         ],
       },
       {
-        heading: "Ruby-throated hummingbird habitat and range",
+        heading: "Habitat and range",
         paragraphs: [
           "They breed in deciduous woodlands of eastern North America and across the Canadian prairies, in old fields, forest edges, meadows, orchards, stream borders and backyards; on their tropical wintering grounds they live in dry forest, citrus groves, hedgerows and scrub [2].",
         ],
@@ -532,7 +572,7 @@ export const birdEditorial: Record<string, EditorialContent> = {
         ],
       },
       {
-        heading: "Ruby-throated hummingbird nesting",
+        heading: "Nesting and young",
         paragraphs: [
           "Females build the nest alone on a slender, often descending branch of a deciduous tree such as oak, hornbeam, birch, poplar or hackberry, usually 10–40 feet up — and sometimes on loops of chain, wire or extension cord [1][2]. The nest takes 6–10 days to finish; clutches are 1–3 tiny white eggs weighing about half a gram, incubated 12–14 days, with the young leaving after 18–22 days; 1–2 broods a year [2].",
         ],

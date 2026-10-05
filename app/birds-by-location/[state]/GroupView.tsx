@@ -210,7 +210,7 @@ function AbsentGroupView({ data }: { data: GroupPageData }) {
         )}
 
         <section className="loc-section loc-prose" style={{ background: "var(--card)" }}>
-          <div className="loc-section-header"><h2>{Kw}: FAQ</h2></div>
+          <div className="loc-section-header"><h2>Frequently asked questions</h2></div>
           <div className="prose">
             {faq.map((f) => (
               <div key={f.q} className="faq-item"><h3>{f.q}</h3><p>{f.a}</p></div>
@@ -229,7 +229,7 @@ function AbsentGroupView({ data }: { data: GroupPageData }) {
         </section>
 
         <section className="loc-section loc-prose" style={{ paddingBottom: "64px" }}>
-          <div className="loc-section-header"><h2>{Kw}: sources</h2></div>
+          <div className="loc-section-header"><h2>Sources</h2></div>
           <div className="prose">
             <p>
               Every number on this page comes from the <a href={data.source.url} rel="noopener noreferrer" target="_blank">{data.source.name}</a> published by the{" "}
@@ -456,7 +456,7 @@ function PresentGroupView({ data }: { data: GroupPageData }) {
 
         <section className="loc-section loc-prose" style={{ background: "var(--card)" }}>
           <div className="loc-section-header">
-            <h2>{Kw}: FAQ</h2>
+            <h2>Frequently asked questions</h2>
           </div>
           <div className="prose">
             {faq.map((f) => (
@@ -493,7 +493,7 @@ function PresentGroupView({ data }: { data: GroupPageData }) {
 
         <section className="loc-section loc-prose" style={{ paddingBottom: "64px" }}>
           <div className="loc-section-header">
-            <h2>{Kw}: sources</h2>
+            <h2>Sources</h2>
           </div>
           <div className="prose">
             <p>

@@ -51,7 +51,7 @@ test("renders encyclopedia and location detail pages", async () => {
   const birdHtml = (await bird.text()).replace(/<!-- -->/g, "");
   assert.match(birdHtml, /Pica hudsonia/);
   // Profiles link to every published State × bird page, including "Are there…?" answers.
-  assert.match(birdHtml, /href="\/birds-by-location\/florida\/black-billed-magpie"[^>]*>Are there Black-billed Magpies in Florida\?/);
+  assert.match(birdHtml, /href="\/birds-by-location\/florida\/black-billed-magpie"[^>]*>Florida</);
 
   const location = await render("/birds-by-location/connecticut/stamford");
   assert.equal(location.status, 200);
@@ -140,7 +140,7 @@ test("renders quality-gated feeder routes and calculator", async () => {
 
   const food = await render("/feeders/for/nectar");
   assert.equal(food.status, 200);
-  assert.match(await food.text(), /Feeders for Hummingbird Nectar/);
+  assert.match(await food.text(), /Hummingbird Nectar Feeder/);
 
   const problem = await render("/feeders/squirrel-proof");
   assert.equal(problem.status, 200);

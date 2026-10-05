@@ -54,6 +54,31 @@ export const seasonalEditorial: Record<string, EditorialContent> = {
     ],
     sources: [EBIRD, FW, HUMMER(3), ORIOLE(4), GOLDFINCH(5), JAY(6), CARDINAL(7), CHICKADEE(8), ROBIN(9)],
   },
+  "/seasonal-birds/winter": {
+    path: "/seasonal-birds/winter", keyword: "winter birds",
+    title: "Winter Birds: Who Stays, Who Arrives & What to Feed Them",
+    description: "Winter birds explained: which backyard birds stay, which arrive from the north, how they survive the cold from December to February, and what to feed them.",
+    image: bimg("northern-cardinal", "Male northern cardinal — one of the most familiar winter birds at backyard feeders"),
+    intro: [
+      "Winter birds are the ones that stay or arrive when insects vanish: cardinals, chickadees, titmice, woodpeckers and jays that live here year-round, plus juncos and other northern birds that come south for the season [3][4][5].",
+      "The behavior below is from All About Birds species accounts [3–8], feeding advice from Project FeederWatch [2], and the state-by-state numbers from eBird records on this site [1].",
+    ],
+    sections: [
+      { heading: "Winter birds that stay all year", paragraphs: [
+        "Northern Cardinals do not migrate; in winter they form flocks of a dozen to several dozen and forage with juncos, sparrows and titmice [3]. Black-capped Chickadees survive cold nights by lowering their body temperature in a controlled hypothermia and roosting in cavities, and they live off food they hid in fall, remembering thousands of cache sites [4]. Downy Woodpeckers join these mixed flocks and roost in cavities they dig in fall [6]. Blue Jays are partly migratory, but some stay through winter everywhere in their range, and a jay that migrated one year may stay the next [5].",
+      ]},
+      { heading: "Winter birds that arrive or change", paragraphs: [
+        "Dark-eyed Juncos breed in northern and mountain forests and spread across most of the United States in winter, which is why many people call them snowbirds [7]. American Goldfinches stay but molt into dull olive-brown, so winter flocks are easy to overlook; they move south only as far as a January minimum of about 0 °F [8]. American Robins that stay north leave lawns for wooded areas with berries and roost together at night [9].",
+        "For winter birds, the most useful foods are high in fat: black-oil sunflower for cardinals, chickadees, titmice and finches; suet for woodpeckers, nuthatches and chickadees; nyjer for goldfinches and siskins; millet scattered on the ground for juncos and doves [2]. Keep seed dry, clear snow from platforms, and add a heated bird bath, because open water is often the scarcest thing in a winter yard [2]. Dense evergreens and brush piles give winter birds cover from wind and hawks.",
+      ]},
+    ],
+    faq: [
+      { question: "What birds stay for the winter?", answer: "Northern Cardinals, Black-capped and Carolina Chickadees, Tufted Titmice, Downy Woodpeckers, nuthatches and many Blue Jays stay year-round across much of the eastern United States [3][4][5][6]." },
+      { question: "What should I feed winter birds?", answer: "High-fat foods: black-oil sunflower, suet, peanuts and nyjer, plus millet on the ground for juncos and doves, and unfrozen water [2]." },
+      { question: "How do small birds survive winter nights?", answer: "Chickadees lower their body temperature at night, shiver to make heat, and roost in tree cavities or nest boxes [4]." },
+    ],
+    sources: [EBIRD, FW, CARDINAL(3), CHICKADEE(4), JAY(5), aab(6, "Downy_Woodpecker", "Downy Woodpecker"), aab(7, "Dark-eyed_Junco", "Dark-eyed Junco"), GOLDFINCH(8), ROBIN(9)],
+  },
   "/seasonal-birds/spring": {
     path: "/seasonal-birds/spring", keyword: "spring birds",
     title: "Spring Birds: Arrivals, Song, Nesting & Window Fights",

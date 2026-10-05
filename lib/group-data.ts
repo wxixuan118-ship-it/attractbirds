@@ -56,6 +56,11 @@ const NAME_FIXES: Record<string, string> = {
 export type GroupImage = { species: string; src: string; width: number; height: number; credit: string; creditUrl: string; license: string; licenseUrl: string; title: string };
 const IMAGES: Record<string, GroupImage> = groupImages as Record<string, GroupImage>;
 
+/** Licensed photo for a species, when one is committed (public/images/birds). */
+export function getBirdImage(slug: string): GroupImage | undefined {
+  return IMAGES[slug];
+}
+
 export type GroupSpecies = OccurrenceBird & {
   presence: Presence;
   abundance: "abundant" | "common" | "uncommon" | "rare";

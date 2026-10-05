@@ -493,4 +493,215 @@ export const howtoEditorial: Record<string, EditorialContent> = {
     ],
     extraSources: [{ id: 4, label: "National Audubon Society — Guide to North American Birds: Eastern Bluebird", url: "https://www.audubon.org/field-guide/bird/eastern-bluebird" }, { id: 5, label: "NestWatch (Cornell Lab of Ornithology) — Eastern Bluebird: nest box placement and measurements", url: "https://nestwatch.org/learn/all-about-birdhouses/birds/eastern-bluebird/" }, NESTWATCH(6)],
   }),
+  // ── Species guides (previously template-only) ─────────────────
+  "/how-to-attract/american-robin": guide({
+    path: "/how-to-attract/american-robin", keyword: "how to attract robins",
+    title: "How to Attract Robins: Fruit, Water & Lawns Without Spray",
+    h1: "How to Attract Robins",
+    description: "How to attract robins: they rarely eat seed, so plant fruiting shrubs, keep a pesticide-free lawn for earthworms, add a bird bath and offer mealworms or fruit.",
+    image: bimg("american-robin", "American robin on a lawn — how to attract robins starts with worms, fruit and water rather than seed"),
+    intro: [
+      "How to attract robins is different from attracting most feeder birds: American Robins rarely eat birdseed. They eat earthworms and insects from lawns in spring and summer and switch to fruit in fall and winter, so a yard with open grass, fruiting plants and water attracts them far better than a seed feeder [4].",
+      "Species facts are from All About Birds [4]; feeder facts from FeederWatch [1]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract robins with food they actually eat", paragraphs: [
+        "Robins hunt earthworms by sight on open, short grass, especially after rain or watering, and they also take beetle grubs, caterpillars and grasshoppers [4]. A lawn free of insecticides keeps that food supply safe. From late summer, fruit takes over: dogwood, sumac, hawthorn, juniper, chokecherry, holly and crabapple all feed robins, and berries that hold on the branch into winter carry the flocks that stay north [4]. Audubon's advice to plant native shrubs that fruit in different seasons fits robins exactly [3].",
+        "At a feeder, robins may take mealworms, chopped apple, raisins soaked in water or berries on a platform or tray, which suits ground-foraging birds [1][4]. Seed mixes will not bring them in.",
+      ]},
+      { heading: "Water and nest sites for robins", paragraphs: [
+        "A shallow bird bath is one of the most effective ways to attract robins, which bathe and drink often; in winter a heated bath can bring robins that otherwise stay in the woods [1][4]. Robins build mud-lined cup nests in trees, shrubs and on ledges, and will use an open nesting shelf under an eave [4]. Keep a small muddy patch in spring for nest building, and hold off on pruning shrubs until fledglings have left.",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best way to attract robins?", answer: "A pesticide-free lawn for earthworms, native fruiting shrubs and trees, and a shallow bird bath; robins rarely eat seed [4]." },
+      { question: "What can I feed robins?", answer: "Mealworms, chopped fruit or soaked raisins on a platform; they ignore most birdseed [1][4]." },
+    ],
+    extraSources: [aab(4, "American_Robin", "American Robin")],
+  }),
+
+  "/how-to-attract/blue-jay": guide({
+    path: "/how-to-attract/blue-jay", keyword: "how to attract blue jays",
+    title: "How to Attract Blue Jays: Peanuts, Oaks & Platform Feeders",
+    h1: "How to Attract Blue Jays",
+    description: "How to attract blue jays: whole peanuts and sunflower on a platform or hopper feeder, native oaks for acorns, a bird bath, and why jays come and go by the year.",
+    image: bimg("blue-jay", "Blue jay perched on a branch — how to attract blue jays starts with peanuts and oaks"),
+    intro: [
+      "How to attract blue jays comes down to their favorite food: nuts. Blue Jays prefer peanuts, sunflower seeds and suet, served on a tray or hopper feeder on a post rather than a small hanging feeder, and they are drawn to yards with oaks [4].",
+      "Species facts are from All About Birds [4]; feeder facts from FeederWatch [1]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract blue jays with peanuts and the right feeder", paragraphs: [
+        "Whole peanuts in the shell are the classic blue jay food: a jay can carry several at once in its throat and bill and flies off to bury them [4]. Peanuts are a favorite of jays at feeders, along with black-oil sunflower and suet [1]. Because jays are large, they use platform feeders and large hoppers easily, while tube feeders with short perches keep them out [1]. Putting peanuts on their own platform, a little away from the seed feeders, keeps the jays from crowding smaller birds.",
+      ]},
+      { heading: "Oaks, water and the migration puzzle", paragraphs: [
+        "Acorns are central to a Blue Jay's diet, and jays bury so many that they are credited with helping oak forests spread after the last glacial period [4]. Planting native oaks — and beeches — is the long-term way to attract blue jays, and Audubon recommends native trees as the backbone of a bird-friendly yard [3]. A bird bath helps too; jays bathe often.",
+        "Do not be surprised if jays vanish for a while. Some Blue Jays migrate and some stay, and the same bird may migrate one year and not the next, so numbers in a yard can change from year to year [4].",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best food to attract blue jays?", answer: "Whole peanuts in the shell, plus black-oil sunflower and suet, on a platform or hopper feeder [1][4]." },
+      { question: "Why did the blue jays leave my yard?", answer: "Some jays migrate in fall and some do not, and individuals change from year to year; they usually return [4]." },
+    ],
+    extraSources: [aab(4, "Blue_Jay", "Blue Jay")],
+  }),
+
+  "/how-to-attract/downy-woodpecker": guide({
+    path: "/how-to-attract/downy-woodpecker", keyword: "how to attract downy woodpeckers",
+    title: "How to Attract Downy Woodpeckers: Suet & Dead Wood",
+    h1: "How to Attract Downy Woodpeckers",
+    description: "How to attract downy woodpeckers: suet in a cage feeder, black-oil sunflower and peanuts, dead branches for foraging and nesting, and native plants.",
+    image: bimg("downy-woodpecker", "Downy woodpecker on a branch — how to attract downy woodpeckers starts with suet"),
+    intro: [
+      "How to attract downy woodpeckers is one of the easier questions in backyard birding: Downies are the woodpecker most likely to visit a feeder, and they readily come to suet, black-oil sunflower, millet and peanuts [4].",
+      "Species facts are from All About Birds [4]; feeder facts from FeederWatch [1]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract downy woodpeckers with suet and seed", paragraphs: [
+        "Suet is the single most reliable draw. Woodpeckers, nuthatches, chickadees and titmice are the birds most attracted to suet [1], and a simple wire cage feeder works well for the small Downy. Downies also take black-oil sunflower and hulled peanuts, and occasionally sip from hummingbird feeders [4]. In warm weather switch to no-melt suet or hang suet in shade, because raw suet goes rancid in heat [1].",
+      ]},
+      { heading: "Dead wood, insects and nest sites", paragraphs: [
+        "In the wild, Downy Woodpeckers eat mostly insects — beetle larvae, ants, caterpillars — picked from bark and from plant stems, including galls on goldenrod [4]. Native trees and shrubs that host insects feed them, which is why Audubon puts native plants first [3]. Leaving dead branches and standing dead trees where they are safe gives Downies both food and nest sites; they excavate a fresh cavity in dead wood each spring and dig separate roost holes for winter [4].",
+        "Downies drum on resonant branches and sometimes gutters in late winter and spring to claim territory — a sign the yard is working, not a problem with the house [4]. In winter they travel with chickadee and titmouse flocks, so a yard that already feeds those birds is usually found by Downies within days.",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best way to attract downy woodpeckers?", answer: "A suet feeder, plus black-oil sunflower or peanuts, and dead branches left for foraging and nesting [1][4]." },
+      { question: "Do downy woodpeckers use nest boxes?", answer: "They usually excavate their own cavity in dead wood, so leaving safe dead branches matters more than a box [4]." },
+    ],
+    extraSources: [aab(4, "Downy_Woodpecker", "Downy Woodpecker")],
+  }),
+
+  "/how-to-attract/house-finch": guide({
+    path: "/how-to-attract/house-finch", keyword: "how to attract house finches",
+    title: "How to Attract House Finches: Sunflower & Clean Feeders",
+    h1: "How to Attract House Finches",
+    description: "How to attract house finches: black-oil sunflower in a tube or hopper, nyjer, nest sites in shrubs and hanging plants, and hygiene that stops eye disease.",
+    image: bimg("house-finch", "Male house finch — how to attract house finches starts with black-oil sunflower"),
+    intro: [
+      "How to attract house finches is mostly a matter of putting out black-oil sunflower: House Finches prefer it over striped sunflower, take millet and nyjer as well, and once they find a feeder they may arrive in flocks of 50 or more [4].",
+      "Species facts are from All About Birds [4]; feeder facts and disease guidance from FeederWatch [1][5]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract house finches to feeders", paragraphs: [
+        "Tube and hopper feeders both work, since House Finches perch easily and are not deterred by short perches [1]. Black-oil sunflower is the preferred food for a wide variety of birds and a House Finch favorite; nyjer and sunflower chips in a fine-port tube attract them along with goldfinches [1][4]. Natural foods are almost entirely plant material — seeds, buds and fruit — and House Finches even feed their nestlings plant food, which is unusual among songbirds [4].",
+      ]},
+      { heading: "Nest sites, and keeping house finches healthy", paragraphs: [
+        "House Finches nest in shrubs and trees, and around houses in hanging plants, ivy, porch lights and building ledges [4]. Males are red, orange or occasionally yellow depending on the pigments in their food, and females prefer the reddest males. Dense native shrubs give them nest sites and cover, in line with Audubon's native-plant advice [3].",
+        "The one thing that matters most with this species is hygiene. They are especially prone to mycoplasmal conjunctivitis, an eye disease spread at feeders that leaves birds with red, swollen or crusty eyes [5]. Wash feeders every week or two, and if you see a sick finch take the feeders down for a couple of weeks and disinfect them before rehanging [1][5].",
+      ]},
+    ],
+    faq: [
+      { question: "What attracts house finches?", answer: "Black-oil sunflower in a tube or hopper feeder, plus nyjer; they come in flocks once they find it [1][4]." },
+      { question: "Why do house finches have swollen eyes?", answer: "Mycoplasmal conjunctivitis, spread at feeders; take feeders down and disinfect them for a couple of weeks [5]." },
+    ],
+    extraSources: [aab(4, "House_Finch", "House Finch"), FW_SICK(5)],
+  }),
+
+  "/how-to-attract/mourning-dove": guide({
+    path: "/how-to-attract/mourning-dove", keyword: "how to attract mourning doves",
+    title: "How to Attract Mourning Doves: Millet, Water & Cover",
+    h1: "How to Attract Mourning Doves",
+    description: "How to attract mourning doves: millet and cracked corn scattered on the ground or a low platform, dense shrubs for nesting, water, and cats kept indoors.",
+    image: bimg("mourning-dove", "Mourning dove on the ground — how to attract mourning doves means feeding low"),
+    intro: [
+      "How to attract mourning doves starts at ground level. Mourning Doves feed on the ground and in the open, and the best way to bring them in is to scatter seed, especially millet, on the ground or on a platform feeder [4].",
+      "Species facts are from All About Birds [4]; feeder facts from FeederWatch [1]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract mourning doves with the right seed", paragraphs: [
+        "Seeds make up about 99 percent of a Mourning Dove's diet [4]. At the feeder that means millet, a favored food of smaller ground-foraging birds, and cracked corn, which attracts doves, quail and sparrows; black-oil sunflower is taken too [1]. Trays placed near the ground are most likely to attract juncos, doves and sparrows [1], and a dove swallows seed whole and stores it in its crop to digest later, so a group can clear a platform quickly [4].",
+      ]},
+      { heading: "Nesting cover, water and safety", paragraphs: [
+        "Mourning Doves build flimsy stick nests in trees, shrubs, vines and on ledges, and dense shrubs or evergreens near the feeding area give them nest sites and cover [4]; native plants recommended by Audubon do double duty as food and shelter [3]. They need water every day, and a shallow bird bath on or near the ground suits them.",
+        "Doves are quick to find scattered seed and often arrive in pairs or small groups, sitting on wires or branches before dropping to the ground to feed. Because doves feed on open ground, they are especially vulnerable to cats [4]. Keep cats indoors, put ground feeding a short dash from cover rather than right beside a hiding spot, and rake up old seed and hulls so disease does not build up [1].",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best food to attract mourning doves?", answer: "Millet and cracked corn scattered on the ground or a low platform feeder [1][4]." },
+      { question: "Will mourning doves use a hanging feeder?", answer: "Rarely; they feed on the ground and open platforms, not small perched feeders [4]." },
+    ],
+    extraSources: [aab(4, "Mourning_Dove", "Mourning Dove")],
+  }),
+
+  "/how-to-attract/tufted-titmouse": guide({
+    path: "/how-to-attract/tufted-titmouse", keyword: "how to attract tufted titmice",
+    title: "How to Attract Tufted Titmice: Sunflower, Suet & Nest Boxes",
+    h1: "How to Attract Tufted Titmice",
+    description: "How to attract tufted titmice: black-oil sunflower, peanuts and suet at feeders, nest boxes and dead trees for nesting, and the winter flocks they lead.",
+    image: bimg("tufted-titmouse", "Tufted titmouse on a branch — how to attract tufted titmice with sunflower and nest boxes"),
+    intro: [
+      "How to attract tufted titmice is straightforward: titmice readily visit feeders for sunflower seeds, suet and peanuts, and they nest in old woodpecker holes and nest boxes [4].",
+      "Species facts are from All About Birds [4]; nest-box guidance from NestWatch [5]; feeder facts from FeederWatch [1]; plant advice from Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract tufted titmice to feeders", paragraphs: [
+        "Black-oil sunflower is the preferred food for a wide variety of birds, titmice included, and suet attracts woodpeckers, nuthatches, chickadees and titmice [1]. Titmice take one seed at a time, fly off to eat or cache it — usually close to the feeder — and return [4], so a tube or hopper kept steadily stocked suits them. Hulled peanuts in a steel-mesh feeder are another favorite.",
+      ]},
+      { heading: "Nest boxes, trees and winter flocks", paragraphs: [
+        "Tufted Titmice nest in natural cavities and old woodpecker holes, and they use nest boxes [4]; a box with the right entrance size, ventilation and drainage, mounted on a pole with a predator guard, follows NestWatch guidance [5]. Mature trees, dead limbs left where safe, and native oaks and beeches that produce nuts support them all year, matching Audubon's emphasis on native plants [3].",
+        "In winter, titmice are often the core of mixed flocks with chickadees, nuthatches and woodpeckers [4], so a yard set up for titmice tends to draw that whole group. Their loud peter-peter-peter song carries a long way in late winter and spring, and listening for it is the easiest way to know titmice are already nearby before you add a feeder.",
+      ]},
+    ],
+    faq: [
+      { question: "What do tufted titmice eat at feeders?", answer: "Black-oil sunflower, suet and peanuts [1][4]." },
+      { question: "Will tufted titmice use a nest box?", answer: "Yes — they nest in cavities and will use a well-made, predator-guarded box [4][5]." },
+    ],
+    extraSources: [aab(4, "Tufted_Titmouse", "Tufted Titmouse"), NESTWATCH(5)],
+  }),
+
+  "/how-to-attract/killdeer": guide({
+    path: "/how-to-attract/killdeer", keyword: "how to attract killdeer",
+    title: "How to Attract Killdeer: Open Ground, Gravel & Safe Nests",
+    h1: "How to Attract Killdeer",
+    description: "How to attract killdeer: open short-grass or gravel ground, shallow water, no feeding needed, and how to protect nests and chicks on lawns and driveways.",
+    image: bimg("killdeer", "Killdeer on gravel — how to attract killdeer means keeping open, bare ground"),
+    intro: [
+      "How to attract killdeer has nothing to do with feeders. Killdeer are shorebirds that live far from shore, on open ground with short or no vegetation — fields, lawns, gravel lots, sandbars and mudflats — and eat insects and other small invertebrates [4].",
+      "Species facts are from All About Birds [4]; general yard advice from FeederWatch [1] and Audubon [3]; window guidance from All About Birds [2].",
+    ],
+    sections: [
+      { heading: "How to attract killdeer with open ground", paragraphs: [
+        "Killdeer forage by running a few steps, stopping and looking, then picking up earthworms, beetles, grasshoppers and other invertebrates from bare or short-grass ground [4]. Open patches of short lawn, gravel or bare soil, and a shallow muddy puddle or wet area, are what attract killdeer; killdeer are not feeder birds, so no supplemental food is needed. Avoiding lawn insecticides keeps their invertebrate food safe [3].",
+      ]},
+      { heading: "Protecting killdeer nests", paragraphs: [
+        "A Killdeer nest is just a shallow scrape on open ground — gravel driveways, parking lots, fields and even flat gravel roofs — lined with a few pebbles, and the speckled eggs are very hard to see [4]. If you find one, mark the area with stakes or flags a few feet away so it is not driven over or mowed, keep pets away, and give the birds room; the chicks leave the nest within a day or so of hatching and follow their parents on foot [4].",
+        "An adult dragging a wing and calling loudly is performing a broken-wing display to lure you away from eggs or chicks [4]. Step back and the bird will return to the nest.",
+      ]},
+    ],
+    faq: [
+      { question: "What attracts killdeer to a yard?", answer: "Open short-grass, gravel or bare ground with insects, and nearby shallow water; they do not come to feeders [4]." },
+      { question: "What should I do if a killdeer nests in my driveway?", answer: "Mark the spot a few feet away, avoid driving or mowing over it, and keep pets back until the chicks leave [4]." },
+    ],
+    extraSources: [aab(4, "Killdeer", "Killdeer")],
+  }),
+
+  "/how-to-attract/birds-to-your-hand": guide({
+    path: "/how-to-attract/birds-to-your-hand", keyword: "how to attract birds to your hand",
+    title: "How to Attract Birds to Your Hand: Chickadees & Patience",
+    h1: "How to Attract Birds to Your Hand",
+    description: "How to attract birds to your hand: which birds hand-feed (chickadees, titmice, nuthatches), the step-by-step routine, the best foods, ethics and hygiene.",
+    image: bimg("black-capped-chickadee", "Black-capped chickadee — how to attract birds to your hand usually starts with chickadees"),
+    intro: [
+      "How to attract birds to your hand is mostly patience: a few bold, curious species — chickadees above all, then titmice and nuthatches — will learn to take food from a still, quiet person who appears at the same place and time every day.",
+      "Feeder and food facts are from FeederWatch [1]; species behavior from All About Birds [4]; ethics from the American Birding Association [5]; window guidance from All About Birds [2]; habitat from Audubon [3].",
+    ],
+    sections: [
+      { heading: "Attract birds to your hand, step by step", paragraphs: [
+        "Start with a busy feeder that chickadees already visit; Black-capped Chickadees are curious, often the first birds to find a new feeder, and readily take black-oil sunflower [1][4]. For several days, stand quietly near the feeder at the same time each morning so the birds get used to you. Then take the feeder down for an hour or two, hold seed in a flat, open palm where the feeder was, and stay completely still. Cold mornings, when birds are hungriest, work best.",
+        "Expect it to take days to weeks. Once one chickadee lands, others in the flock usually follow, and titmice and nuthatches may join them.",
+        "Winter is the easiest season, when natural food is scarce and flocks visit feeders on a regular circuit; in spring and summer, when insects are everywhere and adults are busy with nests, birds are much less interested. Wear the same jacket or hat each day, move slowly, and avoid looking straight at the bird as it lands. Some people have similar success holding a small hand-held nectar feeder for hummingbirds, standing still beside the usual feeder in late summer.",
+      ]},
+      { heading: "Foods for hand-feeding birds, hygiene and ethics", paragraphs: [
+        "Black-oil sunflower, hulled sunflower and pieces of unsalted peanut are the best hand-feeding foods [1]. Avoid bread and salted or processed foods. Wash your hands before and after, keep feeders clean, and stop if birds look sick, because disease spreads where birds gather [1].",
+        "Hand-feeding should stay a small treat, not the birds' main food, and never involve chasing, trapping or handling birds. The American Birding Association's code asks birders to put the welfare of birds first and avoid stressing them [5].",
+      ]},
+    ],
+    faq: [
+      { question: "Which birds will eat from your hand?", answer: "Chickadees most often, then titmice and nuthatches; occasionally jays and some sparrows." },
+      { question: "How long does it take to hand-feed birds?", answer: "Usually days to a few weeks of standing still at the same spot and time." },
+    ],
+    extraSources: [aab(4, "Black-capped_Chickadee", "Black-capped Chickadee"), ABA(5)],
+  }),
+
 };

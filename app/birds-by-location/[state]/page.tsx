@@ -11,6 +11,7 @@ import { getStateStaticParams, getStatePageData, type StateBirdEntry } from "../
 import { busiestMonths, occurrenceAttribution } from "../../../lib/occurrence-data";
 import { SITE } from "../../../lib/url-registry";
 import { birdInStateHref, getPublishedCityParams } from "../../../lib/indexing";
+import { getBirdImage } from "../../../lib/group-data";
 
 export function generateStaticParams() {
   return getStateStaticParams();
@@ -27,7 +28,8 @@ export async function generateMetadata({
 
   const content = getStateContent(state);
   // Titles are kept under 60 characters, so they skip the site-wide " | AttractBirds.app" suffix.
-  const title = content?.title ?? `Birds in ${stateData.name}: Common Backyard Birds & Birding Guide`;
+  const fallbackTitle = `Birds in ${stateData.name}: Common Backyard Birds & Birding Guide`;
+  const title = content?.title ?? (fallbackTitle.length <= 60 ? fallbackTitle : `Birds in ${stateData.name}: Backyard Birds & Birding Guide`);
   const description =
     content?.description ??
     `Birds in ${stateData.name}: ${stateData.speciesCount}+ species, the common backyard birds, a month-by-month calendar, and the best birding spots near ${stateData.popularCities[0]}.`;
@@ -118,6 +120,9 @@ export default async function StatePage({
   const pageUrl = `${SITE.origin}/birds-by-location/${state.slug}`;
   const spots = content?.spots ?? state.topBirdingSpots.map((s) => ({ ...s, url: undefined }));
   const speciesLine = content ? undefined : `${totalSpecies}+`;
+  // States without a researched hero photo show a licensed photo of their most familiar backyard bird.
+  const fallbackHeroBird = content ? undefined : [...backyardBirds, ...commonBirds].find((b) => getBirdImage(b.slug));
+  const fallbackHero = fallbackHeroBird ? getBirdImage(fallbackHeroBird.slug) : undefined;
   const publishedCities = new Set(getPublishedCityParams().filter((c) => c.state === state.slug).map((c) => c.slug));
 
   const jsonLd: Record<string, unknown>[] = [
@@ -203,6 +208,24 @@ export default async function StatePage({
               Birds in {state.name}: {state.summary} This guide lists the common backyard birds, a month-by-month
               calendar, and the best places to go bird watching in {state.name}.
             </p>
+          )}
+          {fallbackHero && fallbackHeroBird && (
+            <figure className="state-hero-figure">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={fallbackHero.src}
+                alt={`${fallbackHeroBird.commonName}, one of the common backyard birds in ${state.name}`}
+                width={fallbackHero.width}
+                height={fallbackHero.height}
+                fetchPriority="high"
+                decoding="async"
+              />
+              <figcaption>
+                {fallbackHeroBird.commonName}, a familiar backyard bird across {state.name}. Photo: <a href={fallbackHero.creditUrl} rel="noopener noreferrer" target="_blank">{fallbackHero.credit}</a>,{" "}
+                <a href={fallbackHero.licenseUrl} rel="noopener noreferrer license" target="_blank">{fallbackHero.license}</a>, via Wikimedia Commons.{" "}
+                See what is being reported right now on <a href={`https://ebird.org/region/US-${state.abbr}`} rel="noopener noreferrer" target="_blank">eBird for {state.name}</a>.
+              </figcaption>
+            </figure>
           )}
           {content && (
             <figure className="state-hero-figure">
@@ -540,7 +563,7 @@ export default async function StatePage({
               <p style={{ marginTop: "16px" }}>
                 Whether you&rsquo;re a backyard birder in {state.popularCities[0]} or planning a trip to{" "}
                 {spots[0]?.name}, this guide covers the most commonly seen species, seasonal patterns,
-                and practical tips for attracting and identifying birds in {state.name}.
+                and practical tips for attracting and identifying birds across {state.name}.
               </p>
             </div>
           </section>

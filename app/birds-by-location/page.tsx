@@ -3,27 +3,37 @@ import { Header } from "../components/Header";
 import { Footer } from "../components/Footer";
 import { USMap } from "../components/USMap";
 import { US_STATES_DATA, REGIONS } from "../../data/us-states-data";
+import { getBirdImage } from "../../lib/group-data";
+import { SITE } from "../../lib/url-registry";
+
+const title = "Birds by State: Backyard Birds in All 50 U.S. States";
+const description = "Birds by state: the common backyard birds, monthly calendar and best birding spots for all 50 U.S. states, with eBird data for the states we have analysed.";
 
 export const metadata: Metadata = {
-  title: "Birds by Location — Discover Birds in Your State | AttractBirds.app",
-  description:
-    "Explore backyard birds across all 50 U.S. states. Interactive map, species counts, birding hotspots, and seasonal guides for California, Texas, Florida, New York, and more.",
+  title: { absolute: title },
+  description,
   alternates: { canonical: "/birds-by-location" },
-  openGraph: {
-    title: "Birds by Location — Discover Birds in Your State",
-    description:
-      "Explore backyard birds across all 50 U.S. states with our interactive map. Species counts, birding hotspots, and seasonal migration guides.",
-  },
+  openGraph: { title, description, type: "website" },
 };
 
 export default function BirdsByLocationPage() {
   const popularStates = ["california", "texas", "florida", "new-york", "arizona", "colorado"];
   const popular = US_STATES_DATA.filter((s) => popularStates.includes(s.slug));
+  const image = getBirdImage("american-robin");
+  const jsonLd = [
+    { "@context": "https://schema.org", "@type": "CollectionPage", name: title, description, url: `${SITE.origin}/birds-by-location`,
+      hasPart: US_STATES_DATA.map((s) => ({ "@type": "WebPage", name: `Birds in ${s.name}`, url: `${SITE.origin}/birds-by-location/${s.slug}` })) },
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE.origin },
+      { "@type": "ListItem", position: 2, name: "Birds by state", item: `${SITE.origin}/birds-by-location` },
+    ] },
+  ];
 
   return (
     <div className="site-shell">
       <Header />
       <main>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         {/* Hero */}
         <section className="hero" style={{ paddingBottom: "40px" }}>
           <div className="hero-badge">
@@ -31,13 +41,26 @@ export default function BirdsByLocationPage() {
             50 states · 600+ species
           </div>
           <h1>
-            Birds by <em>Location</em>
+            Birds by <em>State</em>
           </h1>
           <p className="hero-sub">
-            Discover the birds in your backyard, your city, and your state. Explore common species,
-            migration patterns, and the best bird-watching spots near you.
+            Browse birds by state to see which species visit backyards where you live: the common birds,
+            what arrives and leaves each month, and the best bird-watching spots in all 50 states.
           </p>
         </section>
+
+        {image && (
+          <section className="loc-section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+            <figure className="state-hero-figure" style={{ maxWidth: "760px", margin: "0 auto" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={image.src} alt="American Robin, found in almost every state — compare birds by state below" width={image.width} height={image.height} decoding="async" />
+              <figcaption>
+                American Robin. Photo: <a href={image.creditUrl} rel="noopener noreferrer" target="_blank">{image.credit}</a>,{" "}
+                <a href={image.licenseUrl} rel="noopener noreferrer license" target="_blank">{image.license}</a>, via Wikimedia Commons.
+              </figcaption>
+            </figure>
+          </section>
+        )}
 
         {/* Interactive Map */}
         <section className="loc-section" style={{ paddingTop: "0" }}>
@@ -47,7 +70,7 @@ export default function BirdsByLocationPage() {
         {/* Popular Locations */}
         <section className="loc-section">
           <div className="loc-section-header">
-            <h2>Popular Locations</h2>
+            <h2>Popular states for birding</h2>
             <p>The most-searched states for backyard birding and bird watching</p>
           </div>
           <div className="state-directory" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}>
@@ -64,7 +87,7 @@ export default function BirdsByLocationPage() {
         {/* Browse by Region */}
         <section className="loc-section">
           <div className="loc-section-header">
-            <h2>Browse by Region</h2>
+            <h2>Birds by state and region</h2>
             <p>Find birds across the four major flyways and regions of the United States</p>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
@@ -99,37 +122,37 @@ export default function BirdsByLocationPage() {
             <div className="module-card">
               <div className="module-icon-wrap">🐦</div>
               <span className="module-number">01</span>
-              <h3>Common Birds</h3>
+              <strong>Common Birds</strong>
               <p>The species you're most likely to see in yards, parks, and neighborhoods—with photos, calls, and identification tips.</p>
             </div>
             <div className="module-card">
               <div className="module-icon-wrap">🏡</div>
               <span className="module-number">02</span>
-              <h3>Backyard Birds</h3>
+              <strong>Backyard Birds</strong>
               <p>Birds that regularly visit feeders and gardens. Learn what food, plants, and feeders attract each species in your state.</p>
             </div>
             <div className="module-card">
               <div className="module-icon-wrap">🌲</div>
               <span className="module-number">03</span>
-              <h3>Birds by Habitat</h3>
+              <strong>Birds by Habitat</strong>
               <p>Coastal, desert, forest, wetland, and urban—filter by the habitat you bird in most.</p>
             </div>
             <div className="module-card">
               <div className="module-icon-wrap">📍</div>
               <span className="module-number">04</span>
-              <h3>Birding Hotspots</h3>
+              <strong>Birding Hotspots</strong>
               <p>Top bird-watching locations in each state, from national wildlife refuges to local parks and sanctuaries.</p>
             </div>
             <div className="module-card">
               <div className="module-icon-wrap">📅</div>
               <span className="module-number">05</span>
-              <h3>Monthly Calendar</h3>
+              <strong>Monthly Calendar</strong>
               <p>Which birds to expect each month—migration arrivals, departures, and breeding season highlights.</p>
             </div>
             <div className="module-card">
               <div className="module-icon-wrap">🪶</div>
               <span className="module-number">06</span>
-              <h3>Migration Patterns</h3>
+              <strong>Migration Patterns</strong>
               <p>Spring and fall flyway information—when and where migrants pass through your state.</p>
             </div>
           </div>
@@ -163,7 +186,9 @@ export default function BirdsByLocationPage() {
               </p>
               <p>
                 Whether you're setting up your first bird feeder, planning a birding trip, or trying to identify a
-                bird you spotted in your yard, start by selecting your state on the map above.
+                bird you spotted in your yard, start by selecting your state on the map above. For sightings reported in
+                the last few days, check{" "}
+                <a href="https://ebird.org/explore" rel="noopener noreferrer" target="_blank">eBird</a>, the Cornell Lab of Ornithology&rsquo;s checklist database that our state data comes from.
               </p>
             </div>
           </div>

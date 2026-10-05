@@ -99,15 +99,15 @@ function StatePages({ bird }: { bird: BirdPageData }) {
         <>
           <p className="city-pills-label"><strong>Found regularly in:</strong></p>
           <div className="city-pills">
-            {regular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>{bird.commonName} in {s.name}</Link>)}
+            {regular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>{s.name}</Link>)}
           </div>
         </>
       )}
       {notRegular.length > 0 && (
         <>
-          <p className="city-pills-label"><strong>Not regularly found in:</strong></p>
+          <p className="city-pills-label"><strong>Not regularly found in</strong> (each page answers &ldquo;Are there {plural} in&hellip;?&rdquo;):</p>
           <div className="city-pills">
-            {notRegular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>Are there {plural} in {s.name}?</Link>)}
+            {notRegular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>{s.name}</Link>)}
           </div>
         </>
       )}
@@ -151,7 +151,7 @@ export default async function BirdPage({ params }: { params: Promise<{ slug: str
             <StateData bird={bird} />
             <StatePages bird={bird} />
             <section className="loc-section">
-              <div className="loc-section-header"><h2>Attracting them to your yard</h2></div>
+              <div className="loc-section-header"><h2>Attracting the {bird.commonName} to your yard</h2></div>
               <div className="content-grid">
                 <section className="info-block"><p className="eyebrow"><span /> Serve · best foods</p><ul className="chip-list">{bird.foods.map((x) => <li key={x}>{x}</li>)}</ul></section>
                 <section className="info-block"><p className="eyebrow"><span /> Plant · useful plants</p><ul className="chip-list">{bird.plants.map((x) => <li key={x}>{x}</li>)}</ul></section>
@@ -161,6 +161,8 @@ export default async function BirdPage({ params }: { params: Promise<{ slug: str
                 {resolveFeederFor(bird.slug) && <Link href={`/feeders/for/${bird.slug}`} className="header-cta" style={{ display: "inline-block" }}>Feeder guide →</Link>}
                 {getBirdPlantGuide(bird.slug) && <Link href={`/plants/for/${bird.slug}`} className="region-pill" style={{ display: "inline-block" }}>Plant guide →</Link>}
                 <Link href={`/how-to-attract/${bird.slug}`} className="region-pill" style={{ display: "inline-block" }}>Attraction guide →</Link>
+                <Link href="/birds" className="region-pill" style={{ display: "inline-block" }}>All backyard birds →</Link>
+                <Link href="/birds-by-location" className="region-pill" style={{ display: "inline-block" }}>Birds by state →</Link>
               </div>
             </section>
           </EditorialBody>

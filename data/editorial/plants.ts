@@ -792,6 +792,31 @@ function forBird(b: { slug: string; aabSlug: string; name: string; plural: strin
 
 const FOR_BIRDS = [
   forBird({
+    slug: "ruby-throated-hummingbird", aabSlug: "Ruby-throated_Hummingbird", name: "Ruby-throated Hummingbird", plural: "ruby-throated hummingbirds", keyword: "plants for ruby-throated hummingbirds",
+    title: "Plants for Ruby-throated Hummingbirds: Native Nectar Flowers",
+    description: "The best plants for ruby-throated hummingbirds: red tubular native flowers such as cardinal flower, trumpet honeysuckle and bee balm, blooming all season.",
+    alt: "Ruby-throated hummingbird feeding — plants for ruby-throated hummingbirds are red, tubular nectar flowers",
+    plants: ["cardinal-flower", "trumpet-honeysuckle", "wild-bergamot"],
+    intro: [
+      "Plants for ruby-throated hummingbirds are nectar flowers, and the best are red or orange and tubular: Ruby-throated Hummingbirds feed at trumpet creeper, cardinal flower, honeysuckles, jewelweed, bee balm, red buckeye and red morning glory, and they also eat small insects and spiders [1].",
+      "The plant profiles below use the Lady Bird Johnson Wildflower Center's growing facts [3–5], species facts are from All About Birds [1], and the case for natives is Audubon's [2].",
+    ],
+    sections: [
+      { heading: "Plants for ruby-throated hummingbirds: three native nectar flowers", paragraphs: (n) => [
+        `Cardinal flower has tall spikes of scarlet tubular flowers in late summer and grows best in moist to wet soil; it is pollinated largely by hummingbirds ${n("cardinal-flower")}. Trumpet honeysuckle is a native climbing vine — not the invasive Japanese honeysuckle — with clusters of red-orange tubular flowers from spring into summer that are visited by hummingbirds ${n("trumpet-honeysuckle")}. Wild bergamot, a bee balm, carries lavender flower heads in summer on dry to medium soils and draws hummingbirds as well as bees and butterflies ${n("wild-bergamot")}.`,
+        "Together these give nectar from late spring to early fall, which matters because ruby-throats arrive in spring, nest in summer and refuel heavily before fall migration [1].",
+      ]},
+      { heading: "Bloom season, insects and the feeder", paragraphs: (n) => [
+        `Plan for a continuous bloom rather than one big show: an early vine such as trumpet honeysuckle ${n("trumpet-honeysuckle")}, summer bee balm ${n("wild-bergamot")}, and late cardinal flower ${n("cardinal-flower")} keep nectar available across the season. Plant in clumps that are easy to see, in sun or part shade.`,
+        "Hummingbirds feed their young insects and spiders, so avoid pesticides; a garden full of native plants supplies both nectar and the small insects nestlings need [1][2]. A clean sugar-water feeder (one part white sugar to four parts water) is a useful supplement, not a substitute [1].",
+      ]},
+    ],
+    faq: (n) => [
+      { question: "What plants attract ruby-throated hummingbirds?", answer: `Red or orange tubular natives such as cardinal flower, trumpet honeysuckle, bee balm, trumpet creeper, jewelweed and red buckeye [1]${n("cardinal-flower")}${n("trumpet-honeysuckle")}.` },
+      { question: "Do hummingbirds only drink nectar?", answer: "No — they also eat small insects and spiders, especially when feeding young [1]." },
+    ],
+  }),
+  forBird({
     slug: "american-goldfinch", aabSlug: "American_Goldfinch", name: "American Goldfinch", plural: "goldfinches", keyword: "plants for goldfinches",
     title: "Plants for Goldfinches: Native Seed Flowers, Thistle & Birch",
     description: "The best plants for goldfinches: sunflower, coneflower and black-eyed susan seed heads, native thistles and milkweed for late nests, birch and cedar for seed.",

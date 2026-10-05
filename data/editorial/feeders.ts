@@ -934,6 +934,315 @@ export const feederEditorial: Record<string, EditorialContent> = {
     ],
     extraSources: [aabSpecies(4, "Ruby-throated_Hummingbird", "Ruby-throated Hummingbird")],
   }),
+  // ── Feeder types (previously template-only) ───────────────────
+  "/feeders/tube-feeder": build({
+    path: "/feeders/tube-feeder",
+    keyword: "tube feeder",
+    title: "Tube Feeder Guide: Seeds, Perches & Which Birds Use It",
+    h1: "Tube Feeder Guide",
+    description: "How a tube feeder works: which birds use it, the best seed (sunflower, chips, nyjer), perch and port size, squirrel-resistant designs and how to clean it.",
+    image: timg("tube-feeder", "American goldfinch on a tube feeder with short perches"),
+    intro: [
+      "A tube feeder is a hanging cylinder with feeding ports and short perches. It keeps seed cleaner and drier than an open tray, and the length of the perches decides which birds can use it [1].",
+      "Everything below about tube feeder design, foods, placement and cleaning is drawn from Project FeederWatch, the Cornell Lab of Ornithology's long-running feeder survey [1][2], and from All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "How a tube feeder works", paragraphs: [
+        "Seed sits inside a clear tube and birds take it one piece at a time through ports set beside each perch. Because the seed is enclosed it stays dry longer than on a platform, and droppings do not land in the food [1]. Short perches suit small birds such as chickadees, titmice and finches but exclude larger birds such as grackles and jays; adding a tray under the tube changes that, catching dropped seed and letting cardinals and doves feed too [1].",
+        "Ports are the detail that matters. Large ports with metal surrounds take whole black-oil sunflower; fine ports are for nyjer. Metal ports and a metal cap resist squirrels far better than plastic, which squirrels chew through [1].",
+      ]},
+      { heading: "Best seed and birds for a tube feeder", paragraphs: [
+        "Black-oil sunflower is the preferred food for a wide variety of birds and the best all-round fill for a tube feeder [1]. Sunflower chips (hulled sunflower) leave no shells below the feeder, and nyjer in a fine-port tube attracts American Goldfinches, Pine Siskins and redpolls [1]. Avoid cheap mixes heavy in milo and wheat, which most tube-feeder birds flick out onto the ground [1].",
+        "Typical visitors are American Goldfinches, which do not mind a feeder that sways [4], House Finches, Black-capped and Carolina Chickadees, Tufted Titmice and nuthatches. Seed below the lowest port can sit for weeks and spoil, so empty the tube completely when you clean it rather than topping it up [1].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds use a tube feeder?", answer: "Small perching birds: goldfinches, House Finches, chickadees, titmice and nuthatches. Add a tray below for cardinals and other larger birds [1]." },
+      { question: "What seed is best for a tube feeder?", answer: "Black-oil sunflower in a large-port tube; nyjer in a fine-port tube for goldfinches and siskins [1]." },
+    ],
+    extraSources: [aabSpecies(4, "American_Goldfinch", "American Goldfinch")],
+  }),
+
+  "/feeders/hopper-feeder": build({
+    path: "/feeders/hopper-feeder",
+    keyword: "hopper feeder",
+    title: "Hopper Feeder Guide: Birds, Seed, Squirrels & Cleaning",
+    h1: "Hopper Feeder Guide",
+    description: "How a hopper feeder works: which birds use it (cardinals, jays, finches, chickadees), the best seed, keeping it dry and squirrel-proof, and how to clean it.",
+    image: timg("hopper-feeder", "Birds feeding at a house-shaped hopper feeder"),
+    intro: [
+      "A hopper feeder is a roofed seed reservoir — often shaped like a small house — that lets seed slide down onto a ledge as birds eat it. It protects seed from the weather, though not completely, and most feeder birds will use it [1].",
+      "Everything below about hopper feeder design, foods, placement and cleaning is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "How a hopper feeder works", paragraphs: [
+        "The reservoir holds several days of seed and the roof keeps rain and snow off most of it, so a hopper feeder needs refilling less often than a tray. Hoppers attract most species of feeder birds, including finches, jays, cardinals, buntings, grosbeaks, sparrows, chickadees and titmice [1]. Larger hoppers also let bigger birds such as doves and grackles feed [1].",
+        "The trade-off is cleaning. Seed packs into the corners of the reservoir and molds out of sight, especially after rain driven under the roof. A large hopper also tempts people to keep topping it up, so old seed never leaves the bottom [1].",
+      ]},
+      { heading: "Best seed and placement for a hopper feeder", paragraphs: [
+        "Fill a hopper feeder with black-oil sunflower, the food most feeder birds prefer, or a mix of sunflower, safflower and a little millet [1]. Northern Cardinals favor a broad, stable feeder they can face forward on, and a hopper's ledge suits them well [4]. Skip mixes with milo and red grain; birds kick them out and the waste attracts rodents [1].",
+        "Mount the hopper feeder on a pole with a baffle or hang it from a baffled wire. Squirrels love hoppers because they can sit on the roof or ledge and eat, so placement more than ten feet from trees and buildings matters more than any feeder design [1].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds come to a hopper feeder?", answer: "Most feeder birds: cardinals, jays, finches, grosbeaks, sparrows, chickadees and titmice, and doves at larger hoppers [1]." },
+      { question: "How often should I clean a hopper feeder?", answer: "Empty and wash it every week or two, more often in wet weather; never top up old seed [1]." },
+    ],
+    extraSources: [aabSpecies(4, "Northern_Cardinal", "Northern Cardinal")],
+  }),
+
+  "/feeders/platform-feeder": build({
+    path: "/feeders/platform-feeder",
+    keyword: "platform feeder",
+    title: "Platform Feeder Guide: Birds, Food, Drainage & Cleaning",
+    h1: "Platform Feeder Guide",
+    description: "How a platform (tray) feeder works: the widest range of birds it attracts, what to put on it, why drainage matters, and how often to clean a platform feeder.",
+    image: timg("platform-feeder", "Birds eating seed on an open platform feeder"),
+    intro: [
+      "A platform feeder is an open tray, hung, mounted on a pole or set close to the ground. Trays attract most species of feeder birds, which makes a platform feeder the simplest way to feed the widest variety [1].",
+      "Everything below about platform feeder design, foods, placement and cleaning is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Which birds use a platform feeder", paragraphs: [
+        "Because there are no perches or ports, any bird that can land can eat. Placed near the ground, a platform feeder is most likely to attract juncos, doves and sparrows [1]; raised on a pole it brings cardinals, jays, grosbeaks and woodpeckers as well. Mourning Doves in particular feed on the ground and in the open, and scattered seed on a low platform suits them better than any hanging feeder [4].",
+        "The same openness is the weakness: squirrels, blackbirds and starlings use a platform feeder just as easily, and food is exposed to rain and droppings [1].",
+      ]},
+      { heading: "What to put on a platform feeder", paragraphs: [
+        "Black-oil sunflower, safflower, peanuts, millet and cracked corn all work on a platform feeder [1]. Offer only as much as is eaten in a day: food left out overnight attracts mice and raccoons, and wet seed turns moldy quickly. A screened, perforated bottom lets rain drain away and keeps seed from sitting in water [1].",
+        "Clean it more often than a tube or hopper — every couple of days in busy or wet periods — because droppings fall directly into the food. Scrape it, wash it with warm soapy water, rinse and let it dry before refilling [1][2].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds use a platform feeder?", answer: "Almost all feeder birds; set low, it favors juncos, doves and sparrows, and raised it adds cardinals, jays and woodpeckers [1]." },
+      { question: "How do I keep seed dry on a platform feeder?", answer: "Use a model with a screened or perforated bottom for drainage, and put out only a day's worth of food [1]." },
+    ],
+    extraSources: [aabSpecies(4, "Mourning_Dove", "Mourning Dove")],
+  }),
+
+  "/feeders/suet-feeder": build({
+    path: "/feeders/suet-feeder",
+    keyword: "suet feeder",
+    title: "Suet Feeder Guide: Woodpeckers, Cages, Heat & Cleaning",
+    h1: "Suet Feeder Guide",
+    description: "How a suet feeder works: which birds eat suet (woodpeckers, nuthatches, chickadees), cage and tail-prop designs, summer heat, starlings and cleaning.",
+    image: timg("suet-feeder", "Woodpecker clinging to a suet feeder cage"),
+    intro: [
+      "A suet feeder is a wire cage or holder for cakes of suet — rendered beef fat, often mixed with seed. Suet is a high-energy food that is especially attractive to woodpeckers, nuthatches, chickadees and titmice [1].",
+      "Everything below about suet feeder design, foods, placement and cleaning is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Which birds use a suet feeder", paragraphs: [
+        "Clinging birds are the main customers: Downy, Hairy and Red-bellied Woodpeckers, nuthatches, chickadees and titmice, plus wrens and jays, and in some areas warblers in winter [1]. Downy Woodpeckers readily visit suet and are often the first woodpecker to find a new one [4]. A cage with a long tail-prop panel below it suits larger woodpeckers, which brace against their tails as they feed.",
+        "European Starlings also love suet. Upside-down suet feeders, where birds must cling beneath the cake, are hard for starlings but easy for woodpeckers and nuthatches [1].",
+      ]},
+      { heading: "Suet feeders in warm weather", paragraphs: [
+        "Raw suet turns rancid and soft in heat, and softened fat can mat birds' feathers, so suet is best offered in cool weather [1]. In summer, use rendered no-melt suet doughs, hang the suet feeder in shade, and replace cakes that look discolored or smell off.",
+        "Cages collect grease and residue that harbor bacteria. Scrub the cage with hot soapy water every week or two, more often in warm weather, and dry it before adding a fresh cake [1][2].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds eat from a suet feeder?", answer: "Mainly woodpeckers, nuthatches, chickadees and titmice, with wrens, jays and starlings [1]." },
+      { question: "Can I use a suet feeder in summer?", answer: "Use rendered no-melt suet in the shade; raw suet goes rancid in heat and can foul feathers [1]." },
+    ],
+    extraSources: [aabSpecies(4, "Downy_Woodpecker", "Downy Woodpecker")],
+  }),
+
+  "/feeders/hummingbird-feeder": build({
+    path: "/feeders/hummingbird-feeder",
+    keyword: "hummingbird feeder",
+    title: "Hummingbird Feeder Guide: Nectar Recipe, Cleaning & Ants",
+    h1: "Hummingbird Feeder Guide",
+    description: "How to use a hummingbird feeder: the 1:4 sugar-water recipe, why not to use red dye, how often to clean it, stopping ants and bees, and when to put it out.",
+    image: timg("hummingbird-feeder", "Ruby-throated hummingbird hovering at a hummingbird feeder"),
+    intro: [
+      "A hummingbird feeder holds sugar water that substitutes for flower nectar. It only helps if the nectar is made correctly and the feeder is kept far cleaner than a seed feeder [1][4].",
+      "Everything below about hummingbird feeder design, nectar, placement and cleaning is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "The nectar for a hummingbird feeder", paragraphs: [
+        "Mix one part plain white table sugar with four parts water, stir until dissolved, and let it cool. Do not use honey, brown sugar, artificial sweeteners or red dye — the feeder's red parts are enough to attract hummingbirds [4]. Make small batches and store extra in the refrigerator for up to about a week.",
+        "In the East, the Ruby-throated Hummingbird is the main visitor; hang the hummingbird feeder about two weeks before they usually return in spring and keep it up until two weeks after the last bird passes in fall [4].",
+      ]},
+      { heading: "Keeping a hummingbird feeder clean and safe", paragraphs: [
+        "Nectar ferments and grows black mold quickly in warm weather. Change it every couple of days — daily in heat — and clean the hummingbird feeder each time you refill it; discard it immediately if the solution turns cloudy [1]. Saucer-style feeders that come apart fully are much easier to clean than narrow bottles.",
+        "An ant moat — a small cup of water above the feeder — stops ants, and bee guards on the ports or a saucer design that keeps nectar out of reach discourage bees and wasps. Hang the feeder in partial shade so nectar spoils more slowly, and near flowers hummingbirds already use.",
+      ]},
+    ],
+    faq: [
+      { question: "What is the right sugar-to-water ratio for a hummingbird feeder?", answer: "One part white sugar to four parts water, with no dye [4]." },
+      { question: "How often should I clean a hummingbird feeder?", answer: "Every couple of days, and ideally every time you refill it; immediately if it turns cloudy or moldy [1]." },
+    ],
+    extraSources: [aabSpecies(4, "Ruby-throated_Hummingbird", "Ruby-throated Hummingbird")],
+  }),
+
+  // ── Feeders by food / bird (previously template-only) ─────────
+  "/feeders/for/nectar": build({
+    path: "/feeders/for/nectar",
+    keyword: "hummingbird nectar feeder",
+    title: "Hummingbird Nectar Feeder: Best Designs & Nectar Recipe",
+    h1: "Hummingbird Nectar Feeder Guide",
+    description: "Choosing a hummingbird nectar feeder: saucer vs bottle designs, the 1:4 nectar recipe, cleaning every couple of days, and keeping ants, bees and mold away.",
+    image: timg("hummingbird-feeder", "Hummingbird at a hummingbird nectar feeder with red ports"),
+    intro: [
+      "The best hummingbird nectar feeder is the one you can clean easily: nectar spoils in a couple of days, so a feeder that comes fully apart matters more than its looks [1].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Choosing a hummingbird nectar feeder", paragraphs: [
+        "Saucer feeders hold nectar in a shallow dish under a lid with ports. They rarely drip, bees struggle to reach the nectar, and they separate into two pieces for cleaning. Bottle (inverted) feeders hold more but can drip in heat, and the narrow bottle needs a brush to clean. For most yards a small saucer-style hummingbird nectar feeder is the better choice, because a large one only means more nectar wasted when it spoils.",
+        "Red on the feeder is enough to attract hummingbirds; the nectar itself should be clear [4]. Built-in ant moats and bee guards are worth having.",
+      ]},
+      { heading: "Nectar and cleaning for a hummingbird nectar feeder", paragraphs: [
+        "Make nectar with one part white sugar to four parts water and no dye, honey or sweeteners [4]. Fill the feeder only partway in hot weather so you replace it before it ferments.",
+        "Change the nectar and clean the feeder every couple of days, and ideally at every refill; throw it out at any sign of cloudiness or black mold [1]. Hang it in partial shade, near flowers, and away from seed feeders so the busier birds do not crowd it.",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best hummingbird nectar feeder?", answer: "A small saucer-style feeder that comes apart fully for cleaning, with an ant moat and bee guards." },
+      { question: "Do I need red nectar?", answer: "No — red parts on the feeder attract hummingbirds; use clear 1:4 sugar water without dye [4]." },
+    ],
+    extraSources: [aabSpecies(4, "Ruby-throated_Hummingbird", "Ruby-throated Hummingbird")],
+  }),
+
+  "/feeders/for/nyjer": build({
+    path: "/feeders/for/nyjer",
+    keyword: "nyjer feeder",
+    title: "Nyjer Feeder Guide: Thistle Seed, Socks & Finch Tubes",
+    h1: "Nyjer Feeder Guide",
+    description: "How to choose a nyjer feeder: mesh socks vs fine-port tubes, which finches eat nyjer (thistle) seed, keeping it dry, and why finches ignore old seed.",
+    image: timg("finch-mesh-feeder", "American goldfinches on a nyjer feeder"),
+    intro: [
+      "A nyjer feeder dispenses nyjer — the tiny black seed often sold as thistle — through very small ports or a fine mesh. Nyjer has become popular largely because it attracts finches such as the American Goldfinch, Pine Siskin and Common Redpoll [1].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Types of nyjer feeder", paragraphs: [
+        "A mesh sock is the cheapest nyjer feeder: finches cling to the fabric and pull seed through it, and several birds can feed at once. Socks get soggy in rain, though, so they suit covered spots. A fine-port tube with short perches keeps seed drier and lasts for years; ports must be small enough that the seed does not pour out [1]. Upside-down nyjer tubes, with ports below the perches, favor goldfinches, which can feed hanging upside down.",
+        "Nyjer is imported and expensive, so a nyjer feeder that wastes little seed pays for itself. The seed is heat-treated before sale so it does not sprout under the feeder.",
+      ]},
+      { heading: "Keeping a nyjer feeder working", paragraphs: [
+        "Finches ignore nyjer that is old or has been wet — it clumps and molds. Fill the nyjer feeder with only a week or two of seed, shake out clumps, and replace any seed that smells musty [1]. American Goldfinches are the most reliable visitors and are happy on a feeder that sways in the wind [4]; Pine Siskins and redpolls join them in winter, especially in irruption years [1].",
+        "Because finches crowd the ports, clean the feeder every week or two and take it down for a couple of weeks if you see a finch with swollen or crusty eyes [2].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds eat from a nyjer feeder?", answer: "Mainly American Goldfinches, plus Pine Siskins, redpolls and some House Finches [1]." },
+      { question: "Why won't finches eat my nyjer?", answer: "The seed is probably stale or has been wet; replace it and keep the feeder dry [1]." },
+    ],
+    extraSources: [aabSpecies(4, "American_Goldfinch", "American Goldfinch")],
+  }),
+
+  "/feeders/for/peanuts": build({
+    path: "/feeders/for/peanuts",
+    keyword: "best feeder for peanuts",
+    title: "Best Feeder for Peanuts: Mesh, Platform & Whole-Peanut Rings",
+    h1: "Best Feeder for Peanuts",
+    description: "The best feeder for peanuts depends on whole vs shelled: mesh tubes, platforms and wreaths compared, which birds eat peanuts, and keeping them mold-free.",
+    image: timg("peanut-feeder", "Blue jay at a steel-mesh tube, often the best feeder for peanuts"),
+    intro: [
+      "The best feeder for peanuts depends on what you offer: shelled peanuts go in a sturdy steel-mesh tube, whole peanuts in the shell work best on a platform or in a wreath-style ring. Peanuts are a favorite of jays, woodpeckers, nuthatches, chickadees and titmice [1].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Choosing the best feeder for peanuts", paragraphs: [
+        "A steel-mesh tube holds shelled peanuts and makes birds peck out small pieces, which keeps jays from carrying off the whole supply in minutes. The mesh must be metal; squirrels and woodpeckers destroy plastic quickly. For whole peanuts in the shell, a platform or a spiral wreath feeder works: Blue Jays will take whole peanuts and cache them, often carrying several at once [4].",
+        "If jays and squirrels empty everything, offer a separate peanut station away from the seed feeders so the small birds still get a turn.",
+      ]},
+      { heading: "Keeping peanuts safe for birds", paragraphs: [
+        "Use raw or plain roasted, unsalted peanuts only. Peanuts that get wet can grow molds that produce aflatoxins, which are harmful to birds, so keep them dry, buy from a supplier who sells peanuts for birds, and discard any that look moldy or smell off [1][2].",
+        "Fill the feeder with a few days' worth at a time, and wash the mesh every week or two [1].",
+      ]},
+    ],
+    faq: [
+      { question: "What is the best feeder for peanuts?", answer: "A steel-mesh tube for shelled peanuts, and a platform or wreath feeder for whole peanuts in the shell." },
+      { question: "Which birds eat peanuts?", answer: "Jays, woodpeckers, nuthatches, chickadees and titmice especially [1]." },
+    ],
+    extraSources: [aabSpecies(4, "Blue_Jay", "Blue Jay")],
+  }),
+
+  "/feeders/for/sunflower-chips": build({
+    path: "/feeders/for/sunflower-chips",
+    keyword: "sunflower chips feeder",
+    title: "Sunflower Chips Feeder: No-Mess Seed for Finches & More",
+    h1: "Sunflower Chips Feeder Guide",
+    description: "Choosing a sunflower chips feeder: why hulled sunflower means no shells, the best tube and hopper designs, which birds eat the chips, and keeping them dry.",
+    image: timg("tube-feeder", "Finches at a tube used as a sunflower chips feeder"),
+    intro: [
+      "A sunflower chips feeder holds hulled sunflower — chips or hearts with the shell already removed. Birds eat the same seed they prefer whole, but nothing is left on the ground below [1].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Why use a sunflower chips feeder", paragraphs: [
+        "Black-oil sunflower is the preferred food for a wide variety of feeder birds [1]. Feeding it hulled means no pile of shells smothering the lawn, and small birds such as goldfinches, which handle whole seed slowly, eat chips readily [4]. The cost is price and shelf life: without a shell, chips spoil fast once they get wet.",
+        "Good choices are a tube with medium ports and a drainage tray, a covered hopper, or a fine-mesh feeder. Avoid open platforms in wet climates — chips turn to mush in rain.",
+      ]},
+      { heading: "Keeping sunflower chips fresh", paragraphs: [
+        "Fill a sunflower chips feeder with no more than two or three days' supply in damp weather and a week in dry weather, and store the bag sealed in a cool place. Empty any chips that have clumped or darkened before refilling [1].",
+        "Wash the feeder every week or two; crumbs collect in the ports and corners and mold quickly [1][2].",
+      ]},
+    ],
+    faq: [
+      { question: "What birds eat sunflower chips?", answer: "Goldfinches, House Finches, chickadees, titmice, nuthatches, cardinals and many sparrows — the same birds that eat whole sunflower [1]." },
+      { question: "Are sunflower chips worth the cost?", answer: "Yes where shell mess is a problem; they waste less, but buy in small amounts because they spoil faster." },
+    ],
+    extraSources: [aabSpecies(4, "American_Goldfinch", "American Goldfinch")],
+  }),
+
+  "/feeders/for/tufted-titmouse": build({
+    path: "/feeders/for/tufted-titmouse",
+    keyword: "tufted titmouse feeder",
+    title: "Tufted Titmouse Feeder: Best Seed, Feeders & Nest Boxes",
+    h1: "Tufted Titmouse Feeder Guide",
+    description: "The best tufted titmouse feeder: hopper, tube and platform options, the foods titmice prefer (sunflower, peanuts, suet), how they cache seed, and nest boxes.",
+    image: bimg("tufted-titmouse", "Tufted titmouse perched near a tufted titmouse feeder"),
+    intro: [
+      "Almost any tufted titmouse feeder works, because titmice are bold, agile birds that use tubes, hoppers, platforms and suet cages. What matters is the food: black-oil sunflower, peanuts and suet [1][4].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3][4].",
+    ],
+    sections: [
+      { heading: "Choosing a tufted titmouse feeder", paragraphs: [
+        "Tufted Titmice take sunflower seeds, suet and peanuts at feeders, and they often carry a single seed away to eat or hide it before coming back for the next [4]. A tube or hopper with sunflower suits that one-at-a-time habit, a steel-mesh peanut feeder gives them something larger birds cannot monopolize, and a suet cage helps in cold weather.",
+        "Titmice cache food, usually close to the feeder, shelling seeds and tucking them into bark [4]. Seeing them come and go constantly is normal, not a sign that something is wrong with the tufted titmouse feeder.",
+      ]},
+      { heading: "Beyond the tufted titmouse feeder", paragraphs: [
+        "Titmice nest in cavities, including nest boxes with a hole about 1¼ inches across, and line the nest with soft hair [4]. Mature trees, dead limbs left where safe, and native oaks that produce acorns support them year-round.",
+        "They are often the leaders of winter mixed flocks with chickadees, nuthatches and woodpeckers, so a yard that feeds titmice usually feeds those species too [4].",
+      ]},
+    ],
+    faq: [
+      { question: "What do tufted titmice eat at feeders?", answer: "Black-oil sunflower, peanuts and suet [4]." },
+      { question: "What is the best tufted titmouse feeder?", answer: "A tube or hopper with sunflower, plus a mesh peanut feeder and a suet cage in winter." },
+    ],
+    extraSources: [aabSpecies(4, "Tufted_Titmouse", "Tufted Titmouse")],
+  }),
+
+  "/feeders/compare/platform-vs-tube": build({
+    path: "/feeders/compare/platform-vs-tube",
+    keyword: "platform vs tube feeder",
+    title: "Platform vs Tube Feeder: Which Birds Each One Attracts",
+    h1: "Platform vs Tube Feeder",
+    description: "Platform vs tube feeder compared: which birds each attracts, how they handle rain, squirrels and waste, cleaning effort, and when to use both side by side.",
+    image: timg("platform-feeder", "Open platform feeder — in the platform vs tube feeder choice, trays feed the most species"),
+    intro: [
+      "The platform vs tube feeder choice is a choice between variety and control: an open tray feeds the widest range of birds, while a tube with short perches feeds small birds and keeps seed cleaner and drier [1].",
+      "Everything below is drawn from Project FeederWatch [1][2] and All About Birds [3].",
+    ],
+    sections: [
+      { heading: "Platform vs tube feeder: which birds", paragraphs: [
+        "Trays attract most species of feeder birds; near the ground they bring juncos, doves and sparrows, and raised they add cardinals, jays and grosbeaks [1]. Tube feeders with short perches accommodate small birds such as finches, chickadees and titmice but exclude larger birds such as grackles and jays [1].",
+        "So if your goal is goldfinches and chickadees without crowds of blackbirds, a tube wins; if you want doves, cardinals and the most species in one place, a platform wins.",
+      ]},
+      { heading: "Platform vs tube feeder: weather, waste and cleaning", paragraphs: [
+        "A tube keeps seed drier and away from droppings; a platform leaves food exposed to rain and contamination and needs a screened bottom for drainage [1]. Platforms need cleaning every couple of days in busy periods, tubes every week or two [1][2]. Squirrels reach an open platform easily, while a metal tube on a baffled pole is far harder for them.",
+        "Many yards use both: a tube for sunflower or nyjer for small birds, and a low platform with millet and cracked corn for doves and ground-feeding sparrows, set a few feet apart.",
+      ]},
+    ],
+    faq: [
+      { question: "Is a platform or tube feeder better?", answer: "A tube for small birds and dry seed; a platform for the widest variety of species. Using both covers everything [1]." },
+      { question: "Which is easier to keep clean?", answer: "A tube; platforms collect droppings and need cleaning every couple of days when busy [1]." },
+    ],
+  }),
+
 };
 
 /** Feeder guide pages that keep the old template but need the same eBird state note; placeholder for future entries. */
