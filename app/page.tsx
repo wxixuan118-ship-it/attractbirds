@@ -33,13 +33,22 @@ const entries = [
   { icon: ICONS.feeder, title: "Feeder tools", copy: "A feeder calculator, every feeder type, and the food each bird prefers.", href: URL_REGISTRY.tools.feederCalculator, cta: "Open the tools" },
 ];
 
+/** The deepest guide for each of the five steps, in step order. */
+const STEP_GUIDES = [
+  { label: "Bird food guide", href: URL_REGISTRY.birdFood },
+  { label: "Bird bath guide", href: URL_REGISTRY.howTo.guide("birds-to-a-bird-bath") },
+  { label: "Native plants for birds", href: URL_REGISTRY.plants.hub },
+  { label: "Birdhouse guide", href: URL_REGISTRY.howTo.guide("birds-to-a-birdhouse") },
+  { label: "Feeder safety guide", href: URL_REGISTRY.howTo.guide("birds-to-a-feeder") },
+];
+
 const SEASON_NOTES: Record<string, string> = { spring: "Migration and nesting.", summer: "Breeding and raising young.", fall: "Migration and flocking.", winter: "Feeders, shelter and open water." };
 
 const featured = [
   { slug: "northern-cardinal", food: "Sunflower and safflower" },
   { slug: "blue-jay", food: "Peanuts and acorns" },
   { slug: "american-goldfinch", food: "Nyjer and sunflower chips" },
-  { slug: "ruby-throated-hummingbird", food: "Nectar and tubular flowers" },
+  { slug: "baltimore-oriole", food: "Oranges, jelly and nectar" },
   { slug: "black-capped-chickadee", food: "Sunflower and suet" },
   { slug: "downy-woodpecker", food: "Suet and peanuts" },
 ];
@@ -68,9 +77,11 @@ export default async function Home() {
     const bird = published.find((b) => b.slug === f.slug);
     return bird ? [{ ...f, name: bird.commonName }] : [];
   });
-  const steps = content.sections.filter((s) => /^Step \d/.test(s.heading)).map((s) => {
+  const steps = content.sections.filter((s) => /^Step \d/.test(s.heading)).map((s, i) => {
     const [, num, title] = s.heading.match(/^Step (\d) — (.*)$/) ?? [];
-    return { ...s, num: `0${num}`, title };
+    // The HowTo step's one-line summary, without its citation markers (the body below carries them).
+    const summary = content.steps?.[i]?.text.replace(/\s*\[\d+\]/g, "");
+    return { ...s, num: `0${num}`, title, summary, guide: STEP_GUIDES[i] };
   });
   const stateSection = content.sections.find((s) => !/^Step \d/.test(s.heading));
   const blocks = editorialJsonLd(content, [], [{ "@context": "https://schema.org", "@type": "WebSite", name: SITE.brand, url: SITE.origin }]);
@@ -151,7 +162,12 @@ export default async function Home() {
             <ol className="home-steps">
               {steps.map((s) => (
                 <li key={s.heading} id={s.num === "01" ? "step-1" : undefined}>
-                  <div className="home-step-head"><span>{s.num}</span><h3>{s.title}</h3></div>
+                  <div className="home-step-head">
+                    <span className="home-step-num">{s.num}</span>
+                    <h3>{s.title}</h3>
+                    {s.summary && <p className="home-step-summary">{s.summary}</p>}
+                    {s.guide && <Link href={s.guide.href} className="home-link">{s.guide.label} →</Link>}
+                  </div>
                   <div className="home-step-body">
                     {s.paragraphs.map((p, i) => <p key={i}><Cited text={p} sources={content.sources} /></p>)}
                   </div>

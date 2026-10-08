@@ -22,7 +22,7 @@ export const miscEditorial: Record<string, EditorialContent> = {
     title: "How to Attract Birds to Your Backyard: Food, Water & Plants",
     h1: "How to attract birds to your backyard",
     description: "How to attract birds in five steps: the right food and feeder, water, native plants, nest sites and safe glass — with FeederWatch, Audubon and eBird sources.",
-    image: timg("platform-feeder", "How to attract birds: a junco, chickadee and cardinal share a platform feeder placed near cover"),
+    image: bimg("ruby-throated-hummingbird", "How to attract birds: a Ruby-throated Hummingbird hovers to feed at a red bee balm flower"),
     schemaType: "HowTo",
     steps: [
       { name: "Offer the right food in the right feeder", text: "Start with black-oil sunflower, the seed most backyard birds prefer, in a hopper or tube placed near cover but about ten feet from branches squirrels can jump from [1]." },
