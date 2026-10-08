@@ -13,13 +13,18 @@ test("renders the AttractBirds homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /<h1>How to attract birds/);
-  // The visual line break must not glue "birds" and "to" together in extracted text.
-  assert.match(html, /<h1>How to attract birds <br\/?>/);
+  assert.match(html, /<h1>How to attract birds to your backyard<\/h1>/);
+  assert.match(html, /Learn how to attract birds that actually live near you/);
   assert.match(html, /"@type":"HowTo"/);
-  assert.match(html, /href="\/birds"[^>]*class="module-card entry-card"/);
-  assert.match(html, /href="\/birds-by-location"[^>]*class="module-card entry-card"/);
-  assert.match(html, /href="\/tools\/bird-feeder-calculator"[^>]*class="module-card entry-card"/);
+  for (const href of ["/birds-by-location", "/seasonal-birds", "/birds", "/tools/bird-feeder-calculator"]) {
+    assert.match(html, new RegExp(`href="${href}" class="home-card"`), href);
+  }
+  // Every step of the guide keeps its full, cited text.
+  assert.match(html, /id="step-1"/);
+  assert.equal((html.match(/<div class="home-step-head">/g) ?? []).length, 5);
+  // The tile map links all 50 state pages.
+  const map = html.slice(html.indexOf('class="state-tile-map"'));
+  assert.equal(new Set(map.slice(0, map.indexOf("</div>")).match(/href="\/birds-by-location\/[a-z-]+"/g)).size, 50);
   assert.match(html, /AttractBirds\.app/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });
@@ -50,10 +55,11 @@ test("renders encyclopedia and location detail pages", async () => {
   assert.equal(bird.status, 200);
   const birdHtml = (await bird.text()).replace(/<!-- -->/g, "");
   assert.match(birdHtml, /Pica hudsonia/);
-  // Profiles link to every published State × bird page, including "Are there…?" answers.
-  assert.match(birdHtml, /href="\/birds-by-location\/florida\/black-billed-magpie"[^>]*>Florida</);
+  // Profiles link to the state pages where the species is regular; State × bird pages are retired.
+  assert.match(birdHtml, /href="\/birds-by-location\/colorado"[^>]*>Colorado</);
+  assert.doesNotMatch(birdHtml, /href="\/birds-by-location\/[a-z-]+\/black-billed-magpie"/);
 
-  const location = await render("/birds-by-location/connecticut/stamford");
+  const location = await render("/birds-by-location/connecticut");
   assert.equal(location.status, 200);
   assert.match(await location.text(), /Birds in/);
 });
@@ -88,15 +94,11 @@ test("renders quality-gated seasonal SEO routes", async () => {
   assert.equal(season.status, 200);
   assert.match(await season.text(), /Spring.*birds by state/s);
 
+  // Bird × season pages are retired and redirect to the bird's profile; nothing else exists below a season.
   const species = await render("/seasonal-birds/spring/american-robin");
-  assert.equal(species.status, 200);
-  const speciesHtml = await species.text();
-  assert.match(speciesHtml, /American Robin.*in.*Spring/s);
-  assert.match(speciesHtml, /FAQPage/);
-
-  // State × season previews are not generated.
-  const state = await render("/seasonal-birds/winter/ohio");
-  assert.equal(state.status, 404);
+  assert.equal(species.status, 308);
+  assert.match(species.headers.get("location") ?? "", /\/birds\/american-robin$/);
+  assert.equal((await render("/seasonal-birds/winter/ohio")).status, 404);
 });
 
 test("renders quality-gated plant SEO routes", async () => {
@@ -281,33 +283,43 @@ test("enforces bird and location index eligibility", async () => {
   assert.match(await reviewed.text(), /name="robots" content="index, follow"/);
 
   // Pages we do not want indexed are not generated at all.
-  for (const path of ["/birds/highland-tinamou", "/birds/south-polar-skua", "/birds-by-location/california/los-angeles", "/birds-by-location/alabama/acorn-woodpecker", "/birds-by-location/hawaii/blue-jay"]) {
+  for (const path of ["/birds/highland-tinamou", "/birds/south-polar-skua", "/birds-by-location/california/los-angeles", "/birds-by-location/narnia/blue-jay"]) {
     assert.equal((await render(path)).status, 404, path);
   }
 
-  // eBird-backed and Search Console–whitelisted State × bird pages are indexable.
-  for (const path of ["/birds-by-location/florida/northern-cardinal", "/birds-by-location/florida/black-billed-magpie", "/birds-by-location/virginia/black-chinned-hummingbird", "/birds-by-location/connecticut/stamford"]) {
+  // State × bird pages are retired: each permanently redirects to the bird's profile.
+  for (const [path, profile] of [["/birds-by-location/florida/northern-cardinal", "/birds/northern-cardinal"], ["/birds-by-location/florida/black-billed-magpie", "/birds/black-billed-magpie"], ["/birds-by-location/virginia/black-chinned-hummingbird", "/birds/black-chinned-hummingbird"]]) {
     const response = await render(path);
-    assert.equal(response.status, 200, path);
-    assert.match(await response.text(), /name="robots" content="index, follow"/, path);
+    assert.equal(response.status, 308, path);
+    assert.match(response.headers.get("location") ?? "", new RegExp(`${profile}$`), path);
+  }
+
+  // State × group and city pages are retired too: they redirect to the state page.
+  for (const [path, state] of [["/birds-by-location/florida/hummingbirds", "florida"], ["/birds-by-location/rhode-island/magpies", "rhode-island"], ["/birds-by-location/connecticut/stamford", "connecticut"]]) {
+    const response = await render(path);
+    assert.equal(response.status, 308, path);
+    assert.match(response.headers.get("location") ?? "", new RegExp(`/birds-by-location/${state}$`), path);
   }
 
   const sitemap = await (await render("/sitemap.xml")).text();
   assert.match(sitemap, /\/birds\/northern-cardinal/);
   assert.doesNotMatch(sitemap, /\/birds\/highland-tinamou/);
   assert.doesNotMatch(sitemap, /\/birds\/seasonal</);
-  assert.match(sitemap, /\/birds-by-location\/florida\/black-billed-magpie<\/loc><lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
-  assert.match(sitemap, /\/birds-by-location\/connecticut\/stamford</);
+  assert.doesNotMatch(sitemap, /\/birds-by-location\/florida\/black-billed-magpie</);
+  // Nothing below state or season pages is listed.
+  assert.doesNotMatch(sitemap, /\/birds-by-location\/[a-z-]+\/[a-z-]+</);
+  assert.doesNotMatch(sitemap, /\/seasonal-birds\/[a-z]+\/[a-z-]+</);
+  assert.match(sitemap, /\/seasonal-birds\/winter<\/loc><lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   assert.doesNotMatch(sitemap, /\/attract-birds-to-bird-bath/);
   assert.doesNotMatch(sitemap, /\/how-to-attract-birds/);
   assert.match(sitemap, /https:\/\/attractbirds\.app\/how-to-attract<\/loc>/);
   assert.match(sitemap, /\/how-to-attract\/birds-to-a-bird-bath/);
-  // Core pages + group × state pages + published State × bird pages; never the old 5,000+ combinations.
-  assert.ok((sitemap.match(/<url>/g) ?? []).length < 2000);
+  // 50 state pages, 4 season pages, bird profiles and the guide sections.
+  assert.ok((sitemap.match(/<url>/g) ?? []).length < 400);
 });
 
 test("never renders template placeholders or www links", async () => {
-  for (const path of ["/", "/birds", "/seasonal-birds", "/birds-by-location/florida", "/birds-by-location/arizona", "/birds-by-location/connecticut/stamford", "/birds-by-location/florida/northern-cardinal", "/birds/black-billed-magpie"]) {
+  for (const path of ["/", "/birds", "/seasonal-birds", "/birds-by-location/florida", "/birds-by-location/arizona", "/seasonal-birds/winter", "/birds/black-billed-magpie"]) {
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /Taxonomy pending|>Varies<|Steady winter residents|See profile</, path);
     assert.doesNotMatch(html, /https?:\/\/www\.attractbirds\.app/, path);
@@ -321,9 +333,9 @@ test("bird cards are plain anchors carrying the full bird name", async () => {
   // Render the encyclopedia first: it must not reorder the shared bird list the homepage features.
   await render("/birds");
   const home = await (await render("/")).text();
-  assert.match(home, /<a href="\/birds\/northern-cardinal" class="bird-card" aria-label="Northern Cardinal">/);
+  assert.match(home, /<a href="\/birds\/northern-cardinal" class="home-bird" aria-label="Northern Cardinal">/);
   const florida = await (await render("/birds-by-location/florida")).text();
-  assert.match(florida, /<a href="\/birds-by-location\/florida\/northern-mockingbird" class="loc-bird-card" aria-label="Northern Mockingbird">/);
+  assert.match(florida, /<a href="\/birds\/northern-mockingbird" class="loc-bird-card" aria-label="Northern Mockingbird">/);
 });
 
 test("state bird calendars follow the state's climate", async () => {
@@ -342,17 +354,31 @@ test("state bird calendars follow the state's climate", async () => {
   const minnesota = await (await render("/birds-by-location/minnesota")).text();
   const mnJanuary = calendar(minnesota).slice(calendar(minnesota).indexOf(">January<"), calendar(minnesota).indexOf(">February<"));
   assert.doesNotMatch(mnJanuary, /Ruby-throated Hummingbird|Baltimore Oriole/);
+});
 
-  const combo = (await (await render("/birds-by-location/florida/black-billed-magpie")).text()).replace(/<!-- -->/g, "");
-  assert.match(combo, /Not regularly recorded/);
-  // "Are there X in Y?" pages answer first, then point to the nearest range and local look-alikes.
-  assert.match(combo, /<title>Are There Magpies in Florida\?/);
-  assert.match(combo, /No — Black-billed Magpies are not regularly found in Florida/);
-  assert.match(combo, /Where to see them instead:/);
-  assert.match(combo, /Often mistaken for Black-billed Magpies in Florida:/);
-  const resident = await (await render("/birds-by-location/florida/northern-cardinal")).text();
-  assert.match(resident, /Year-round resident/);
-  assert.doesNotMatch(resident, /best seen in January, February, March/);
+test("season pages list each state's birds and link profiles and state pages", async () => {
+  const home = await (await render("/")).text();
+  for (const season of ["spring", "summer", "fall", "winter"]) assert.match(home, new RegExp(`href="/seasonal-birds/${season}"`), season);
+  // The homepage footer is a directory of every state page and season page.
+  const directory = home.slice(home.indexOf('class="footer-directory"'));
+  assert.equal(new Set(directory.match(/href="\/birds-by-location\/[a-z-]+"/g)).size, 50);
+  assert.match(directory, /<a href="\/birds-by-location\/alabama" title="Birds in Alabama">Alabama birds<\/a>/);
+  assert.equal(new Set(directory.match(/href="\/seasonal-birds\/[a-z]+"/g)).size, 4);
+  // Other pages keep the short footer.
+  assert.doesNotMatch(await (await render("/birds")).text(), /class="footer-directory"/);
+
+  const winter = (await (await render("/seasonal-birds/winter")).text()).replace(/<!-- -->/g, "");
+  assert.match(winter, /<h2>Winter birds by state<\/h2>/);
+  assert.match(winter, /<a href="\/birds-by-location\/texas" title="Winter birds in Texas">Winter birds in Texas<\/a>/);
+  assert.match(winter, /Here for winter:/);
+  assert.match(winter, /href="\/birds\/northern-cardinal"/);
+  // States without eBird data link to their month-by-month state guide.
+  assert.match(winter, /href="\/birds-by-location\/alabama"[^>]*title="Birds in Alabama"/);
+  assert.doesNotMatch(winter, /href="\/seasonal-birds\/winter\/[a-z-]+"/);
+
+  // State pages link bird cards straight to profiles, with no group or city sub-pages.
+  const arizona = await (await render("/birds-by-location/arizona")).text();
+  assert.doesNotMatch(arizona, /href="\/birds-by-location\/arizona\/[a-z-]+"/);
 });
 
 test("researched state pages carry cited content, a licensed hero image, and structured data", async () => {
@@ -367,28 +393,6 @@ test("researched state pages carry cited content, a licensed hero image, and str
   }
 });
 
-test("group × state pages render from occurrence data with image, FAQ and sitemap entries", async () => {
-  const page = await render("/birds-by-location/florida/hummingbirds");
-  assert.equal(page.status, 200);
-  const html = await page.text();
-  assert.match(html, /<title>Hummingbirds in Florida: Species &amp; When to See Them<\/title>/);
-  assert.match(html, /name="robots" content="index, follow"/);
-  assert.match(html, /<img src="\/images\/birds\/[a-z-]+\.webp" alt="[^"]*hummingbirds in Florida[^"]*" width="\d+" height="\d+"/);
-  assert.match(html, /"@type":"FAQPage"/);
-  assert.match(html, /Ruby-throated Hummingbird/);
-  assert.match(html, /eBird Observation Dataset/);
-  // A group with no regular species in a state gets an honest "Are there…?" page backed by the same data.
-  const absent = await render("/birds-by-location/rhode-island/magpies");
-  assert.equal(absent.status, 200);
-  const absentHtml = await absent.text();
-  assert.match(absentHtml, /<title>Are There Magpies in Rhode Island\? What eBird Records Show<\/title>/);
-  assert.match(absentHtml, /Not as regular birds/);
-  assert.match(absentHtml, /<img src="\/images\/birds\/black-billed-magpie\.webp"/);
-  const sitemap = await (await render("/sitemap.xml")).text();
-  assert.match(sitemap, /https:\/\/attractbirds\.app\/birds-by-location\/florida\/hummingbirds/);
-  assert.match(sitemap, /birds-by-location\/rhode-island\/magpies/);
-});
-
 test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sources, a licensed image, FAQ and canonical", async () => {
   const samples = [
     ["/feeders/finch-mesh-feeder", /feederwatch\.org\/learn\/feeding-birds/],
@@ -400,7 +404,6 @@ test("editorial pages (feeders, plants, how-to, seasonal, misc) carry cited sour
     ["/how-to-attract/birds-to-a-birdhouse", /nestwatch\.org/],
     ["/how-to-attract/birds-with-sounds", /aba\.org\/aba-code-of-birding-ethics/],
     ["/seasonal-birds/fall", /gbif\.org\/dataset\/4fa7b334/],
-    ["/seasonal-birds/summer/ruby-throated-hummingbird", /eBird records by state/],
     ["/bird-problems/no-birds-at-feeder", /feederwatch\.org\/learn\/sick-birds/],
     ["/bird-food", /feederwatch\.org/],
     ["/how-to-attract/birds-to-a-feeder", /feederwatch\.org\/learn\/sick-birds/],

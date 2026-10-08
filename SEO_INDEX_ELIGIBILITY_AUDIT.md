@@ -1,5 +1,35 @@
 # SEO Index Eligibility Audit
 
+## 2026-10-08 revision: flat structure — 50 state pages, 4 season pages, bird profiles
+
+GSC coverage on 2026-10-08 showed 275 URLs "Discovered – currently not indexed"
+(never crawled), mostly State × group pages linked only from each other, in a
+1,698-URL sitemap. The site now follows a flat structure (哥飞: home → hub →
+page, keyword anchors with `title`):
+
+- **50 state pages** list the state's birds; bird cards link to `/birds/[bird]`.
+  Nothing is published below a state page.
+- **4 season pages** (`/seasonal-birds/[season]`, plus the `/seasonal-birds` hub)
+  list, for each state with eBird data, the birds seen that season
+  (`app/components/SeasonData.tsx`); the other states link to their state page.
+- **Bird profiles** (`/birds/[bird]`) are the only bird pages.
+
+Retired URLs redirect (`retiredLocationRedirect` / `retiredSeasonalRedirect` in
+`lib/indexing.ts`):
+
+| Retired | Count | Redirect |
+|---|---:|---|
+| `/birds-by-location/[state]/[bird]` | 1,234 | 308 → `/birds/[bird]` (307 → state page while the bird has no profile: house-wren) |
+| `/birds-by-location/[state]/[group]` | 144 | 308 → state page |
+| City pages (Stamford, Springfield, St. George, Biloxi) | 4 | 308 → state page |
+| `/seasonal-birds/[season]/[bird]` | 40 | 308 → `/birds/[bird]` |
+
+Sitemap: 1,698 → 276 URLs. Bird × season editorial entries in
+`data/editorial/seasonal.ts` are no longer rendered.
+
+Next: profiles for birds listed on state pages that lack one; "which states and
+when" on each profile; eBird data for the 31 states without it.
+
 ## 2026-10-05 revision: generate only what should be indexed
 
 Supersedes the tables below. Driven by the GSC export of 2026-10-05: State × bird
@@ -13,8 +43,8 @@ for page metadata, `generateStaticParams`, internal links and `app/sitemap.xml`.
 
 | Route class | Published (index) | Rule |
 |---|---:|---|
-| State × bird | ~1,230 | GSC whitelist (`data/gsc-location-pages.ts`) ∪ eBird occurrence data in the state with abundance ≥ uncommon |
-| City | 4 | GSC whitelist only (Stamford, Springfield IL, St. George, Biloxi) |
+| State × bird | 0 (retired 2026-10-08) | Redirect to `/birds/[bird]`; see revision above |
+| City | 0 (retired 2026-10-08) | Redirect to the state page |
 | Bird profiles | ~115 | U.S. backyard species (100-bird whitelist + reviewed + yard regulars) with editorial, reviewed data, or eBird evidence; the rest of the 1,000-species AOS catalog is not generated |
 | Plant / feeder / seasonal state previews | 0 | Not generated until they have their own data |
 | `/birds/seasonal` | — | 308 → `/seasonal-birds` |

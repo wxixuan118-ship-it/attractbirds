@@ -3,13 +3,13 @@ import { useState } from "react";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 
 const nav = [
-  { label: "Bird Encyclopedia", href: "/birds" },
-  { label: "By Location", href: "/birds-by-location" },
+  { label: "Birds by State", href: "/birds-by-location" },
   { label: "Seasonal Birds", href: "/seasonal-birds" },
-  { label: "Plants", href: "/plants" },
+  { label: "Bird Encyclopedia", href: "/birds" },
   { label: "Feeders", href: "/feeders" },
   { label: "Bird Food", href: "/bird-food" },
-  { label: "Attraction Guides", href: URL_REGISTRY.howTo.hub },
+  { label: "Plants", href: "/plants" },
+  { label: "How to Attract", href: URL_REGISTRY.howTo.hub },
 ];
 
 export function Header() {
@@ -32,7 +32,7 @@ export function Header() {
       </nav>
 
       <div className="header-right">
-        <a className="header-cta" href="/#planner">Plan My Garden</a>
+        <a className="header-cta" href="/#planner">Plan My Yard</a>
         <button
           className="nav-burger"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -52,7 +52,7 @@ export function Header() {
             </a>
           ))}
           <a className="header-cta mobile-cta" href="/#planner" onClick={() => setOpen(false)}>
-            Plan My Garden →
+            Plan My Yard →
           </a>
         </div>
       )}

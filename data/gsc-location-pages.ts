@@ -1,11 +1,11 @@
 /**
- * State × bird and city URLs that already earn Google impressions.
+ * State × bird and city URLs that earned Google impressions.
  *
  * Source: Google Search Console export, web search, last 3 months
  * (attractbirds.app-Performance-on-Search-2026-10-05.xlsx, "网页" sheet; www and
- * non-www rows merged). Every URL here is published and indexable regardless of
- * whether its state has eBird data — Google already ranks these pages, so they
- * stay in the index. Rows: [path, impressions, average position].
+ * non-www rows merged). City URLs here stay published and indexable. State × bird
+ * URLs were retired on 2026-10-08 and redirect to /birds/[slug]; their birds keep
+ * a published profile (lib/indexing.ts). Rows: [path, impressions, average position].
  */
 export const GSC_LOCATION_PAGES: ReadonlyArray<readonly [path: string, impressions: number, position: number]> = [
   ["/birds-by-location/illinois/house-wren", 29, 13.7],

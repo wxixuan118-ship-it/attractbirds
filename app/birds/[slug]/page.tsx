@@ -8,8 +8,7 @@ import { getBirdBySlug, isBirdIndexEligible, type BirdPageData } from "../../../
 import { birdEditorial } from "../../../data/editorial/birds";
 import { getStateOccurrences, classifyPresence, PRESENCE_LABEL, activeMonths } from "../../../lib/occurrence-data";
 import { US_STATES_DATA } from "../../../data/us-states-data";
-import { getPublishedBirdSlugs, getPublishedStatesForBird, isBirdProfilePublished, isComboPublished } from "../../../lib/indexing";
-import { birdOccursInState } from "../../../lib/location-repository";
+import { getPublishedBirdSlugs, getStatesWithBird, isBirdProfilePublished } from "../../../lib/indexing";
 import { pluralizeBird } from "../../../lib/bird-names";
 import { resolveFeederFor } from "../../../lib/feeder-repository";
 import { getBirdPlantGuide } from "../../../lib/plant-repository";
@@ -70,11 +69,7 @@ function StateData({ bird }: { bird: BirdPageData }) {
                 {r.presence !== "resident" && r.months.length > 0 && <span className="loc-bird-meta">Active {r.months[0]}–{r.months[r.months.length - 1]}</span>}
               </>
             );
-            return isComboPublished(r.state, bird.slug) ? (
-              <Link key={r.state} href={`/birds-by-location/${r.state}/${bird.slug}`} className="loc-bird-card" style={{ textDecoration: "none" }}>{body}</Link>
-            ) : (
-              <div key={r.state} className="loc-bird-card loc-bird-card-static">{body}</div>
-            );
+            return <Link key={r.state} href={`/birds-by-location/${r.state}`} className="loc-bird-card" style={{ textDecoration: "none" }}>{body}</Link>;
           })}
         </div>
       </div>
@@ -82,35 +77,20 @@ function StateData({ bird }: { bird: BirdPageData }) {
   );
 }
 
-/** Every published State × bird page for this species, split into "found here" and "are there … ?" answers. */
+/** States where the species is regularly recorded, linking to each state's bird guide. */
 function StatePages({ bird }: { bird: BirdPageData }) {
-  const states = getPublishedStatesForBird(bird.slug);
+  const states = getStatesWithBird(bird.slug);
   if (states.length === 0) return null;
-  const regular = states.filter((s) => birdOccursInState(s.slug, bird.slug));
-  const notRegular = states.filter((s) => !birdOccursInState(s.slug, bird.slug));
   const plural = pluralizeBird(bird.commonName);
   return (
     <section className="loc-section">
       <div className="loc-section-header">
         <h2>Which states have {plural}?</h2>
-        <p>State guides with monthly activity, identification, and backyard tips.</p>
+        <p>Found regularly in these states, from 2020–2024 eBird records. Each state guide lists its other backyard birds by month.</p>
       </div>
-      {regular.length > 0 && (
-        <>
-          <p className="city-pills-label"><strong>Found regularly in:</strong></p>
-          <div className="city-pills">
-            {regular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>{s.name}</Link>)}
-          </div>
-        </>
-      )}
-      {notRegular.length > 0 && (
-        <>
-          <p className="city-pills-label"><strong>Not regularly found in</strong> (each page answers &ldquo;Are there {plural} in&hellip;?&rdquo;):</p>
-          <div className="city-pills">
-            {notRegular.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}/${bird.slug}`} className="city-pill" style={{ textDecoration: "none" }}>{s.name}</Link>)}
-          </div>
-        </>
-      )}
+      <div className="city-pills">
+        {states.map((s) => <Link key={s.slug} href={`/birds-by-location/${s.slug}`} className="city-pill" title={`Birds in ${s.name}`} style={{ textDecoration: "none" }}>{s.name}</Link>)}
+      </div>
     </section>
   );
 }

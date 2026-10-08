@@ -16,7 +16,7 @@ import tennessee from "../data/occurrences/groups/tennessee.json";
 import texas from "../data/occurrences/groups/texas.json";
 import groupImages from "../data/group-images.json";
 import { birdInStateHref } from "./indexing";
-import { BIRD_GROUPS, BIRD_GROUP_BY_SLUG, speciesInGroup, type BirdGroup } from "../data/bird-groups";
+import { BIRD_GROUPS, speciesInGroup, type BirdGroup } from "../data/bird-groups";
 import { birdWhitelist } from "../data/bird-whitelist";
 import { classifyPresence, relativeByMonth, activeMonths, MONTH_NAMES, PRESENCE_LABEL, type OccurrenceBird, type Presence } from "./occurrence-data";
 
@@ -75,35 +75,7 @@ export type GroupSpecies = OccurrenceBird & {
   href: string | null;
 };
 
-export type GroupPageData = {
-  state: string;
-  stateName: string;
-  group: BirdGroup;
-  species: GroupSpecies[];
-  totalGroupRecords: number;
-  totalRecords: number;
-  years: string;
-  yearsLabel: string;
-  minRecords: number;
-  retrievedAt: string;
-  /** Months ranked by the group's combined share of state records. */
-  bestMonths: string[];
-  quietMonths: string[];
-  residents: GroupSpecies[];
-  seasonal: GroupSpecies[];
-  image?: GroupImage;
-  source: GroupFile["source"];
-  /** Other groups with at least one species in this state, for cross-links. */
-  otherGroups: { slug: string; name: string; count: number }[];
-  /** Other states with a page for this group, most species first. */
-  otherStates: { slug: string; name: string; count: number; top?: { commonName: string; total: number; slug: string | null } }[];
-  /** Species recorded too rarely to be regular — the honest answer when `species` is empty. */
-  vagrants: { commonName: string; scientificName: string; total: number }[];
-};
 
-export function getGroupStates(): string[] {
-  return Object.keys(FILES);
-}
 
 const whitelistSlugs = new Set(birdWhitelist.map((b) => b.slug));
 
@@ -143,80 +115,10 @@ function groupSpeciesFor(file: GroupFile, group: BirdGroup): GroupSpecies[] {
   return out.filter((s) => s.presence !== "absent").sort((a, b) => b.total - a.total);
 }
 
-/** Species of the group recorded in the state but too rarely to count as regular (below the fetch threshold or classified absent). */
-function groupVagrantsFor(file: GroupFile, group: BirdGroup): { commonName: string; scientificName: string; total: number }[] {
-  const regular = new Set(groupSpeciesFor(file, group).map((s) => s.commonName));
-  const out: { commonName: string; scientificName: string; total: number }[] = [];
-  for (const family of group.families) {
-    const fam = file.families[family];
-    if (!fam) continue;
-    for (const s of fam.species) {
-      const commonName = NAME_FIXES[s.commonName] ?? s.commonName;
-      if (!speciesInGroup(group, family, commonName) || regular.has(commonName)) continue;
-      out.push({ commonName, scientificName: s.scientificName, total: s.total });
-    }
-  }
-  return out.sort((a, b) => b.total - a.total);
-}
 
-export function getGroupPageData(stateSlug: string, groupSlug: string): GroupPageData | undefined {
-  const file = FILES[stateSlug];
-  const group = BIRD_GROUP_BY_SLUG[groupSlug];
-  if (!file || !group) return undefined;
-  const species = groupSpeciesFor(file, group);
-  const vagrants = groupVagrantsFor(file, group);
-  if (species.length === 0 && vagrants.length === 0 && Object.keys(file.families).length === 0) return undefined;
 
-  const combined = Array.from({ length: 12 }, (_, m) => species.reduce((sum, s) => sum + s.share[m], 0));
-  const ranked = combined.map((v, i) => ({ v, i })).sort((a, b) => b.v - a.v);
-  const top = species[0];
-  const image = top?.slug ? IMAGES[top.slug] : undefined;
 
-  const otherGroups = BIRD_GROUPS.filter((g) => g.slug !== groupSlug)
-    .map((g) => ({ slug: g.slug, name: g.name, count: groupSpeciesFor(file, g).length }))
-    .filter((g) => g.count > 0);
-  const otherStates = Object.values(FILES).filter((f) => f.state !== stateSlug)
-    .map((f) => { const sp = groupSpeciesFor(f, group); return { slug: f.state, name: f.stateName, count: sp.length, top: sp[0] ? { commonName: sp[0].commonName, total: sp[0].total, slug: sp[0].slug } : undefined }; })
-    .filter((s) => s.count > 0)
-    .sort((a, b) => b.count - a.count);
 
-  return {
-    state: file.state,
-    stateName: file.stateName,
-    group,
-    species,
-    totalGroupRecords: species.reduce((n, s) => n + s.total, 0),
-    totalRecords: file.totalRecords,
-    years: file.years,
-    yearsLabel: file.years.replace(",", "–"),
-    minRecords: file.minRecords,
-    retrievedAt: file.retrievedAt,
-    bestMonths: ranked.slice(0, 3).map(({ i }) => MONTH_NAMES[i]),
-    quietMonths: ranked.slice(-2).map(({ i }) => MONTH_NAMES[i]).reverse(),
-    residents: species.filter((s) => s.presence === "resident"),
-    seasonal: species.filter((s) => s.presence !== "resident"),
-    vagrants,
-    // Fall back to any listed species with a photo, then to the group's leading species in the nearest covered state.
-    image: image ?? species.map((s) => (s.slug ? IMAGES[s.slug] : undefined)).find(Boolean) ?? otherStates.map((s) => (s.top?.slug ? IMAGES[s.top.slug] : undefined)).find(Boolean),
-    source: file.source,
-    otherGroups,
-    otherStates,
-  };
-}
-
-/** Every (state, group) pair that has at least one regularly occurring species. */
-export function getGroupStaticParams(): { state: string; slug: string }[] {
-  const params: { state: string; slug: string }[] = [];
-  for (const file of Object.values(FILES)) {
-    if (Object.keys(file.families).length === 0) continue;
-    for (const group of BIRD_GROUPS) params.push({ state: file.state, slug: group.slug });
-  }
-  return params;
-}
-
-export function isGroupSlug(slug: string): boolean {
-  return Boolean(BIRD_GROUP_BY_SLUG[slug]);
-}
 
 /** Top species per (state, group) — used by the image-fetch script to know which photos are needed. */
 export function getGroupTopSpecies(): { state: string; group: string; slug: string; commonName: string; scientificName: string }[] {

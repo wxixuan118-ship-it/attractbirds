@@ -2,8 +2,8 @@
  * Single source of truth for which programmatic pages exist and are indexable.
  *
  * Rule: a page we do not want indexed is not generated. Every route below either
- * renders with `index, follow` and is listed in the sitemap, or returns 404 and
- * receives no internal links. Page metadata, generateStaticParams, internal
+ * renders with `index, follow` and is listed in the sitemap, redirects (retired
+ * URLs), or returns 404 and receives no internal links. Page metadata, generateStaticParams, internal
  * links, and app/sitemap.xml all read from here so they can never disagree.
  *
  * Production has no database, so decisions use only static data: the GSC
@@ -15,17 +15,18 @@ import { pilotBirds } from "../data/pilot-birds";
 import { birdCatalog } from "../data/bird-catalog";
 import { birdEditorial } from "../data/editorial/birds";
 import { GSC_LOCATION_PAGES } from "../data/gsc-location-pages";
+import { BIRD_GROUP_BY_SLUG } from "../data/bird-groups";
 import { classifyPresence, getStateOccurrences, OCCURRENCE_STATES } from "./occurrence-data";
 import { getBirdSnapshot, isBirdIndexEligible } from "./bird-repository";
 
-const comboPath = (state: string, slug: string) => `/birds-by-location/${state}/${slug}`;
-
-/** Birds that can have a State × bird page at all. */
+/** Bird slugs that once had State × bird pages; those URLs now redirect (see retiredLocationRedirect). */
 export const LOCATION_BIRD_SLUGS = new Set<string>([...pilotBirds.map((b) => b.slug), ...birdWhitelist.map((b) => b.slug)]);
 
-const GSC_PATHS = new Set(GSC_LOCATION_PAGES.map(([path]) => path));
+/** City pages that earned impressions before all state sub-pages were retired. */
+const RETIRED_CITY_PATHS = new Set(GSC_LOCATION_PAGES.map(([path]) => path).filter((path) => !LOCATION_BIRD_SLUGS.has(path.split("/")[3])));
 
-// ─── State × bird pages ────────────────────────────────────────
+/** Birds whose retired State × bird pages earned impressions; their profiles stay published. */
+const GSC_BIRD_SLUGS = new Set(GSC_LOCATION_PAGES.map(([path]) => path.split("/")[3]).filter((slug) => LOCATION_BIRD_SLUGS.has(slug)));
 
 /** Bird has real eBird records in the state and is not rare there. */
 function hasOccurrenceEvidence(stateSlug: string, birdSlug: string): boolean {
@@ -35,45 +36,36 @@ function hasOccurrenceEvidence(stateSlug: string, birdSlug: string): boolean {
   return classifyPresence(occ, data.totalRecords).abundance !== "rare";
 }
 
-let comboParams: { state: string; slug: string }[] | undefined;
+// ─── Retired sub-pages ─────────────────────────────────────────
 
-/** Published (and indexable) State × bird pages: GSC whitelist ∪ eBird-backed combinations. */
-export function getPublishedComboParams(): { state: string; slug: string }[] {
-  if (comboParams) return comboParams;
-  const params: { state: string; slug: string }[] = [];
-  for (const state of US_STATES_DATA) {
-    for (const slug of LOCATION_BIRD_SLUGS) {
-      if (GSC_PATHS.has(comboPath(state.slug, slug)) || hasOccurrenceEvidence(state.slug, slug)) params.push({ state: state.slug, slug });
-    }
+type Redirect = { destination: string; permanent: boolean };
+
+/**
+ * Site structure from 2026-10-08: 50 state pages and 4 season pages link straight
+ * to bird profiles, with nothing below them. Every former sub-page redirects:
+ * - /birds-by-location/[state]/[bird] → /birds/[bird] (temporarily to the state
+ *   page while a bird has no profile yet)
+ * - /birds-by-location/[state]/[group] and the GSC city pages → the state page
+ */
+export function retiredLocationRedirect(stateSlug: string, slug: string): Redirect | null {
+  if (!STATE_BY_SLUG[stateSlug]) return null;
+  const statePage = `/birds-by-location/${stateSlug}`;
+  if (LOCATION_BIRD_SLUGS.has(slug)) {
+    return isBirdProfilePublished(slug) ? { destination: `/birds/${slug}`, permanent: true } : { destination: statePage, permanent: false };
   }
-  comboParams = params;
-  return params;
+  if (BIRD_GROUP_BY_SLUG[slug] || RETIRED_CITY_PATHS.has(`${statePage}/${slug}`)) return { destination: statePage, permanent: true };
+  return null;
 }
 
-let comboSet: Set<string> | undefined;
-
-export function isComboPublished(stateSlug: string, birdSlug: string): boolean {
-  comboSet ??= new Set(getPublishedComboParams().map(({ state, slug }) => comboPath(state, slug)));
-  return comboSet.has(comboPath(stateSlug, birdSlug));
+/** /seasonal-birds/[season]/[bird] → /birds/[bird]; season pages list each state's birds instead. */
+export function retiredSeasonalRedirect(birdSlug: string): Redirect | null {
+  if (!pilotBirds.some((b) => b.slug === birdSlug) || !isBirdProfilePublished(birdSlug)) return null;
+  return { destination: `/birds/${birdSlug}`, permanent: true };
 }
 
-/** States with a published page for this bird. */
-export function getPublishedStatesForBird(birdSlug: string): USState[] {
-  return US_STATES_DATA.filter((s) => isComboPublished(s.slug, birdSlug));
-}
-
-// ─── City pages ────────────────────────────────────────────────
-
-/** Only cities that already earn impressions; the rest are not generated. */
-export function getPublishedCityParams(): { state: string; slug: string }[] {
-  return GSC_LOCATION_PAGES
-    .map(([path]) => path.split("/"))
-    .filter(([, , state, slug]) => STATE_BY_SLUG[state] && !LOCATION_BIRD_SLUGS.has(slug))
-    .map(([, , state, slug]) => ({ state, slug }));
-}
-
-export function isCityPublished(stateSlug: string, citySlug: string): boolean {
-  return GSC_PATHS.has(comboPath(stateSlug, citySlug)) && !LOCATION_BIRD_SLUGS.has(citySlug);
+/** States where the bird is regularly recorded in eBird data. */
+export function getStatesWithBird(birdSlug: string): USState[] {
+  return US_STATES_DATA.filter((s) => hasOccurrenceEvidence(s.slug, birdSlug));
 }
 
 // ─── Bird profiles ─────────────────────────────────────────────
@@ -106,7 +98,7 @@ export function getPublishedBirdSlugs(): Set<string> {
     [...PROFILE_CANDIDATES].filter((slug) => {
       if (birdEditorial[slug]) return true;
       const snapshot = getBirdSnapshot(slug);
-      return (snapshot && isBirdIndexEligible(snapshot)) || hasAnyStateEvidence(slug) || getPublishedStatesForBird(slug).length > 0;
+      return (snapshot && isBirdIndexEligible(snapshot)) || hasAnyStateEvidence(slug) || GSC_BIRD_SLUGS.has(slug);
     }),
   );
   return profileSet;
@@ -118,9 +110,7 @@ export function isBirdProfilePublished(slug: string): boolean {
 
 // ─── Links ─────────────────────────────────────────────────────
 
-/** Best published destination for a bird card in a state: the State × bird page, else the profile, else none. */
-export function birdInStateHref(stateSlug: string, birdSlug: string): string | null {
-  if (isComboPublished(stateSlug, birdSlug)) return comboPath(stateSlug, birdSlug);
-  if (isBirdProfilePublished(birdSlug)) return `/birds/${birdSlug}`;
-  return null;
+/** Destination for a bird card in a state: the bird's profile, else none. */
+export function birdInStateHref(_stateSlug: string, birdSlug: string): string | null {
+  return isBirdProfilePublished(birdSlug) ? `/birds/${birdSlug}` : null;
 }

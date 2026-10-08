@@ -1,5 +1,6 @@
 import { US_STATES_DATA } from "../../data/us-states-data";
 import { indexedSeasonalBirds, seasonSlugs } from "../../lib/seasonal-repository";
+import { OCCURRENCE_STATES } from "../../lib/occurrence-data";
 import { indexedPlants, plantCategories } from "../../lib/plant-repository";
 import { plantPurposes } from "../../data/pilot-plants";
 import { feederComparisons, feederFoods, feederGuides, feederProblems } from "../../data/pilot-feeders";
@@ -8,8 +9,7 @@ import { attractionGuides, attractionGuidePath } from "../../data/attraction-gui
 import { birdEditorial } from "../../data/editorial/birds";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 import { speciesAttractionGuides } from "../../data/species-attraction-guides";
-import { getGroupStaticParams, isGroupSlug } from "../../lib/group-data";
-import { getPublishedBirdSlugs, getPublishedCityParams, getPublishedComboParams } from "../../lib/indexing";
+import { getPublishedBirdSlugs } from "../../lib/indexing";
 import LASTMOD from "../../data/lastmod.json";
 
 const ORIGIN = SITE.origin;
@@ -27,21 +27,20 @@ function escapeXml(value: string) {
  * chrome (header, footer, layout) is deliberately not a source.
  */
 function sourcesFor(path: string): string[] {
-  const [, a = "", b = "", c = ""] = path.split("/");
+  const [, a = "", b = ""] = path.split("/");
   switch (a) {
     case "":
       return ["app/page.tsx", "data/editorial/misc.ts"];
     case "birds-by-location":
       if (!b) return ["app/birds-by-location/page.tsx"];
-      if (!c) return ["app/birds-by-location/[state]/page.tsx", "lib/location-repository.ts", `data/occurrences/${b}.json`, `data/state-content/${b}.ts`];
-      if (isGroupSlug(c)) return ["app/birds-by-location/[state]/GroupView.tsx", "lib/group-data.ts", `data/occurrences/groups/${b}.json`];
-      return ["app/birds-by-location/[state]/[slug]/page.tsx", "lib/location-repository.ts", `data/occurrences/${b}.json`];
+      return ["app/birds-by-location/[state]/page.tsx", "lib/location-repository.ts", `data/occurrences/${b}.json`, `data/state-content/${b}.ts`];
     case "birds":
       if (!b) return ["app/birds/page.tsx", "data/editorial/misc.ts"];
       if (b === "oriole") return ["app/birds/oriole/page.tsx"];
       return ["app/birds/[slug]/page.tsx", ...(birdEditorial[b] ? ["data/editorial/birds.ts"] : ["lib/bird-repository.ts"])];
     case "seasonal-birds":
-      return [b ? (c ? "app/seasonal-birds/[season]/[slug]/page.tsx" : "app/seasonal-birds/[season]/page.tsx") : "app/seasonal-birds/page.tsx", "data/editorial/seasonal.ts"];
+      if (!b) return ["app/seasonal-birds/page.tsx", "data/editorial/seasonal.ts"];
+      return ["app/seasonal-birds/[season]/page.tsx", "app/components/SeasonData.tsx", "data/editorial/seasonal.ts", ...OCCURRENCE_STATES.map((state) => `data/occurrences/${state}.json`)];
     case "feeders":
       return [b === "compare" ? "app/feeders/compare/[comparison]/page.tsx" : b === "for" ? "app/feeders/for/[target]/page.tsx" : b ? "app/feeders/[slug]/page.tsx" : "app/feeders/page.tsx", "data/editorial/feeders.ts", "data/pilot-feeders.ts"];
     case "plants":
@@ -98,14 +97,8 @@ export async function GET() {
   for (const slug of Object.keys(plantCategories)) paths.add(`/plants/${slug}`);
   for (const slug of Object.keys(plantPurposes)) paths.add(`/plants/${slug}`);
   for (const bird of indexedSeasonalBirds) paths.add(`/plants/for/${bird.slug}`);
-  for (const season of seasonSlugs) {
-    paths.add(`/seasonal-birds/${season}`);
-    for (const bird of indexedSeasonalBirds) paths.add(`/seasonal-birds/${season}/${bird.slug}`);
-  }
+  for (const season of seasonSlugs) paths.add(`/seasonal-birds/${season}`);
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
-  for (const { state, slug } of getGroupStaticParams()) paths.add(`/birds-by-location/${state}/${slug}`);
-  for (const { state, slug } of getPublishedComboParams()) paths.add(`/birds-by-location/${state}/${slug}`);
-  for (const { state, slug } of getPublishedCityParams()) paths.add(`/birds-by-location/${state}/${slug}`);
 
   const body = [...paths]
     .sort()

@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { EditorialPage, editorialMetadata } from "../../../components/Editorial";
-import { SeasonSpeciesData } from "../../../components/SeasonData";
-import { seasonalEditorial } from "../../../../data/editorial/seasonal";
-import { SEASONS, getSeasonalStaticParams, isSeason, resolveSeasonalSlug } from "../../../../lib/seasonal-repository";
-import { SeasonalBirdGuide, seasonalBirdMetadata } from "./SeasonalBirdGuide";
+import { notFound, permanentRedirect } from "next/navigation";
+import { isSeason } from "../../../../lib/seasonal-repository";
+import { retiredSeasonalRedirect } from "../../../../lib/indexing";
 
-export function generateStaticParams(){return getSeasonalStaticParams()}
-export async function generateMetadata({params}:{params:Promise<{season:string;slug:string}>}):Promise<Metadata>{const {season,slug}=await params;if(!isSeason(season))return{};const ed=seasonalEditorial[`/seasonal-birds/${season}/${slug}`];if(ed)return editorialMetadata(ed);const resolved=resolveSeasonalSlug(slug);if(!resolved)return{};return seasonalBirdMetadata(resolved.bird,season)}
+// Bird × season pages are retired: season pages list each state's birds, and
+// each URL here redirects to the bird's profile (lib/indexing.ts).
+export function generateStaticParams() {
+  return [];
+}
 
-export default async function SeasonalDetail({params}:{params:Promise<{season:string;slug:string}>}){const {season,slug}=await params;if(!isSeason(season))notFound();const resolved=resolveSeasonalSlug(slug);if(!resolved)notFound();const config=SEASONS[season];const ed=seasonalEditorial[`/seasonal-birds/${season}/${slug}`];if(ed&&resolved.type==="bird"){const bird=resolved.bird;return <EditorialPage content={ed} eyebrow={`${config.name} · ${config.months} · ${bird.scientificName}`} breadcrumbs={[{name:"Seasonal birds",path:"/seasonal-birds"},{name:`${config.name} birds`,path:`/seasonal-birds/${season}`},{name:`${bird.commonName} in ${config.name.toLowerCase()}`,path:ed.path}]}><SeasonSpeciesData season={season} birdSlug={bird.slug} birdName={bird.commonName}/><section className="loc-section"><div className="loc-section-header"><h2>More on this bird</h2></div><div className="chip-list"><a href={`/birds/${bird.slug}`}>{bird.commonName} profile →</a><a href={`/feeders/for/${bird.slug}`}>Feeders for {bird.commonName.toLowerCase()}s →</a><a href={`/plants/for/${bird.slug}`}>Plants for {bird.commonName.toLowerCase()}s →</a><a href={`/how-to-attract/${bird.slug}`}>How to attract {bird.commonName.toLowerCase()}s →</a>{(["spring","summer","fall","winter"] as const).filter(x=>x!==season).map(x=><a href={`/seasonal-birds/${x}/${bird.slug}`} key={x}>{bird.commonName} in {x} →</a>)}</div></section></EditorialPage>;}return <SeasonalBirdGuide bird={resolved.bird} season={season}/>}
+export default async function RetiredSeasonalBirdPage({ params }: { params: Promise<{ season: string; slug: string }> }) {
+  const { season, slug } = await params;
+  const retired = isSeason(season) ? retiredSeasonalRedirect(slug) : null;
+  if (!retired) notFound();
+  permanentRedirect(retired.destination);
+}

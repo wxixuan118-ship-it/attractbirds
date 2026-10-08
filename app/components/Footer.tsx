@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { SITE, URL_REGISTRY } from "../../lib/url-registry";
+import { US_STATES_DATA } from "../../data/us-states-data";
+import { SEASONS, seasonSlugs } from "../../lib/seasonal-repository";
 
 const links = {
   Birds: [
@@ -7,6 +9,7 @@ const links = {
     { label: "By Location", href: "/birds-by-location" },
     { label: "Seasonal Birds", href: "/seasonal-birds" },
     { label: "Attraction Guides", href: "/birds" },
+    { label: "Oriole Birds", href: URL_REGISTRY.birds.oriole },
   ],
   Garden: [
     { label: "Bird-Friendly Plants", href: "/plants" },
@@ -14,6 +17,7 @@ const links = {
     { label: "Water Sources", href: "/#planner" },
     { label: "Nesting & Shelter", href: "/birds" },
     { label: "Bird Food Guide", href: "/bird-food" },
+    { label: "Bird of Paradise Plant", href: "/plants/bird-of-paradise" },
   ],
   Tools: [
     { label: "AI Yard Planner", href: "/#planner" },
@@ -29,14 +33,16 @@ const links = {
   ],
 };
 
-// Partner badges render on the homepage only, so directory backlinks are not repeated site-wide.
-export function Footer({ showPartners = false }: { showPartners?: boolean }) {
+const statesByName = [...US_STATES_DATA].sort((a, b) => a.name.localeCompare(b.name));
+
+// Partner badges and the state/season directory render on the homepage only, so they are not repeated site-wide.
+export function Footer({ showPartners = false, showDirectory = false }: { showPartners?: boolean; showDirectory?: boolean }) {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link className="brand" href="/" style={{ color: "white" }}>
+            <Link className="brand" href="/">
               <span className="brand-mark">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.5 2 3 6 3 10c0 2.5 1.5 4.5 3.5 5.5L4 22l4-2 2 2 2-2 2 2 4-2-2.5-6.5C17.5 14.5 19 12.5 19 10c0-4-3.5-8-7-8z"/><circle cx="9" cy="9" r="1" fill="currentColor" stroke="none"/></svg>
               </span>
@@ -53,6 +59,22 @@ export function Footer({ showPartners = false }: { showPartners?: boolean }) {
             </div>
           ))}
         </div>
+        {showDirectory && (
+          <nav className="footer-directory" aria-label="Birds by state and season">
+            <h4>Birds by state</h4>
+            <div className="footer-directory-links">
+              {statesByName.map((state) => (
+                <Link key={state.slug} href={URL_REGISTRY.locations.state(state.slug)} title={`Birds in ${state.name}`}>{`${state.name} birds`}</Link>
+              ))}
+            </div>
+            <h4>Birds by season</h4>
+            <div className="footer-directory-links">
+              {seasonSlugs.map((season) => (
+                <Link key={season} href={URL_REGISTRY.seasonal.season(season)} title={`${SEASONS[season].name} birds by state`}>{`${SEASONS[season].name} birds`}</Link>
+              ))}
+            </div>
+          </nav>
+        )}
         {showPartners && (
         <div className="footer-partners">
           <h4>Partners</h4>

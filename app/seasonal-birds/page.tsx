@@ -68,18 +68,11 @@ export default function SeasonalBirdsHub() {
 
         <section className="loc-section">
           <div className="loc-section-header">
-            <h2>Seasonal guides for common backyard birds</h2>
-            <p>Each guide covers what the bird is doing that season, what to feed it, the plants and shelter it needs, and eBird records by state.</p>
+            <h2>Common backyard birds through the year</h2>
+            <p>Each profile shows when the bird is present, where it lives and how to attract it in every season.</p>
           </div>
-          <div className="content-grid">
-            {indexedSeasonalBirds.map((bird) => (
-              <div className="info-block" key={bird.slug}>
-                <p><strong>{bird.commonName}</strong></p>
-                <div className="chip-list">
-                  {seasonSlugs.map((slug) => <Link key={slug} href={`/seasonal-birds/${slug}/${bird.slug}`}>{SEASONS[slug].name}</Link>)}
-                </div>
-              </div>
-            ))}
+          <div className="chip-list">
+            {indexedSeasonalBirds.map((bird) => <Link key={bird.slug} href={`/birds/${bird.slug}`}>{bird.commonName}</Link>)}
           </div>
         </section>
 

@@ -10,7 +10,7 @@ import { getStateContent, type StateContent } from "../../../data/state-content"
 import { getStateStaticParams, getStatePageData, type StateBirdEntry } from "../../../lib/location-repository";
 import { busiestMonths, occurrenceAttribution } from "../../../lib/occurrence-data";
 import { SITE } from "../../../lib/url-registry";
-import { birdInStateHref, getPublishedCityParams } from "../../../lib/indexing";
+import { birdInStateHref } from "../../../lib/indexing";
 import { getBirdImage } from "../../../lib/group-data";
 
 export function generateStaticParams() {
@@ -123,7 +123,6 @@ export default async function StatePage({
   // States without a researched hero photo show a licensed photo of their most familiar backyard bird.
   const fallbackHeroBird = content ? undefined : [...backyardBirds, ...commonBirds].find((b) => getBirdImage(b.slug));
   const fallbackHero = fallbackHeroBird ? getBirdImage(fallbackHeroBird.slug) : undefined;
-  const publishedCities = new Set(getPublishedCityParams().filter((c) => c.state === state.slug).map((c) => c.slug));
 
   const jsonLd: Record<string, unknown>[] = [
     {
@@ -269,22 +268,9 @@ export default async function StatePage({
             <strong>Popular cities in {state.name}:</strong>
           </p>
           <div className="city-pills">
-            {state.popularCities.map((city) => {
-              const citySlug = city.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-              // Only cities with a published page are links; the rest are plain labels.
-              return publishedCities.has(citySlug) ? (
-                <Link
-                  key={city}
-                  href={`/birds-by-location/${state.slug}/${citySlug}`}
-                  className="city-pill"
-                  style={{ textDecoration: "none" }}
-                >
-                  Birds in {city}
-                </Link>
-              ) : (
-                <span key={city} className="city-pill">{city}</span>
-              );
-            })}
+            {state.popularCities.map((city) => (
+              <span key={city} className="city-pill">{city}</span>
+            ))}
           </div>
         </section>
 

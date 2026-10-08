@@ -12,23 +12,3 @@ export const seasonSlugs = Object.keys(SEASONS) as SeasonSlug[];
 export function isSeason(value:string):value is SeasonSlug{return value in SEASONS}
 
 export const indexedSeasonalBirds = pilotBirds;
-
-export function resolveSeasonalSlug(slug:string){
-  const bird=indexedSeasonalBirds.find(item=>item.slug===slug);
-  if(bird)return {type:"bird" as const,bird};
-  return null;
-}
-
-export function getSeasonalStaticParams(){
-  // State × season previews are not generated until they have their own data (see lib/indexing.ts).
-  return seasonSlugs.flatMap(season=>indexedSeasonalBirds.map(bird=>({season,slug:bird.slug})));
-}
-
-export function getBirdSeasonCopy(season:SeasonSlug,bird:(typeof pilotBirds)[number]){
-  const config=SEASONS[season];
-  const migratory=bird.behavior.migratory;
-  const movement=season==="spring"||season==="fall"
-    ? migratory?`${bird.commonName} populations may be moving during ${season}; timing varies by latitude, weather, and population.`:`${bird.commonName} is generally non-migratory, though local movements can still change visibility.`
-    : season==="summer"?`Summer activity centers on breeding habitat, nesting, and natural food where the species occurs.`:`Winter presence depends on the species' regional range and ${bird.behavior.migrationPattern} movement pattern.`;
-  return {config,movement,food:`During ${config.name.toLowerCase()}, prioritize ${bird.foods.slice(0,3).join(", ")} where appropriate, plus ${config.focus}.`,habitat:`Look in ${bird.habitats.slice(0,3).join(", ")}. ${config.watching}`};
-}
