@@ -1,6 +1,30 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import { isRetiredPath } from "../lib/retired-paths";
+
+function pointsToRetiredPage(href: string, origin: string): boolean {
+  try {
+    const url = new URL(href, origin);
+    return url.origin === origin && isRetiredPath(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
+async function stripRetiredLinks(response: Response, origin: string): Promise<Response> {
+  if (!response.headers.get("content-type")?.includes("text/html")) return response;
+
+  const html = await response.text();
+  const cleaned = html
+    .replace(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>[\s\S]*?<\/a>/gi,
+      (tag, href: string) => pointsToRetiredPage(href, origin) ? "" : tag)
+    .replace(/<link\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi,
+      (tag, href: string) => pointsToRetiredPage(href, origin) ? "" : tag);
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  return new Response(cleaned, { status: response.status, statusText: response.statusText, headers });
+}
 
 interface Env {
   ASSETS: Fetcher;
@@ -29,6 +53,13 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    if (isRetiredPath(url.pathname)) {
+      return new Response("Not Found", {
+        status: 404,
+        headers: { "Content-Type": "text/plain; charset=utf-8", "X-Robots-Tag": "noindex" },
+      });
+    }
+
     if (url.pathname === "/_vinext/image") {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       return handleImageOptimization(request, {
@@ -40,7 +71,7 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    return stripRetiredLinks(await handler.fetch(request, env, ctx), url.origin);
   },
 };
 

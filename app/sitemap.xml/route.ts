@@ -11,6 +11,7 @@ import { SITE, URL_REGISTRY } from "../../lib/url-registry";
 import { speciesAttractionGuides } from "../../data/species-attraction-guides";
 import { getPublishedBirdSlugs } from "../../lib/indexing";
 import LASTMOD from "../../data/lastmod.json";
+import { isRetiredPath } from "../../lib/retired-paths";
 
 const ORIGIN = SITE.origin;
 const FILE_DATES = LASTMOD as Record<string, string>;
@@ -101,6 +102,7 @@ export async function GET() {
   for (const state of US_STATES_DATA) paths.add(`/birds-by-location/${state.slug}`);
 
   const body = [...paths]
+    .filter((path) => !isRetiredPath(path))
     .sort()
     .map((path) => {
       const lastmod = lastModified(path);
