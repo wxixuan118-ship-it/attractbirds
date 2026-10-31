@@ -309,6 +309,17 @@ export function Footer({ showPartners = false, showDirectory = false }: { showPa
                 height={54}
               />
             </a>
+            {/* Markup kept identical to LaunchBoard's snippet so their badge verifier can match it. */}
+            {/* eslint-disable-next-line react/jsx-no-target-blank */}
+            <a href="https://launchboard.dev" target="_blank" rel="noopener">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://launchboard.dev/featured.svg"
+                alt="Featured on LaunchBoard"
+                width={240}
+                height={60}
+              />
+            </a>
           </div>
         </div>
         )}
